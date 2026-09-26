@@ -1,0 +1,1 @@
+@extends('layouts.admin') @section('title',$feature) @section('content')<h1>{{ $feature }}</h1><p>Fitur belum tersedia. Dijadwalkan pada tahap berikutnya.</p>@endsection
