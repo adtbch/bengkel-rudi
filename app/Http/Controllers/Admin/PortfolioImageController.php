@@ -34,6 +34,18 @@ class PortfolioImageController extends Controller
         return back()->with('status', 'Foto berhasil diunggah.');
     }
 
+    public function destroy(Portfolio $portfolio, PortfolioImage $image, CloudinaryService $cloudinary)
+    {
+        abort_unless($image->portfolio_id === $portfolio->id, 404);
+
+        if ($image->cloudinary_public_id) {
+            $cloudinary->delete($image->cloudinary_public_id);
+        }
+        $image->delete();
+
+        return back()->with('status', 'Foto berhasil dihapus.');
+    }
+
     public function reorder(Request $request, Portfolio $portfolio)
     {
         // Expected payload: [{id: <image_id>, sort_order: <int>}]
