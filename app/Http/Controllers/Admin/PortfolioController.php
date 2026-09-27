@@ -25,7 +25,7 @@ class PortfolioController extends Controller
         $data['slug'] = UniqueSlug::make($data['title'], Portfolio::class);
         Portfolio::create($data);
 
-        return redirect('/admin/portfolio');
+        return redirect('/admin/portfolio')->with('status', 'Portfolio berhasil ditambahkan.');
     }
 
     public function update(Request $request, Portfolio $portfolio)
@@ -34,14 +34,17 @@ class PortfolioController extends Controller
         $data['slug'] = UniqueSlug::make($data['title'], Portfolio::class, $portfolio->id);
         $portfolio->update($data);
 
-        return redirect('/admin/portfolio');
+        return redirect('/admin/portfolio')->with('status', 'Portfolio berhasil diperbarui.');
     }
 
     public function toggle(Portfolio $portfolio)
     {
         $portfolio->update(['is_published' => !$portfolio->is_published]);
 
-        return redirect('/admin/portfolio');
+        return redirect('/admin/portfolio')->with(
+            'status',
+            $portfolio->is_published ? 'Portfolio dipublikasikan.' : 'Portfolio dijadikan draft.'
+        );
     }
 
     public function destroy(Portfolio $portfolio)
@@ -52,7 +55,7 @@ class PortfolioController extends Controller
 
         $portfolio->delete();
 
-        return redirect('/admin/portfolio');
+        return redirect('/admin/portfolio')->with('status', 'Portfolio berhasil dihapus.');
     }
 
     private function validated(Request $request): array

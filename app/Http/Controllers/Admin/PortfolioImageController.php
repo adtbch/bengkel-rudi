@@ -7,7 +7,9 @@ use App\Models\Portfolio;
 use App\Models\PortfolioImage;
 use App\Services\CloudinaryService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 
 class PortfolioImageController extends Controller
 {
@@ -21,14 +23,32 @@ class PortfolioImageController extends Controller
         ]);
 
         $sortOrder = (int) $request->input('sort_order', 0);
-        foreach ($request->file('images') as $file) {
-            $uploaded = $cloudinary->upload($file, trim(config('cloudinary.folder', 'BengkelRudi'), '/') . '/portfolio');
-            $portfolio->images()->create([
-                'image_url' => $uploaded['secure_url'],
-                'cloudinary_public_id' => $uploaded['public_id'],
-                'stage' => $request->input('stage'),
-                'sort_order' => $sortOrder++,
-            ]);
+        $uploadedAssets = [];
+
+        try {
+            DB::beginTransaction();
+            foreach ($request->file('images') as $file) {
+                $uploaded = $cloudinary->upload($file, trim(config('cloudinary.folder', 'BengkelRudi'), '/') . '/portfolio');
+                $uploadedAssets[] = $uploaded['public_id'];
+                $portfolio->images()->create([
+                    'image_url' => $uploaded['secure_url'],
+                    'cloudinary_public_id' => $uploaded['public_id'],
+                    'stage' => $request->input('stage'),
+                    'sort_order' => $sortOrder++,
+                ]);
+            }
+            DB::commit();
+        } catch (\Throwable $exception) {
+            DB::rollBack();
+            foreach (array_reverse($uploadedAssets) as $publicId) {
+                try {
+                    $cloudinary->delete($publicId);
+                } catch (\Throwable) {
+                    // Cleanup is best-effort; original upload failure remains primary.
+                }
+            }
+
+            return back()->withErrors(['integration' => 'Unggah foto gagal. Tidak ada perubahan yang disimpan.']);
         }
 
         return back()->with('status', 'Foto berhasil diunggah.');
@@ -39,7 +59,13 @@ class PortfolioImageController extends Controller
         abort_unless($image->portfolio_id === $portfolio->id, 404);
 
         if ($image->cloudinary_public_id) {
-            $cloudinary->delete($image->cloudinary_public_id);
+            try {
+                if (!$cloudinary->delete($image->cloudinary_public_id)) {
+                    return back()->withErrors(['integration' => 'Foto gagal dihapus dari penyimpanan. Data tetap disimpan.']);
+                }
+            } catch (\Throwable) {
+                return back()->withErrors(['integration' => 'Foto gagal dihapus dari penyimpanan. Data tetap disimpan.']);
+            }
         }
         $image->delete();
 
@@ -48,16 +74,24 @@ class PortfolioImageController extends Controller
 
     public function reorder(Request $request, Portfolio $portfolio)
     {
-        // Expected payload: [{id: <image_id>, sort_order: <int>}]
         $data = $request->validate([
-            '*.id' => ['required', 'integer', Rule::exists('portfolio_images', 'id')->where('portfolio_id', $portfolio->id)],
-            '*.sort_order' => ['required', 'integer', 'min:0'],
+            'order' => ['required', 'array'],
+            'order.*' => ['required', 'integer', 'min:0'],
         ]);
 
-        foreach ($data as $item) {
-            PortfolioImage::where('id', $item['id'])->update(['sort_order' => $item['sort_order']]);
+        $ids = array_map('intval', array_keys($data['order']));
+        $ownedIds = $portfolio->images()->whereIn('id', $ids)->pluck('id')->map(fn ($id) => (int) $id)->all();
+
+        if (count($ids) !== count($ownedIds)) {
+            throw ValidationException::withMessages(['order' => 'Daftar foto tidak valid untuk portfolio ini.']);
         }
 
-        return response()->json(['status' => 'ok']);
+        DB::transaction(function () use ($data, $portfolio): void {
+            foreach ($data['order'] as $id => $sortOrder) {
+                $portfolio->images()->whereKey((int) $id)->update(['sort_order' => $sortOrder]);
+            }
+        });
+
+        return back()->with('status', 'Urutan foto berhasil disimpan.');
     }
 }

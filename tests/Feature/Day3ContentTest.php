@@ -63,18 +63,93 @@ class Day3ContentTest extends TestCase
         $this->get('/admin/portfolio')->assertRedirect('/admin/login');
         $this->admin()->post('/admin/portfolio',['title'=>'','service_id'=>999,'vehicle_type'=>'TRUCK'])->assertSessionHasErrors(['title','service_id','vehicle_type']);
         $payload=['title'=>'Avanza Body Repair','service_id'=>$service->id,'vehicle_type'=>'CAR','is_published'=>1];
-        $this->admin()->post('/admin/portfolio',$payload)->assertRedirect('/admin/portfolio');
+        $this->admin()->post('/admin/portfolio',$payload)
+            ->assertRedirect('/admin/portfolio')
+            ->assertSessionHas('status', 'Portfolio berhasil ditambahkan.');
         $this->admin()->post('/admin/portfolio',$payload)->assertRedirect('/admin/portfolio');
         $this->assertDatabaseHas('portfolios',['slug'=>'avanza-body-repair-2']);
         $portfolio=Portfolio::where('slug','avanza-body-repair')->firstOrFail();
-        $this->admin()->put("/admin/portfolio/{$portfolio->id}",['title'=>'Motor Custom','service_id'=>$service->id,'vehicle_type'=>'MOTOR'])->assertRedirect('/admin/portfolio');
+        $this->admin()->put("/admin/portfolio/{$portfolio->id}",['title'=>'Motor Custom','service_id'=>$service->id,'vehicle_type'=>'MOTOR','is_published'=>1])
+            ->assertRedirect('/admin/portfolio')
+            ->assertSessionHas('status', 'Portfolio berhasil diperbarui.');
         $this->assertSame('motor-custom',$portfolio->fresh()->slug);
-        $this->admin()->patch("/admin/portfolio/{$portfolio->id}/toggle")->assertRedirect('/admin/portfolio');
+        $this->assertTrue($portfolio->fresh()->is_published);
+        $this->admin()->patch("/admin/portfolio/{$portfolio->id}/toggle")
+            ->assertRedirect('/admin/portfolio')
+            ->assertSessionHas('status', 'Portfolio dijadikan draft.');
+        $this->assertFalse($portfolio->fresh()->is_published);
         PortfolioImage::create(['portfolio_id'=>$portfolio->id,'image_url'=>'https://example.test/x.jpg','cloudinary_public_id'=>'x','stage'=>'BEFORE','sort_order'=>0]);
         $this->admin()->delete("/admin/portfolio/{$portfolio->id}")->assertSessionHasErrors('portfolio');
+        $this->assertModelExists($portfolio);
         $portfolio->images()->delete();
-        $this->admin()->delete("/admin/portfolio/{$portfolio->id}")->assertRedirect('/admin/portfolio');
+        $this->admin()->delete("/admin/portfolio/{$portfolio->id}")
+            ->assertRedirect('/admin/portfolio')
+            ->assertSessionHas('status', 'Portfolio berhasil dihapus.');
         $this->assertModelMissing($portfolio);
+    }
+
+    public function test_admin_frontend_matches_prd_clean_premium_minimal_direction(): void
+    {
+        $css = file_get_contents(public_path('css/admin.css'));
+        $dashboard = file_get_contents(resource_path('views/admin/dashboard.blade.php'));
+        $portfolio = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
+
+        $this->assertStringContainsString('--admin-page: #f8fafc;', $css);
+        $this->assertStringContainsString('--admin-surface: #ffffff;', $css);
+        $this->assertStringContainsString('--admin-charcoal: #0f172a;', $css);
+        $this->assertStringContainsString('--admin-accent: #dc2626;', $css);
+        $this->assertStringNotContainsString('linear-gradient', $css);
+        $this->assertStringNotContainsString('rotate(', $css);
+        $this->assertStringContainsString('admin-page-head', $dashboard);
+        $this->assertStringContainsString('admin-metric-grid', $dashboard);
+        $this->assertStringContainsString('Portfolio terbaru', $dashboard);
+        $this->assertStringContainsString('admin-page-head', $portfolio);
+        $this->assertStringContainsString('admin-card-grid', $portfolio);
+    }
+
+    public function test_portfolio_uses_clear_admin_hierarchy(): void
+    {
+        $view = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
+
+        $this->assertStringContainsString('admin-page-head__eyebrow', $view);
+        $this->assertStringContainsString('admin-page-head__mark', $view);
+        $this->assertStringContainsString('admin-section-head', $view);
+    }
+
+    public function test_portfolio_create_form_exposes_accessible_field_errors(): void
+    {
+        $source = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
+
+        $this->assertStringContainsString("@error('title')", $source);
+        $this->assertStringContainsString("@error('service_id')", $source);
+        $this->assertStringContainsString("@error('vehicle_type')", $source);
+        $this->assertStringContainsString('aria-describedby="create-title-error"', $source);
+        $this->assertStringContainsString('id="create-title-error"', $source);
+    }
+
+    public function test_admin_portfolio_keeps_navigation_and_errors_accessible_on_mobile(): void
+    {
+        $layout = file_get_contents(resource_path('views/layouts/admin.blade.php'));
+        $css = file_get_contents(public_path('css/admin.css'));
+        $view = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
+
+        $this->assertStringContainsString("asset('css/admin.css')", $layout);
+        $this->assertMatchesRegularExpression('/\.admin-nav\s*\{[^}]*flex-wrap:\s*wrap/s', $css);
+        $this->assertStringContainsString('class="admin-field-error" role="alert"', $view);
+        $this->assertStringContainsString(':focus-visible', $css);
+        $this->assertStringContainsString('min-height: 44px', $css);
+    }
+
+    public function test_portfolio_upload_exposes_local_preview_with_cleanup(): void
+    {
+        $view = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
+        $script = file_get_contents(public_path('js/admin-portfolio.js')) ?: '';
+
+        $this->assertStringContainsString('data-image-input', $view);
+        $this->assertStringContainsString('data-image-preview', $view);
+        $this->assertStringContainsString('URL.createObjectURL', $script);
+        $this->assertStringContainsString('URL.revokeObjectURL', $script);
+        $this->assertStringContainsString('DataTransfer', $script);
     }
 
     public function test_portfolio_admin_page_exposes_mobile_friendly_edit_and_actions(): void
@@ -88,6 +163,15 @@ class Day3ContentTest extends TestCase
             'is_published' => false,
         ]);
 
+        $portfolio->images()->create([
+            'image_url' => 'https://example.test/before.jpg',
+            'cloudinary_public_id' => 'portfolio/before',
+            'stage' => 'BEFORE',
+            'sort_order' => 0,
+        ]);
+
+        $this->withoutExceptionHandling();
+
         $this->admin()->get('/admin/portfolio')
             ->assertOk()
             ->assertSee('class="admin-shell"', false)
@@ -99,7 +183,9 @@ class Day3ContentTest extends TestCase
             ->assertSee("action=\"/admin/portfolio/{$portfolio->id}\"", false)
             ->assertSee('value="Avanza Body Repair"', false)
             ->assertSee('Publish')
-            ->assertSee('Hapus');
+            ->assertSee('Hapus')
+            ->assertSee("form=\"delete-image-{$portfolio->id}-", false)
+            ->assertSee("id=\"delete-image-{$portfolio->id}-", false);
     }
 
     public function test_public_portfolio_filters_drafts_and_displays_optional_relations(): void

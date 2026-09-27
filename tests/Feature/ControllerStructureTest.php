@@ -28,13 +28,13 @@ class ControllerStructureTest extends TestCase
     public function test_all_public_and_admin_buttons_share_the_same_radius(): void
     {
         $publicCss = file_get_contents(public_path('css/site.css'));
-        $adminLayout = file_get_contents(resource_path('views/layouts/admin.blade.php'));
+        $adminCss = file_get_contents(public_path('css/admin.css'));
 
         $this->assertStringContainsString('--radius-button: 9999px;', $publicCss);
         $this->assertStringContainsString('nav.nav-links-desktop a.btn', $publicCss);
         $this->assertStringContainsString('border-radius: var(--radius-button);', $publicCss);
-        $this->assertStringContainsString('--radius-button: 9999px;', $adminLayout);
-        $this->assertStringContainsString('border-radius: var(--radius-button);', $adminLayout);
+        $this->assertStringContainsString('--radius-button: 9999px;', $adminCss);
+        $this->assertStringContainsString('border-radius: var(--radius-button);', $adminCss);
     }
 
     public function test_controllers_are_split_by_area_and_feature(): void
