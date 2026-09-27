@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>@yield('title') - Admin</title>
     <style>
-        :root { font-family: system-ui, sans-serif; color: #172033; background: #f4f6f8; }
+        :root { --radius-button: 9999px; font-family: system-ui, sans-serif; color: #172033; background: #f4f6f8; }
         * { box-sizing: border-box; }
         body { margin: 0; }
         button, input, select, textarea { font: inherit; }
+        button { border-radius: var(--radius-button); }
         button, .admin-nav a { min-height: 44px; }
         :focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
         .admin-nav { position: sticky; top: 0; z-index: 20; display: flex; gap: .25rem; align-items: center; overflow-x: auto; padding: .65rem max(1rem, calc((100vw - 1180px) / 2)); background: #172033; }
@@ -29,7 +30,7 @@
         .admin-check input { width: 1.2rem; height: 1.2rem; }
         .admin-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .85rem; }
         .admin-actions form { margin: 0; }
-        .admin-button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; border: 0; border-radius: .5rem; padding: .65rem 1rem; color: #fff; background: #172033; font-weight: 700; cursor: pointer; }
+        .admin-button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; border: 0; border-radius: var(--radius-button); padding: .65rem 1rem; color: #fff; background: #172033; font-weight: 700; cursor: pointer; }
         .admin-button--secondary { color: #172033; background: #e9edf2; }
         .admin-button--danger { background: #b42318; }
         .admin-status { display: inline-block; margin-bottom: .75rem; padding: .25rem .55rem; border-radius: 999px; background: #e8f7ee; color: #176b3a; font-size: .8rem; font-weight: 700; }

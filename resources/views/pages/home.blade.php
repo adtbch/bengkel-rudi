@@ -6,7 +6,7 @@
 
 <section class="workshop-hero" id="beranda" aria-labelledby="hero-title">
     <div class="workshop-hero__content">
-        <span class="workshop-hero__brand" aria-hidden="true">BR</span>
+        <img class="workshop-hero__brand" src="https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png" alt="Bengkel Rudi - Cat &amp; Body Repair" width="180" height="180">
         <h1 id="hero-title">Cat dan Body Repair Terpercaya di Batang</h1>
         <p class="workshop-hero__subtitle">Perbaikan penyok dan pengecatan mobil maupun motor dengan hasil rapi dan Terpercaya.</p>
         <div class="home-actions">

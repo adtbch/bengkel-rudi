@@ -1,7 +1,8 @@
 <header class="site-header{{ request()->is('/') ? ' site-header--hero' : '' }}">
     <div class="header-wrap">
         <a href="/" class="brand-logo">
-            <span>{{ $settings['business_name'] ?? 'Bengkel Rudi' }}</span>
+            <img class="brand-logo__image" src="https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png"
+            <span class="brand-logo__text">Bengkel Rudi</span>
         </a>
 
         <nav class="nav-links-desktop" aria-label="Navigasi utama">
@@ -10,7 +11,6 @@
             <a href="/portfolio">Portfolio</a>
             <a href="/tentang">Tentang</a>
             <a href="/kontak">Kontak &amp; Lokasi</a>
-            <a class="btn btn-wa header-wa" href="https://wa.me/{{ $settings['whatsapp_number'] ?? '628123456789' }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin konsultasi perbaikan bodi kendaraan.') }}" target="_blank" rel="noopener">Chat WhatsApp</a>
         </nav>
 
         <details class="mobile-menu">

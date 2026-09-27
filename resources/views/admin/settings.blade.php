@@ -74,6 +74,6 @@
         <textarea name="about_content" required style="width:100%;padding:0.5rem" rows="5">{{ old('about_content', $settings['about_content'] ?? '') }}</textarea>
     </label>
 
-    <button type="submit" style="padding:0.75rem;background:#171717;color:#fff;border:0;border-radius:6px;cursor:pointer">Simpan Perubahan</button>
+    <button type="submit" style="padding:0.75rem;background:#171717;color:#fff;border:0;border-radius:9999px;cursor:pointer">Simpan Perubahan</button>
 </form>
 @endsection

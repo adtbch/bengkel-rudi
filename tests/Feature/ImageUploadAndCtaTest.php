@@ -14,7 +14,10 @@ class ImageUploadAndCtaTest extends TestCase
     public function test_admin_can_upload_and_delete_portfolio_images_with_validation(): void
     {
         $mock = $this->createMock(CloudinaryService::class);
-        $mock->method('upload')->willReturn([
+        config(['cloudinary.folder' => 'BengkelRudi']);
+        $mock->expects($this->once())->method('upload')
+            ->with($this->isInstanceOf(UploadedFile::class), 'BengkelRudi/portfolio')
+            ->willReturn([
             'secure_url' => 'https://res.cloudinary.com/test/image/upload/v1/BengkelRudi/sample.jpg',
             'public_id' => 'BengkelRudi/sample',
         ]);

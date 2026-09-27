@@ -12,6 +12,31 @@ use Tests\TestCase;
 
 class ControllerStructureTest extends TestCase
 {
+    public function test_public_header_and_hero_use_supplied_logo(): void
+    {
+        $logo = 'https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png';
+        foreach (['layouts/partials/header', 'pages/home'] as $view) {
+            $source = file_get_contents(resource_path("views/{$view}.blade.php"));
+            $this->assertStringContainsString($logo, $source);
+            $this->assertStringNotContainsString('>BR</span>', $source);
+        }
+
+        $css = file_get_contents(public_path('css/site.css'));
+        $this->assertStringContainsString('width: min(88vw, 360px);', $css);
+    }
+
+    public function test_all_public_and_admin_buttons_share_the_same_radius(): void
+    {
+        $publicCss = file_get_contents(public_path('css/site.css'));
+        $adminLayout = file_get_contents(resource_path('views/layouts/admin.blade.php'));
+
+        $this->assertStringContainsString('--radius-button: 9999px;', $publicCss);
+        $this->assertStringContainsString('nav.nav-links-desktop a.btn', $publicCss);
+        $this->assertStringContainsString('border-radius: var(--radius-button);', $publicCss);
+        $this->assertStringContainsString('--radius-button: 9999px;', $adminLayout);
+        $this->assertStringContainsString('border-radius: var(--radius-button);', $adminLayout);
+    }
+
     public function test_controllers_are_split_by_area_and_feature(): void
     {
         $this->assertTrue(class_exists(AdminServiceController::class));

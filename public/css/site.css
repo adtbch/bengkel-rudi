@@ -15,6 +15,7 @@
             --radius-sm: 6px;
             --radius-md: 12px;
             --radius-lg: 18px;
+            --radius-button: 9999px;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
             --shadow-md: 0 4px 12px -2px rgba(15,23,42,0.08), 0 2px 6px -1px rgba(15,23,42,0.04);
             --shadow-lg: 0 12px 24px -4px rgba(15,23,42,0.1), 0 4px 8px -2px rgba(15,23,42,0.04);
@@ -101,6 +102,11 @@
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
+        .brand-logo__text {
+            display: block;
+            font-size: 1.15rem;
+            font-weight: 100;
+        }
 
         nav.nav-links-desktop {
             display: none;
@@ -118,6 +124,7 @@
         nav.nav-links-desktop a.active {
             color: var(--brand-primary);
         }
+        nav.nav-links-desktop a.btn { border-radius: var(--radius-button); }
         .header-wa { padding: .5rem 1.1rem; font-size: .85rem; min-height: 40px; white-space: nowrap; }
         .mobile-menu { position: relative; }
         .mobile-menu summary {
@@ -149,7 +156,7 @@
         }
         .mobile-menu nav a { min-height: 44px; display: flex; align-items: center; padding: .7rem .8rem; color: var(--text-body); font-weight: 700; }
         .mobile-menu nav a:hover { color: var(--brand-primary); background: #f8fafc; }
-        .mobile-menu nav .mobile-menu__wa { justify-content: center; margin-top: .4rem; border-radius: var(--radius-sm); color: #ffffff; background: var(--wa-color); }
+        .mobile-menu nav .mobile-menu__wa { justify-content: center; margin-top: .4rem; border-radius: var(--radius-button); color: #ffffff; background: var(--wa-color); }
         .mobile-menu nav .mobile-menu__wa:hover { color: #ffffff; background: var(--wa-hover); }
 
         /* Buttons */
@@ -161,7 +168,7 @@
             padding: 0.75rem 1.4rem;
             font-size: 0.92rem;
             font-weight: 700;
-            border-radius: var(--radius-sm);
+            border-radius: var(--radius-button);
             cursor: pointer;
             text-decoration: none;
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -521,18 +528,18 @@
             justify-content: center;
             text-align: center;
         }
+        .brand-logo__image {
+            display: block;
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+        }
         .workshop-hero__brand {
-            width: 72px;
-            height: 72px;
-            display: grid;
-            place-items: center;
+            display: block;
+            width: min(60vw, 360px);
+            height: auto;
+            object-fit: contain;
             margin-bottom: 1.25rem;
-            border: 2px solid rgba(255, 255, 255, .72);
-            border-radius: 50%;
-            color: #f8fafc;
-            font-size: 1.3rem;
-            font-weight: 800;
-            letter-spacing: -.05em;
         }
         .workshop-hero .home-eyebrow { color: #fdba74; }
         .workshop-hero h1 {
@@ -559,7 +566,7 @@
         .btn-hero-secondary:hover { border-color: #f8fafc; background: rgba(248, 250, 252, .12); }
         @media (max-width: 639px) {
             .workshop-hero { min-height: calc(100dvh - 72px); }
-            .workshop-hero__brand { width: 60px; height: 60px; }
+            .workshop-hero__brand { width: min(88vw, 360px); height: auto; }
             .workshop-hero .home-actions { width: 100%; }
             .workshop-hero .home-actions .btn { width: 100%; }
         }

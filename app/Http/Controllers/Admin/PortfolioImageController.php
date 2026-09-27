@@ -22,7 +22,7 @@ class PortfolioImageController extends Controller
 
         $sortOrder = (int) $request->input('sort_order', 0);
         foreach ($request->file('images') as $file) {
-            $uploaded = $cloudinary->upload($file, config('cloudinary.folder', 'BengkelRudi'));
+            $uploaded = $cloudinary->upload($file, trim(config('cloudinary.folder', 'BengkelRudi'), '/') . '/portfolio');
             $portfolio->images()->create([
                 'image_url' => $uploaded['secure_url'],
                 'cloudinary_public_id' => $uploaded['public_id'],
