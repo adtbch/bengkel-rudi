@@ -37,7 +37,7 @@ Route::prefix('admin')->middleware('admin.jwt')->group(function () {
     Route::put('/portfolio/{portfolio}', [AdminPortfolioController::class, 'update']);
     Route::patch('/portfolio/{portfolio}/toggle', [AdminPortfolioController::class, 'toggle']);
     Route::delete('/portfolio/{portfolio}', [AdminPortfolioController::class, 'destroy']);
-    Route::post('/portfolio/{portfolio}/images', [PortfolioImageController::class, 'store']);
+    Route::post('/portfolio/{portfolio}/images/order', [PortfolioImageController::class, 'reorder']);
     Route::delete('/portfolio/{portfolio}/images/{image}', [PortfolioImageController::class, 'destroy']);
 
     Route::middleware('superadmin')->group(function () {
