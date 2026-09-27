@@ -6,6 +6,15 @@ use Tests\TestCase;
 class SiteSettingsTest extends TestCase
 {
  use DatabaseMigrations;
+ public function test_default_location_uses_confirmed_wonokerto_address_and_map_link(): void
+ {
+  $address='RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254';
+  $mapUrl='https://maps.app.goo.gl/2ZnVyFhLXDU7AfS2A';
+
+  $this->get('/kontak')->assertOk()->assertSee($address)->assertSee($mapUrl, false);
+  $this->get('/')->assertOk()->assertSee($address);
+ }
+
  public function test_superadmin_updates_settings_and_public_pages_use_them(): void
  {
   $user=User::factory()->create(['role'=>'SUPER_ADMIN','is_active'=>true]);

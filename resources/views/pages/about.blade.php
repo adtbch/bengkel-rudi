@@ -6,7 +6,7 @@
 <div style="margin-bottom:2rem">
     <div class="pill-badge" style="background:#fee2e2;color:#b91c1c;margin-bottom:0.5rem">Tentang Bengkel Rudi</div>
     <h1 style="font-size:clamp(1.75rem, 4vw, 2.35rem);font-weight:800;color:var(--text-heading);letter-spacing:-0.02em;margin-bottom:0.35rem">
-        Bengkel Cat Oven &amp; Body Repair Semarang
+        Bengkel Cat &amp; Body Repair di Kabupaten Batang
     </h1>
     <p style="color:var(--text-muted);font-size:0.95rem">Membangun kepercayaan pelanggan melalui ketelitian pengerjaan, material cat berkualitas, dan garansi rapi.</p>
 </div>

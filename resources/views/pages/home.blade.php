@@ -1,6 +1,6 @@
 @extends('layouts.public')
-@section('title', $settings['meta_title'] ?? 'Bengkel Rudi - Bengkel Cat dan Body Repair Semarang')
-@section('description', $settings['meta_description'] ?? 'Bengkel cat dan body repair mobil motor di Semarang. Lihat layanan, kisaran harga, dan konsultasi langsung melalui WhatsApp.')
+@section('title', $settings['meta_title'] ?? 'Bengkel Rudi - Bengkel Cat dan Body Repair Batang')
+@section('description', $settings['meta_description'] ?? 'Bengkel cat dan body repair mobil motor di Wonokerto, Bandar, Kabupaten Batang. Konsultasi langsung melalui WhatsApp.')
 
 @section('content')
 
@@ -109,7 +109,7 @@
 <section class="home-location" aria-labelledby="lokasi-title">
     <div class="home-location__copy">
         <h2 id="lokasi-title">Lokasi workshop</h2>
-        <p>{{ $settings['address'] ?? 'Semarang, Jawa Tengah' }}</p>
+        <p>{{ $settings['address'] ?? 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254' }}</p>
         <span>{{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</span>
         <a class="home-text-link" href="/kontak">Lihat kontak dan petunjuk arah <span aria-hidden="true">→</span></a>
     </div>

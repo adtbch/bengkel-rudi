@@ -1,6 +1,6 @@
 @extends('layouts.public')
 @section('title', 'Kontak & Lokasi Workshop — ' . ($settings['business_name'] ?? 'Bengkel Rudi'))
-@section('description', 'Hubungi kami dan temukan petunjuk arah lokasi workshop Bengkel Rudi di Semarang.')
+@section('description', 'Hubungi kami dan temukan petunjuk arah workshop Bengkel Rudi di Wonokerto, Bandar, Kabupaten Batang.')
 
 @section('content')
 <div style="margin-bottom:2rem">
@@ -17,7 +17,7 @@
             <div style="background:#f8fafc;padding:1.25rem;border-radius:var(--radius-sm);border:1px solid var(--border-color)">
                 <span style="font-size:0.75rem;color:var(--brand-primary);text-transform:uppercase;letter-spacing:0.04em;font-weight:800;display:block;margin-bottom:0.35rem">Alamat Workshop</span>
                 <p style="font-size:1.05rem;color:var(--text-heading);margin:0;line-height:1.6">
-                    <strong>Alamat:</strong> {{ $settings['address'] ?? 'Semarang, Jawa Tengah' }}
+                    <strong>Alamat:</strong> {{ $settings['address'] ?? 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254' }}
                 </p>
             </div>
             <div style="background:#f8fafc;padding:1.25rem;border-radius:var(--radius-sm);border:1px solid var(--border-color)">

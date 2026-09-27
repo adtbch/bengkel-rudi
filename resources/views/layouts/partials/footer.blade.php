@@ -11,7 +11,7 @@
             </div>
             <div class="footer-col">
                 <h4>Workshop &amp; Jam Buka</h4>
-                <p>📍 {{ $settings['address'] ?? 'Semarang, Jawa Tengah' }}</p>
+                <p>📍 {{ $settings['address'] ?? 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254' }}</p>
                 <p style="margin-top:0.5rem">🕒 {{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</p>
                 <p style="margin-top:0.5rem;color:#f87171">Minggu / Tanggal Merah: Konfirmasi Janji</p>
             </div>
@@ -31,6 +31,6 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <small>&copy; {{ date('Y') }} {{ $settings['business_name'] ?? 'Bengkel Rudi' }}. Solusi Cat &amp; Body Repair Kendaraan Semarang.</small>
+            <small>&copy; {{ date('Y') }} {{ $settings['business_name'] ?? 'Bengkel Rudi' }}. Solusi Cat &amp; Body Repair Kendaraan di Kabupaten Batang.</small>
         </div>
     </footer>
