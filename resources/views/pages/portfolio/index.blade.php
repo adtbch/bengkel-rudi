@@ -26,7 +26,7 @@
                         </div>
                     @endif
                     <div style="position:absolute;top:0.65rem;left:0.65rem;display:flex;gap:0.35rem">
-                        <span class="pill-badge badge-vehicle">{{ $portfolio->vehicle_type }}</span>
+                        <span class="pill-badge badge-vehicle">{{ $portfolio->vehicle_label }}</span>
                         @if($cover && !empty($cover->stage))
                             <span class="pill-badge badge-stage-{{ strtolower($cover->stage) }}">{{ $cover->stage }}</span>
                         @endif
@@ -41,7 +41,7 @@
                         <a href="/portfolio/{{ $portfolio->slug }}" style="color:var(--text-heading)">{{ $portfolio->title }}</a>
                     </h2>
                     <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.1rem">
-                        {{ $portfolio->vehicle_type }} · {{ $portfolio->service->name }}
+                        {{ $portfolio->vehicle_label }} · {{ $portfolio->service->name }}
                     </p>
                     <div style="margin-top:auto">
                         <a href="/portfolio/{{ $portfolio->slug }}" class="btn btn-white" style="width:100%;font-size:0.85rem;padding:0.55rem;min-height:40px">

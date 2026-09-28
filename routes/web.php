@@ -19,6 +19,23 @@ Route::get('/layanan/{slug}', [ServiceController::class, 'show']);
 Route::get('/portfolio', [PortfolioController::class, 'index']);
 Route::get('/portfolio/{slug}', [PortfolioController::class, 'show']);
 
+Route::get('/robots.txt', function () {
+    return response("User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ".url('/sitemap.xml')."\n", 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+});
+
+Route::get('/sitemap.xml', function () {
+    $urls = collect(['/', '/tentang', '/kontak', '/layanan', '/portfolio'])
+        ->merge(\App\Models\Service::where('is_active', true)->pluck('slug')->map(fn ($slug) => "/layanan/{$slug}"))
+        ->merge(\App\Models\Portfolio::where('is_published', true)->pluck('slug')->map(fn ($slug) => "/portfolio/{$slug}"));
+
+    $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n".'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+    foreach ($urls as $path) {
+        $xml .= '<url><loc>'.e(url($path)).'</loc></url>';
+    }
+
+    return response($xml.'</urlset>', 200, ['Content-Type' => 'application/xml; charset=UTF-8']);
+});
+
 Route::get('/admin/login', [AuthController::class, 'show'])->name('login');
 Route::post('/admin/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 

@@ -514,7 +514,7 @@
         .home-process {
             display: grid;
             gap: 2rem;
-            margin: 4.5rem calc(50% - 50vw) 0;
+            margin: 4.5rem -1rem 0;
             padding: 4rem max(1rem, calc((100vw - 1180px) / 2));
             color: #cbd5e1;
             background: var(--brand-dark);
@@ -583,7 +583,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: -1.5rem calc(50% - 50vw) 0;
+            margin: -1.5rem -1rem 0;
             padding: clamp(3rem, 8vw, 5.5rem) max(1rem, calc((100vw - 1180px) / 2));
             position: relative;
             isolation: isolate;
@@ -618,6 +618,7 @@
             height: 56px;
             object-fit: contain;
         }
+        .workshop-hero__brand { max-width: 100%; }
         .workshop-hero__brand {
             display: block;
             width: min(60vw, 360px);
@@ -685,7 +686,7 @@
         .about-preview {
             display: grid;
             gap: 2rem;
-            margin: 4.5rem calc(50% - 50vw) 0;
+            margin: 4.5rem -1rem 0;
             padding: 4rem max(1rem, calc((100vw - 1180px) / 2));
             color: #cbd5e1;
             background: var(--brand-dark);

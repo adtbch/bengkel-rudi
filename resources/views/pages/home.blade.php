@@ -2,6 +2,27 @@
 @section('title', $settings['meta_title'] ?? 'Bengkel Rudi - Bengkel Cat dan Body Repair Batang')
 @section('description', $settings['meta_description'] ?? 'Bengkel cat dan body repair mobil motor di Wonokerto, Bandar, Kabupaten Batang. Konsultasi langsung melalui WhatsApp.')
 
+@section('structured_data')
+@php($structuredData = [
+    '@context' => 'https://schema.org',
+    '@type' => ['LocalBusiness', 'AutoRepair'],
+    'name' => $settings['business_name'] ?? 'Bengkel Cat & Body Repair Rudi',
+    'description' => $settings['meta_description'] ?? 'Layanan cat dan body repair mobil dan motor di Wonokerto, Bandar, Kabupaten Batang.',
+    'telephone' => '+' . ($settings['whatsapp_number'] ?? '628123456789'),
+    'url' => url('/'),
+    'address' => [
+        '@type' => 'PostalAddress',
+        'streetAddress' => $settings['address'] ?? 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254',
+        'addressLocality' => 'Bandar',
+        'addressRegion' => 'Jawa Tengah',
+        'addressCountry' => 'ID',
+    ],
+    'openingHours' => $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB',
+    'sameAs' => array_values(array_filter([$settings['instagram_url'] ?? null, $settings['google_business_url'] ?? null])),
+])
+<script type="application/ld+json">{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endsection
+
 @section('content')
 
 <section class="workshop-hero" id="beranda" aria-labelledby="hero-title">
@@ -80,7 +101,7 @@
                     <div>
                         <span>{{ $portfolio->service->name }}</span>
                         <h3>{{ $portfolio->title }}</h3>
-                        <p>{{ $portfolio->vehicle_type }}</p>
+                        <p>{{ $portfolio->vehicle_label }}</p>
                     </div>
                 </a>
             </article>

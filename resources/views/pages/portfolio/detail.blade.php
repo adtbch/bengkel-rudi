@@ -8,14 +8,14 @@
         &larr; Kembali ke Galeri Portfolio
     </a>
     <div style="display:flex;flex-wrap:wrap;gap:0.5rem;align-items:center;margin-bottom:0.5rem">
-        <span class="pill-badge badge-vehicle">{{ $portfolio->vehicle_type }}</span>
+        <span class="pill-badge badge-vehicle">{{ $portfolio->vehicle_label }}</span>
         <span style="font-size:0.85rem;color:var(--brand-primary);font-weight:700">{{ $portfolio->service->name }}</span>
     </div>
     <h1 style="font-size:clamp(1.75rem, 4vw, 2.35rem);font-weight:800;color:var(--text-heading);letter-spacing:-0.03em;margin-bottom:0.35rem">
         {{ $portfolio->title }}
     </h1>
     <p style="color:var(--text-muted);font-size:0.88rem">
-        {{ $portfolio->vehicle_type }} · {{ $portfolio->service->name }}
+        {{ $portfolio->vehicle_label }} · {{ $portfolio->service->name }}
     </p>
 </div>
 

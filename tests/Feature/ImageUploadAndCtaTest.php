@@ -59,20 +59,20 @@ class ImageUploadAndCtaTest extends TestCase
         $service = Service::create(['name' => 'Reorder', 'slug' => 'reorder', 'description' => 'Test', 'features' => []]);
         $portfolio = Portfolio::create(['service_id' => $service->id, 'title' => 'Satu', 'slug' => 'satu', 'vehicle_type' => 'CAR']);
         $other = Portfolio::create(['service_id' => $service->id, 'title' => 'Dua', 'slug' => 'dua', 'vehicle_type' => 'CAR']);
-        $first = $portfolio->images()->create(['image_url' => 'https://example.test/1.jpg', 'cloudinary_public_id' => 'one', 'stage' => 'BEFORE', 'sort_order' => 0]);
-        $second = $portfolio->images()->create(['image_url' => 'https://example.test/2.jpg', 'cloudinary_public_id' => 'two', 'stage' => 'AFTER', 'sort_order' => 1]);
+        $first = $portfolio->images()->create(['image_url' => 'https://example.test/1.jpg', 'cloudinary_public_id' => 'one', 'stage' => 'BEFORE', 'sort_order' => 1]);
+        $second = $portfolio->images()->create(['image_url' => 'https://example.test/2.jpg', 'cloudinary_public_id' => 'two', 'stage' => 'AFTER', 'sort_order' => 2]);
         $foreign = $other->images()->create(['image_url' => 'https://example.test/3.jpg', 'cloudinary_public_id' => 'three', 'stage' => 'AFTER', 'sort_order' => 9]);
         $client = $this->withCookie('admin_token', auth('admin')->login($admin));
 
         $client->post("/admin/portfolio/{$portfolio->id}/images/order", [
-            'order' => [$first->id => 2, $second->id => 0],
+            'order' => [$first->id => 2, $second->id => 1],
         ])->assertRedirect()->assertSessionHas('status', 'Urutan foto berhasil disimpan.');
 
         $this->assertDatabaseHas('portfolio_images', ['id' => $first->id, 'sort_order' => 2]);
-        $this->assertDatabaseHas('portfolio_images', ['id' => $second->id, 'sort_order' => 0]);
+        $this->assertDatabaseHas('portfolio_images', ['id' => $second->id, 'sort_order' => 1]);
 
         $client->from('/admin/portfolio')->post("/admin/portfolio/{$portfolio->id}/images/order", [
-            'order' => [$foreign->id => 0],
+            'order' => [$foreign->id => 1],
         ])->assertRedirect('/admin/portfolio')->assertSessionHasErrors('order');
         $this->assertDatabaseHas('portfolio_images', ['id' => $foreign->id, 'sort_order' => 9]);
     }

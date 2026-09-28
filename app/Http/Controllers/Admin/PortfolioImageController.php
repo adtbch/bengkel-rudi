@@ -19,10 +19,11 @@ class PortfolioImageController extends Controller
             'images' => 'required|array',
             'images.*' => 'required|file|mimes:jpg,jpeg,png,webp|max:10240',
             'stage' => ['required', Rule::in(['BEFORE', 'PROCESS', 'AFTER'])],
-            'sort_order' => 'nullable|integer|min:0',
+            'sort_order' => 'nullable|integer|min:1',
         ]);
 
-        $sortOrder = (int) $request->input('sort_order', 0);
+        $requestedOrder = (int) $request->input('sort_order', 1);
+        $sortOrder = max($requestedOrder, ((int) $portfolio->images()->max('sort_order')) + 1);
         $uploadedAssets = [];
 
         try {
@@ -76,8 +77,14 @@ class PortfolioImageController extends Controller
     {
         $data = $request->validate([
             'order' => ['required', 'array'],
-            'order.*' => ['required', 'integer', 'min:0'],
+            'order.*' => ['required', 'integer', 'min:1'],
+        ], [
+            'order.*.min' => 'Urutan foto minimal 1.',
         ]);
+
+        if (count($data['order']) !== count(array_unique(array_values($data['order'])))) {
+            throw ValidationException::withMessages(['order' => 'Urutan foto harus unik dalam satu portfolio.']);
+        }
 
         $ids = array_map('intval', array_keys($data['order']));
         $ownedIds = $portfolio->images()->whereIn('id', $ids)->pluck('id')->map(fn ($id) => (int) $id)->all();

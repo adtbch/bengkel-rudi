@@ -6,6 +6,16 @@ use Tests\TestCase;
 class SiteSettingsTest extends TestCase
 {
  use DatabaseMigrations;
+ public function test_public_css_prevents_viewport_overflow_and_keeps_mobile_navigation_visible(): void
+ {
+  $css=file_get_contents(public_path('css/site.css'));
+  $header=file_get_contents(resource_path('views/layouts/partials/header.blade.php'));
+  $this->assertStringNotContainsString('calc(50% - 50vw)', $css);
+  $this->assertStringContainsString('.workshop-hero__brand { max-width: 100%; }', $css);
+  $this->assertStringContainsString('alt="Logo Bengkel Rudi"', $header);
+  $this->assertStringContainsString('class="mobile-menu"', $header);
+ }
+
  public function test_default_location_uses_confirmed_wonokerto_address_and_map_link(): void
  {
   $address='RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254';
@@ -14,6 +24,25 @@ class SiteSettingsTest extends TestCase
 
   $this->get('/kontak')->assertOk()->assertSee($address)->assertSee($mapUrl, false)->assertSee($embedUrl, false);
   $this->get('/')->assertOk()->assertSee($address)->assertSee($embedUrl, false);
+ }
+
+ public function test_homepage_publishes_local_business_structured_data_without_unconfirmed_coordinates(): void
+ {
+  $this->withoutExceptionHandling();
+  $response=$this->get('/')->assertOk();
+  $response->assertSee('application/ld+json',false)->assertSee('"LocalBusiness"',false)->assertSee('"AutoRepair"',false)->assertSee('"address"',false)->assertSee('Wonokerto',false);
+  $response->assertDontSee('"geo"',false);
+ }
+
+ public function test_robots_and_sitemap_expose_only_public_active_content(): void
+ {
+  $service=\App\Models\Service::create(['name'=>'Cat Panel','slug'=>'cat-panel','description'=>'Cat panel rapi','features'=>[],'is_active'=>true]);
+  \App\Models\Service::create(['name'=>'Rahasia','slug'=>'rahasia','description'=>'Tidak tampil','features'=>[],'is_active'=>false]);
+  \App\Models\Portfolio::create(['service_id'=>$service->id,'title'=>'Jazz','slug'=>'jazz','vehicle_type'=>'CAR','is_published'=>true]);
+  \App\Models\Portfolio::create(['service_id'=>$service->id,'title'=>'Draft','slug'=>'draft','vehicle_type'=>'CAR','is_published'=>false]);
+
+  $this->get('/robots.txt')->assertOk()->assertHeader('Content-Type','text/plain; charset=UTF-8')->assertSee('Sitemap: '.url('/sitemap.xml'),false);
+  $this->get('/sitemap.xml')->assertOk()->assertHeader('Content-Type','application/xml; charset=UTF-8')->assertSee('/layanan/cat-panel',false)->assertSee('/portfolio/jazz',false)->assertDontSee('/layanan/rahasia',false)->assertDontSee('/portfolio/draft',false);
  }
 
  public function test_superadmin_updates_settings_and_public_pages_use_them(): void

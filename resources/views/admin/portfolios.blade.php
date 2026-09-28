@@ -56,8 +56,26 @@
     </div>
     <div class="admin-card-grid">
         @forelse($portfolios as $portfolio)
-            <article class="admin-card">
-                <span class="admin-status{{ $portfolio->is_published ? '' : ' admin-status--draft' }}">{{ $portfolio->is_published ? 'Published' : 'Draft' }}</span>
+            <article class="admin-card admin-portfolio-card">
+                @php($cover = $portfolio->images->first())
+                <div class="admin-portfolio-card__summary">
+                    <div class="admin-portfolio-card__cover">
+                        @if($cover)
+                            <img src="{{ $cover->image_url }}" alt="Foto utama {{ $portfolio->title }}" loading="lazy" decoding="async">
+                        @else
+                            <span aria-hidden="true">Belum ada foto</span>
+                        @endif
+                    </div>
+                    <div class="admin-portfolio-card__info">
+                        <div class="admin-portfolio-card__title-row">
+                            <h3>{{ $portfolio->title }}</h3>
+                            <span class="admin-status{{ $portfolio->is_published ? '' : ' admin-status--draft' }}">{{ $portfolio->is_published ? 'Terbit' : 'Draf' }}</span>
+                        </div>
+                        <p>{{ $portfolio->vehicle_label }} · {{ $portfolio->service->name }} · {{ $portfolio->images->count() }} foto</p>
+                    </div>
+                </div>
+            <details class="admin-section admin-portfolio-editor">
+                <summary class="admin-section-summary">Kelola portfolio</summary>
                 <form method="post" action="/admin/portfolio/{{ $portfolio->id }}" class="admin-form-grid">
                     @csrf
                     @method('PUT')
@@ -80,28 +98,34 @@
                     <input type="hidden" name="is_published" value="{{ $portfolio->is_published ? 1 : 0 }}">
                     <div class="admin-actions"><button class="admin-button" type="submit">Simpan perubahan</button></div>
                 </form>
-                <h3>Tambah foto</h3>
-                <form method="post" action="/admin/portfolio/{{ $portfolio->id }}/images" enctype="multipart/form-data" class="admin-form-grid">
-                    @csrf
-                    <label class="admin-field admin-field--wide">Foto (JPG, PNG, WebP; maksimal 10 MB per foto)
-                        <input type="file" name="images[]" accept="image/jpeg,image/png,image/webp" multiple required data-image-input>
-                        <span class="admin-field-help">Pilih satu atau beberapa foto. Preview hanya tampil di perangkat ini.</span>
-                    </label>
-                    <div class="admin-image-preview admin-field--wide" data-image-preview aria-live="polite"></div>
-                    <label class="admin-field">Tahap foto
-                        <select name="stage" required>
-                            <option value="BEFORE">Sebelum perbaikan</option>
-                            <option value="PROCESS">Proses perbaikan</option>
-                            <option value="AFTER">Hasil akhir</option>
-                        </select>
-                    </label>
-                    <label class="admin-field">Urutan awal
-                        <input type="number" name="sort_order" value="0" min="0" step="1">
-                    </label>
-                    <div class="admin-actions"><button class="admin-button" type="submit">Unggah foto</button></div>
-                </form>
+            </details>
+
+                <details class="admin-section">
+                    <summary class="admin-section-summary">Tambah foto</summary>
+                    <form method="post" action="/admin/portfolio/{{ $portfolio->id }}/images" enctype="multipart/form-data" class="admin-form-grid">
+                        @csrf
+                        <label class="admin-field admin-field--wide">Foto (JPG, PNG, WebP; maksimal 10 MB per foto)
+                            <input type="file" name="images[]" accept="image/jpeg,image/png,image/webp" multiple required data-image-input>
+                            <span class="admin-field-help">Pilih satu atau beberapa foto. Preview hanya tampil di perangkat ini.</span>
+                        </label>
+                        <div class="admin-image-preview admin-field--wide" data-image-preview aria-live="polite"></div>
+                        <label class="admin-field">Tahap foto
+                            <select name="stage" required>
+                                <option value="BEFORE">Sebelum perbaikan</option>
+                                <option value="PROCESS">Proses perbaikan</option>
+                                <option value="AFTER">Hasil akhir</option>
+                            </select>
+                        </label>
+                        <label class="admin-field">Urutan awal
+                            <input type="number" name="sort_order" value="1" min="1" step="1">
+                        </label>
+                        <div class="admin-actions"><button class="admin-button" type="submit">Simpan foto</button></div>
+                    </form>
+                </details>
 
                 @if($portfolio->images->count())
+                    <details class="admin-section">
+                    <summary class="admin-section-summary">Kelola foto ({{ $portfolio->images->count() }})</summary>
                     <h4 class="admin-image-heading">Foto Terunggah</h4>
                     <form method="post" action="/admin/portfolio/{{ $portfolio->id }}/images/order" class="admin-form-grid admin-image-order">
                         @csrf
@@ -110,7 +134,7 @@
                                 <img src="{{ $img->image_url }}" alt="Foto {{ strtolower($img->stage) }} {{ $portfolio->title }}" loading="lazy" decoding="async" />
                                 <span class="pill-badge @if($img->stage === 'BEFORE') badge-stage-before @elseif($img->stage === 'PROCESS') badge-stage-process @else badge-stage-after @endif">{{ $img->stage }}</span>
                                 <label class="admin-field admin-image-order__field">Urutan
-                                    <input type="number" name="order[{{ $img->id }}]" value="{{ $img->sort_order }}" min="0" step="1" />
+                                    <input type="number" name="order[{{ $img->id }}]" value="{{ max(1, $img->sort_order) }}" min="1" step="1" />
                                 </label>
                                 <button type="submit" form="delete-image-{{ $portfolio->id }}-{{ $img->id }}" onclick="return confirm('Hapus foto?')" class="admin-button admin-button--danger admin-image-delete">
                                     Hapus Foto
@@ -127,8 +151,11 @@
                             @method('DELETE')
                         </form>
                     @endforeach
+                    </details>
                 @endif
 
+                <details class="admin-section">
+                <summary class="admin-section-summary">Publikasi dan hapus</summary>
                 <div class="admin-actions admin-card-actions">
                     <form method="post" action="/admin/portfolio/{{ $portfolio->id }}/toggle">
                         @csrf
@@ -141,6 +168,7 @@
                         <button class="admin-button admin-button--danger" type="submit">Hapus</button>
                     </form>
                 </div>
+                </details>
             </article>
         @empty
             <p>Belum ada portfolio.</p>

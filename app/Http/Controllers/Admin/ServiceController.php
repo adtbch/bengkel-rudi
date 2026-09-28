@@ -59,7 +59,7 @@ class ServiceController extends Controller
             'max_price' => 'nullable|integer|min:0|gte:min_price',
             'features' => 'required|string|max:5000',
             'is_active' => 'nullable|boolean',
-            'sort_order' => 'required|integer|min:0',
+            'sort_order' => 'required|integer|min:1',
         ]);
         $data['features'] = array_values(array_filter(array_map('trim', preg_split('/\R/', $data['features']))));
         $data['is_active'] = $request->boolean('is_active');

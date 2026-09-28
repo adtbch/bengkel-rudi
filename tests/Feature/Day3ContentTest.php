@@ -57,6 +57,21 @@ class Day3ContentTest extends TestCase
         $this->get('/layanan')->assertOk()->assertSee('Belum ada layanan');
     }
 
+    public function test_public_pages_render_specific_title_and_description_metadata(): void
+    {
+        $service = $this->service();
+        $portfolio = Portfolio::create(['service_id'=>$service->id, 'title'=>'Avanza Body Repair', 'slug'=>'avanza-body-repair', 'vehicle_type'=>'CAR', 'is_published'=>true]);
+
+        $this->get('/')->assertOk()->assertSee('<title>', false)->assertSee('<meta name="description"', false);
+        $this->get('/tentang')->assertOk()->assertSee('Tentang Kami', false)->assertSee('<meta name="description"', false);
+        $this->get('/kontak')->assertOk()->assertSee('Kontak &amp; Lokasi Workshop', false)->assertSee('<meta name="description"', false);
+        $this->get('/layanan')->assertOk()->assertSee('Layanan &amp; Paket Cat', false)->assertSee('<meta name="description"', false);
+        $this->get("/layanan/{$service->slug}")->assertOk()->assertSee('<title>'.$service->name, false)->assertSee('<meta name="description"', false);
+        $this->get('/portfolio')->assertOk()->assertSee('<title>Portfolio', false)->assertSee('<meta name="description"', false);
+        $this->get("/portfolio/{$portfolio->slug}")->assertOk()->assertSee('<title>'.$portfolio->title, false)->assertSee('<meta name="description"', false);
+        $this->assertStringNotContainsString('Oven', file_get_contents(resource_path('views/pages/about.blade.php')));
+    }
+
     public function test_portfolio_admin_validation_crud_publish_and_image_delete_constraint(): void
     {
         $service=$this->service();
@@ -107,6 +122,21 @@ class Day3ContentTest extends TestCase
         $this->assertStringContainsString('admin-card-grid', $portfolio);
     }
 
+    public function test_admin_services_exposes_editable_accessible_mobile_friendly_management(): void
+    {
+        $view = file_get_contents(resource_path('views/admin/services.blade.php'));
+        $css = file_get_contents(public_path('css/admin.css'));
+
+        $this->assertStringContainsString('admin-page-head', $view);
+        $this->assertStringContainsString('admin-panel', $view);
+        $this->assertStringContainsString('admin-card-grid', $view);
+        $this->assertStringContainsString('@method(\'PUT\')', $view);
+        $this->assertStringContainsString('admin-status--draft', $view);
+        $this->assertStringContainsString('aria-describedby="service-name-error"', $view);
+        $this->assertStringContainsString('role="alert"', $view);
+        $this->assertStringContainsString('admin-service-price', $css);
+    }
+
     public function test_portfolio_uses_clear_admin_hierarchy(): void
     {
         $view = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
@@ -134,7 +164,11 @@ class Day3ContentTest extends TestCase
         $view = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
 
         $this->assertStringContainsString("asset('css/admin.css')", $layout);
+        $this->assertStringContainsString('https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png', $layout);
+        $this->assertStringContainsString('alt="Logo Bengkel Rudi"', $layout);
+        $this->assertStringContainsString('class="admin-brand"', $layout);
         $this->assertMatchesRegularExpression('/\.admin-nav\s*\{[^}]*flex-wrap:\s*wrap/s', $css);
+        $this->assertStringContainsString('.admin-brand__logo', $css);
         $this->assertStringContainsString('class="admin-field-error" role="alert"', $view);
         $this->assertStringContainsString(':focus-visible', $css);
         $this->assertStringContainsString('min-height: 44px', $css);
@@ -218,6 +252,44 @@ class Day3ContentTest extends TestCase
         $this->get('/')->assertOk()->assertSee('Karya 6')->assertDontSee('Lihat Semua Portfolio');
         Portfolio::create(['service_id'=>$service->id,'title'=>'Karya 7','slug'=>'karya-7','vehicle_type'=>'CAR','is_published'=>true]);
         $this->get('/')->assertOk()->assertSee('Karya 7')->assertDontSee('Karya 1')->assertSee('Lihat Semua Portfolio');
+    }
+
+    public function test_duplicate_image_order_is_rejected_without_database_changes(): void
+    {
+        $service = $this->service();
+        $portfolio = Portfolio::create(['service_id' => $service->id, 'title' => 'Urutan Foto', 'slug' => 'urutan-foto', 'vehicle_type' => 'CAR', 'is_published' => true]);
+        $first = $portfolio->images()->create(['image_url' => 'https://example.test/1.jpg', 'cloudinary_public_id' => 'order/1', 'stage' => 'BEFORE', 'sort_order' => 1]);
+        $second = $portfolio->images()->create(['image_url' => 'https://example.test/2.jpg', 'cloudinary_public_id' => 'order/2', 'stage' => 'AFTER', 'sort_order' => 2]);
+
+        $this->admin()->post("/admin/portfolio/{$portfolio->id}/images/order", ['order' => [$first->id => 1, $second->id => 1]])
+            ->assertSessionHasErrors(['order' => 'Urutan foto harus unik dalam satu portfolio.']);
+
+        $this->assertSame(1, $first->fresh()->sort_order);
+        $this->assertSame(2, $second->fresh()->sort_order);
+    }
+
+    public function test_image_order_must_start_at_one(): void
+    {
+        $service = $this->service();
+        $portfolio = Portfolio::create(['service_id' => $service->id, 'title' => 'Urutan Minimum', 'slug' => 'urutan-minimum', 'vehicle_type' => 'CAR', 'is_published' => true]);
+        $image = $portfolio->images()->create(['image_url' => 'https://example.test/min.jpg', 'cloudinary_public_id' => 'order/min', 'stage' => 'BEFORE', 'sort_order' => 1]);
+
+        $this->admin()->post("/admin/portfolio/{$portfolio->id}/images/order", ['order' => [$image->id => 0]])
+            ->assertSessionHasErrors('order.'.$image->id);
+        $this->assertSame(1, $image->fresh()->sort_order);
+    }
+
+    public function test_public_vehicle_labels_are_indonesian_without_changing_storage(): void
+    {
+        $service = $this->service();
+        foreach (['CAR' => 'Mobil', 'MOTOR' => 'Motor'] as $type => $label) {
+            $portfolio = Portfolio::create(['service_id' => $service->id, 'title' => 'Karya '.$type, 'slug' => strtolower($type), 'vehicle_type' => $type, 'is_published' => true]);
+            $this->assertSame($label, $portfolio->vehicle_label);
+            foreach (['/', '/portfolio', '/portfolio/'.$portfolio->slug] as $url) {
+                $this->get($url)->assertOk()->assertSee($label)->assertDontSee('>'.$type.'<', false)->assertDontSee($type.' ·', false);
+            }
+            $this->assertSame($type, $portfolio->fresh()->vehicle_type);
+        }
     }
 
     public function test_mutating_admin_routes_keep_web_csrf_middleware(): void

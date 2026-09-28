@@ -21,8 +21,8 @@
         <!-- 3 Pilar Keunggulan (seperti Bengkel Anga & Bengkel Cat) -->
         <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:1rem;margin-bottom:1.75rem">
             <div style="background:#f8fafc;padding:1.2rem;border-radius:var(--radius-sm);border:1px solid var(--border-color)">
-                <div style="color:var(--brand-primary);font-weight:800;font-size:1.05rem;margin-bottom:0.35rem">✓ Ruang Cat Oven Standar</div>
-                <p style="color:var(--text-muted);font-size:0.85rem;margin:0;line-height:1.5">Proses spray booth tertutup meminimalkan debu dan partikel asing, menjamin kilap bening merata.</p>
+                <div style="color:var(--brand-primary);font-weight:800;font-size:1.05rem;margin-bottom:0.35rem">✓ Pengecatan Rapi dan Terkontrol</div>
+                <p style="color:var(--text-muted);font-size:0.85rem;margin:0;line-height:1.5">Area kerja dijaga bersih untuk membantu hasil pengecatan rapi dan merata.</p>
             </div>
             <div style="background:#f8fafc;padding:1.2rem;border-radius:var(--radius-sm);border:1px solid var(--border-color)">
                 <div style="color:var(--brand-primary);font-weight:800;font-size:1.05rem;margin-bottom:0.35rem">✓ Tukang Las &amp; Ketok Presisi</div>
