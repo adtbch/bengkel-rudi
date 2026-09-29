@@ -51,6 +51,8 @@ Route::prefix('admin')->middleware('admin.jwt')->group(function () {
 
     Route::get('/portfolio', [AdminPortfolioController::class, 'index']);
     Route::post('/portfolio', [AdminPortfolioController::class, 'store']);
+    Route::get('/portfolio/{portfolio}', [AdminPortfolioController::class, 'show']);
+    Route::post('/portfolio/{portfolio}/save', [AdminPortfolioController::class, 'save']);
     Route::put('/portfolio/{portfolio}', [AdminPortfolioController::class, 'update']);
     Route::patch('/portfolio/{portfolio}/toggle', [AdminPortfolioController::class, 'toggle']);
     Route::delete('/portfolio/{portfolio}', [AdminPortfolioController::class, 'destroy']);

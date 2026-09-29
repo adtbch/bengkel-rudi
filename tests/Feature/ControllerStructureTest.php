@@ -22,7 +22,11 @@ class ControllerStructureTest extends TestCase
         }
 
         $css = file_get_contents(public_path('css/site.css'));
-        $this->assertStringContainsString('width: min(88vw, 360px);', $css);
+        $this->assertStringContainsString('width: min(48vw, 200px);', $css);
+        $this->assertStringContainsString('white-space: nowrap;', $css);
+        $this->assertStringContainsString('@media (max-width: 1099px)', $css);
+        $this->assertStringContainsString('white-space: normal;', $css);
+        $this->assertStringContainsString('font-size: clamp(1.45rem, 6.4vw, 2.2rem);', $css);
     }
 
     public function test_all_public_and_admin_buttons_share_the_same_radius(): void

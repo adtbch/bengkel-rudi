@@ -11,6 +11,8 @@ class SiteSettingsTest extends TestCase
   $css=file_get_contents(public_path('css/site.css'));
   $header=file_get_contents(resource_path('views/layouts/partials/header.blade.php'));
   $this->assertStringNotContainsString('calc(50% - 50vw)', $css);
+  $this->assertStringContainsString('clip-path: inset(0 -100vmax);', $css);
+  $this->assertStringContainsString('box-shadow: 0 0 0 100vmax var(--brand-dark);', $css);
   $this->assertStringContainsString('.workshop-hero__brand { max-width: 100%; }', $css);
   $this->assertStringContainsString('alt="Logo Bengkel Rudi"', $header);
   $this->assertStringContainsString('class="mobile-menu"', $header);

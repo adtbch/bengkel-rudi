@@ -24,13 +24,14 @@ class Day3ContentTest extends TestCase
     public function test_service_admin_requires_auth_and_crud_generates_collision_safe_slug(): void
     {
         $this->get('/admin/layanan')->assertRedirect('/admin/login');
-        $this->admin()->post('/admin/layanan', ['name'=>'Cat Panel','description'=>'Deskripsi cukup','min_price'=>100,'max_price'=>200,'features'=>"Rapi\nCepat",'is_active'=>1,'sort_order'=>2])->assertRedirect('/admin/layanan');
-        $this->admin()->post('/admin/layanan', ['name'=>'Cat Panel','description'=>'Deskripsi cukup','min_price'=>100,'max_price'=>200,'features'=>'Garansi','sort_order'=>3])->assertRedirect('/admin/layanan');
+        $this->admin()->post('/admin/layanan', ['name'=>'Cat Panel','description'=>'Deskripsi cukup','min_price'=>100,'max_price'=>200,'is_active'=>1,'sort_order'=>2])->assertRedirect('/admin/layanan');
+        $this->admin()->post('/admin/layanan', ['name'=>'Cat Panel','description'=>'Deskripsi cukup','min_price'=>100,'max_price'=>200,'sort_order'=>3])->assertRedirect('/admin/layanan');
         $this->assertDatabaseHas('services',['slug'=>'cat-panel']);
         $this->assertDatabaseHas('services',['slug'=>'cat-panel-2']);
         $service=Service::where('slug','cat-panel')->firstOrFail();
-        $this->admin()->put("/admin/layanan/{$service->id}", ['name'=>'Body Repair','description'=>'Body kendaraan diperbaiki','min_price'=>200,'max_price'=>500,'features'=>'Presisi','is_active'=>1,'sort_order'=>4])->assertRedirect('/admin/layanan');
+        $this->admin()->put("/admin/layanan/{$service->id}", ['name'=>'Body Repair','description'=>'Body kendaraan diperbaiki','min_price'=>200,'max_price'=>500,'is_active'=>1,'sort_order'=>4])->assertRedirect('/admin/layanan');
         $this->assertSame('body-repair', $service->fresh()->slug);
+        $this->assertSame([], $service->fresh()->features);
         $this->admin()->patch("/admin/layanan/{$service->id}/toggle")->assertRedirect('/admin/layanan');
         $this->assertFalse($service->fresh()->is_active);
         $this->admin()->delete("/admin/layanan/{$service->id}")->assertRedirect('/admin/layanan');
@@ -39,7 +40,7 @@ class Day3ContentTest extends TestCase
 
     public function test_service_validation_and_delete_constraint(): void
     {
-        $this->admin()->post('/admin/layanan', ['name'=>'','description'=>'x','min_price'=>500,'max_price'=>100,'features'=>'','sort_order'=>-1])->assertSessionHasErrors(['name','description','max_price','features','sort_order']);
+        $this->admin()->post('/admin/layanan', ['name'=>'','description'=>'x','min_price'=>500,'max_price'=>100,'sort_order'=>-1])->assertSessionHasErrors(['name','description','max_price','sort_order']);
         $service=$this->service();
         Portfolio::create(['service_id'=>$service->id,'title'=>'Avanza','slug'=>'avanza','vehicle_type'=>'CAR','is_published'=>true]);
         $this->admin()->delete("/admin/layanan/{$service->id}")->assertSessionHasErrors('service');
@@ -176,7 +177,7 @@ class Day3ContentTest extends TestCase
 
     public function test_portfolio_upload_exposes_local_preview_with_cleanup(): void
     {
-        $view = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
+        $view = file_get_contents(resource_path('views/admin/portfolio-edit.blade.php'));
         $script = file_get_contents(public_path('js/admin-portfolio.js')) ?: '';
 
         $this->assertStringContainsString('data-image-input', $view);
@@ -186,7 +187,7 @@ class Day3ContentTest extends TestCase
         $this->assertStringContainsString('DataTransfer', $script);
     }
 
-    public function test_portfolio_admin_page_exposes_mobile_friendly_edit_and_actions(): void
+    public function test_portfolio_admin_uses_scannable_index_and_dedicated_management_page(): void
     {
         $service = $this->service();
         $portfolio = Portfolio::create([
@@ -201,23 +202,30 @@ class Day3ContentTest extends TestCase
             'image_url' => 'https://example.test/before.jpg',
             'cloudinary_public_id' => 'portfolio/before',
             'stage' => 'BEFORE',
-            'sort_order' => 0,
+            'sort_order' => 1,
         ]);
 
         $this->withoutExceptionHandling();
 
         $this->admin()->get('/admin/portfolio')
             ->assertOk()
-            ->assertSee('class="admin-shell"', false)
-            ->assertSee('class="admin-card-grid"', false)
+            ->assertSee('admin-portfolio-list', false)
+            ->assertSee("href=\"/admin/portfolio/{$portfolio->id}\"", false)
+            ->assertSee('Kelola')
+            ->assertDontSee('enctype="multipart/form-data"', false)
+            ->assertDontSee("action=\"/admin/portfolio/{$portfolio->id}/images/order\"", false);
+
+        $this->admin()->get("/admin/portfolio/{$portfolio->id}")
+            ->assertOk()
+            ->assertSee('Avanza Body Repair')
             ->assertSee('enctype="multipart/form-data"', false)
             ->assertSee('name="images[]"', false)
             ->assertSee('name="stage"', false)
             ->assertSee('name="sort_order"', false)
-            ->assertSee("action=\"/admin/portfolio/{$portfolio->id}\"", false)
-            ->assertSee('value="Avanza Body Repair"', false)
-            ->assertSee('Publish')
-            ->assertSee('Hapus')
+            ->assertSee("action=\"/admin/portfolio/{$portfolio->id}/save\"", false)
+            ->assertSee('Tampilkan portfolio di website')
+            ->assertSee('Simpan semua perubahan')
+            ->assertSee('Hapus portfolio')
             ->assertSee("form=\"delete-image-{$portfolio->id}-", false)
             ->assertSee("id=\"delete-image-{$portfolio->id}-", false);
     }
@@ -240,8 +248,10 @@ class Day3ContentTest extends TestCase
         $this->get('/')
             ->assertOk()
             ->assertSee('id="beranda"', false)
-            ->assertSee('Cat dan Body Repair Terpercaya di')
-            ->assertSee('Konsultasi via WhatsApp')
+            ->assertSee('class="workshop-hero__brand"', false)
+            ->assertSee('Solusi Cat dan Body Repair Terpercaya di')
+            ->assertSee('Hubungi Kami via WhatsApp')
+            ->assertDontSee('Lihat Galeri', false)
             ->assertDontSee('workshop-hero__copy', false);
     }
 

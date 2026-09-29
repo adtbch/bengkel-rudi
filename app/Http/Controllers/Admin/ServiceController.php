@@ -18,6 +18,7 @@ class ServiceController extends Controller
     {
         $data = $this->validated($request);
         $data['slug'] = UniqueSlug::make($data['name'], Service::class);
+        $data['features'] = [];
         Service::create($data);
 
         return redirect('/admin/layanan');
@@ -57,11 +58,9 @@ class ServiceController extends Controller
             'description' => 'required|string|min:10|max:5000',
             'min_price' => 'nullable|integer|min:0',
             'max_price' => 'nullable|integer|min:0|gte:min_price',
-            'features' => 'required|string|max:5000',
             'is_active' => 'nullable|boolean',
             'sort_order' => 'required|integer|min:1',
         ]);
-        $data['features'] = array_values(array_filter(array_map('trim', preg_split('/\R/', $data['features']))));
         $data['is_active'] = $request->boolean('is_active');
 
         return $data;

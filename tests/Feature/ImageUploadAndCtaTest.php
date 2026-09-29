@@ -11,6 +11,40 @@ class ImageUploadAndCtaTest extends TestCase
 {
     use DatabaseMigrations;
 
+    public function test_single_management_form_updates_details_order_publication_and_uploads_images(): void
+    {
+        $mock = $this->createMock(CloudinaryService::class);
+        config(['cloudinary.folder' => 'BengkelRudi']);
+        $mock->expects($this->once())->method('upload')
+            ->with($this->isInstanceOf(UploadedFile::class), 'BengkelRudi/portfolio')
+            ->willReturn(['secure_url' => 'https://example.test/new.jpg', 'public_id' => 'BengkelRudi/portfolio/new']);
+        $this->app->instance(CloudinaryService::class, $mock);
+
+        $admin = User::factory()->create(['role' => 'ADMIN', 'is_active' => true]);
+        $service = Service::create(['name' => 'Cat Panel', 'slug' => 'cat-panel', 'description' => 'Layanan cat', 'features' => []]);
+        $portfolio = Portfolio::create(['service_id' => $service->id, 'title' => 'Judul Lama', 'slug' => 'judul-lama', 'vehicle_type' => 'CAR']);
+        $first = $portfolio->images()->create(['image_url' => 'https://example.test/1.jpg', 'cloudinary_public_id' => 'one', 'stage' => 'BEFORE', 'sort_order' => 1]);
+        $second = $portfolio->images()->create(['image_url' => 'https://example.test/2.jpg', 'cloudinary_public_id' => 'two', 'stage' => 'AFTER', 'sort_order' => 2]);
+
+        $this->withCookie('admin_token', auth('admin')->login($admin))
+            ->post("/admin/portfolio/{$portfolio->id}/save", [
+                'title' => 'Judul Baru',
+                'service_id' => $service->id,
+                'vehicle_type' => 'MOTOR',
+                'is_published' => 1,
+                'order' => [$first->id => 2, $second->id => 1],
+                'images' => [UploadedFile::fake()->image('new.jpg')],
+                'stage' => 'PROCESS',
+                'sort_order' => 3,
+            ])->assertRedirect("/admin/portfolio/{$portfolio->id}")
+            ->assertSessionHas('status', 'Semua perubahan berhasil disimpan.');
+
+        $this->assertDatabaseHas('portfolios', ['id' => $portfolio->id, 'title' => 'Judul Baru', 'vehicle_type' => 'MOTOR', 'is_published' => true]);
+        $this->assertDatabaseHas('portfolio_images', ['id' => $first->id, 'sort_order' => 2]);
+        $this->assertDatabaseHas('portfolio_images', ['id' => $second->id, 'sort_order' => 1]);
+        $this->assertDatabaseHas('portfolio_images', ['cloudinary_public_id' => 'BengkelRudi/portfolio/new', 'stage' => 'PROCESS', 'sort_order' => 3]);
+    }
+
     public function test_admin_can_upload_multiple_portfolio_images_with_consecutive_order(): void
     {
         $mock = $this->createMock(CloudinaryService::class);

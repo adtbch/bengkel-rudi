@@ -71,10 +71,6 @@
                     <label class="admin-field">Harga maksimum
                         <input name="max_price" type="number" value="{{ $service->max_price }}" min="0" step="1" inputmode="numeric">
                     </label>
-                    <label class="admin-field admin-field--wide">Fitur layanan
-                        <textarea name="features" required maxlength="5000">{{ implode("\n", $service->features ?? []) }}</textarea>
-                        <span class="admin-field-help">Satu fitur per baris.</span>
-                    </label>
                     <label class="admin-field">Urutan tampil
                         <input name="sort_order" type="number" value="{{ $service->sort_order }}" min="1" step="1" required>
                     </label>
