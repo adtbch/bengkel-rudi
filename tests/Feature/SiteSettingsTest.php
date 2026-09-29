@@ -37,6 +37,18 @@ class SiteSettingsTest extends TestCase
   $response->assertDontSee('"geo"',false);
  }
 
+ public function test_public_pages_publish_canonical_social_metadata_and_detail_breadcrumbs(): void
+ {
+  $service=\App\Models\Service::create(['name'=>'Cat Panel','slug'=>'cat-panel','description'=>'Cat panel rapi','features'=>[],'is_active'=>true]);
+  $portfolio=\App\Models\Portfolio::create(['service_id'=>$service->id,'title'=>'Jazz','slug'=>'jazz','vehicle_type'=>'CAR','is_published'=>true]);
+  $canonical='https://bengkel-rudi.vercel.app';
+  $image=$canonical.'/images/og-bengkel-rudi.png';
+
+  $this->get('/')->assertOk()->assertSee('<link rel="canonical" href="'.$canonical.'/">',false)->assertSee('property="og:image" content="'.$image.'"',false)->assertSee('name="twitter:card" content="summary_large_image"',false)->assertSee('OpeningHoursSpecification',false)->assertSee('Kabupaten Batang',false)->assertSee('https://share.google/8pHQ7sXmkUWGf9YHI',false);
+  $this->get('/layanan/cat-panel')->assertOk()->assertSee('<link rel="canonical" href="'.$canonical.'/layanan/cat-panel">',false)->assertSee('BreadcrumbList',false)->assertSee('Cat Panel',false);
+  $this->get('/portfolio/jazz')->assertOk()->assertSee('<link rel="canonical" href="'.$canonical.'/portfolio/jazz">',false)->assertSee('BreadcrumbList',false)->assertSee('Jazz',false);
+ }
+
  public function test_robots_and_sitemap_expose_only_public_active_content(): void
  {
   $service=\App\Models\Service::create(['name'=>'Cat Panel','slug'=>'cat-panel','description'=>'Cat panel rapi','features'=>[],'is_active'=>true]);
@@ -45,7 +57,7 @@ class SiteSettingsTest extends TestCase
   \App\Models\Portfolio::create(['service_id'=>$service->id,'title'=>'Draft','slug'=>'draft','vehicle_type'=>'CAR','is_published'=>false]);
 
   $this->get('/robots.txt')->assertOk()->assertHeader('Content-Type','text/plain; charset=UTF-8')->assertSee('Sitemap: '.url('/sitemap.xml'),false);
-  $this->get('/sitemap.xml')->assertOk()->assertHeader('Content-Type','application/xml; charset=UTF-8')->assertSee('/layanan/cat-panel',false)->assertSee('/portfolio/jazz',false)->assertDontSee('/layanan/rahasia',false)->assertDontSee('/portfolio/draft',false);
+  $this->get('/sitemap.xml')->assertOk()->assertHeader('Content-Type','application/xml; charset=UTF-8')->assertSee('/layanan/cat-panel',false)->assertSee('/portfolio/jazz',false)->assertSee('<lastmod>',false)->assertDontSee('/layanan/rahasia',false)->assertDontSee('/portfolio/draft',false);
  }
 
  public function test_superadmin_updates_settings_and_public_pages_use_them(): void

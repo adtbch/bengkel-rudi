@@ -2,6 +2,19 @@
 @section('title', $portfolio->title . ' — ' . ($settings['business_name'] ?? 'Bengkel Rudi'))
 @section('description', 'Dokumentasi BEFORE, PROCESS, dan AFTER pengerjaan ' . $portfolio->title . ' di Bengkel Rudi.')
 
+@section('breadcrumb_structured_data')
+@php($breadcrumbs = [
+    '@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Beranda', 'item' => 'https://bengkel-rudi.vercel.app/'],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Portfolio', 'item' => 'https://bengkel-rudi.vercel.app/portfolio'],
+        ['@type' => 'ListItem', 'position' => 3, 'name' => $portfolio->title, 'item' => 'https://bengkel-rudi.vercel.app/portfolio/'.$portfolio->slug],
+    ],
+])
+<script type="application/ld+json">{!! json_encode($breadcrumbs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endsection
+
 @section('content')
 <div style="margin-bottom:1.75rem">
     <a href="/portfolio" style="font-size:0.85rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:0.35rem;margin-bottom:0.75rem;font-weight:600">
@@ -31,9 +44,7 @@
                 </div>
             </div>
 
-            @php
-                $stageImages = $portfolio->images->where('stage', $stage);
-            @endphp
+            @php($stageImages = $portfolio->images->where('stage', $stage))
 
             @if($stageImages->isEmpty())
                 <p style="color:var(--text-muted);font-size:0.88rem;padding:0.75rem 0">Belum ada foto pada tahap ini.</p>

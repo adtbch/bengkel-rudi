@@ -25,13 +25,19 @@ Route::get('/robots.txt', function () {
 });
 
 Route::get('/sitemap.xml', function () {
-    $urls = collect(['/', '/tentang', '/kontak', '/layanan', '/portfolio'])
-        ->merge(\App\Models\Service::where('is_active', true)->pluck('slug')->map(fn ($slug) => "/layanan/{$slug}"))
-        ->merge(\App\Models\Portfolio::where('is_published', true)->pluck('slug')->map(fn ($slug) => "/portfolio/{$slug}"));
+    $baseUrl = 'https://bengkel-rudi.vercel.app';
+    $urls = collect([
+        ['path' => '/', 'updated_at' => now()],
+        ['path' => '/tentang', 'updated_at' => now()],
+        ['path' => '/kontak', 'updated_at' => now()],
+        ['path' => '/layanan', 'updated_at' => now()],
+        ['path' => '/portfolio', 'updated_at' => now()],
+    ])->merge(\App\Models\Service::where('is_active', true)->get(['slug', 'updated_at'])->map(fn ($service) => ['path' => "/layanan/{$service->slug}", 'updated_at' => $service->updated_at]))
+        ->merge(\App\Models\Portfolio::where('is_published', true)->get(['slug', 'updated_at'])->map(fn ($portfolio) => ['path' => "/portfolio/{$portfolio->slug}", 'updated_at' => $portfolio->updated_at]));
 
     $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n".'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-    foreach ($urls as $path) {
-        $xml .= '<url><loc>'.e(url($path)).'</loc></url>';
+    foreach ($urls as $url) {
+        $xml .= '<url><loc>'.e($baseUrl.$url['path']).'</loc><lastmod>'.$url['updated_at']->toAtomString().'</lastmod></url>';
     }
 
     return response($xml.'</urlset>', 200, ['Content-Type' => 'application/xml; charset=UTF-8']);

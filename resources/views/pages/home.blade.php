@@ -6,19 +6,30 @@
 @php($structuredData = [
     '@context' => 'https://schema.org',
     '@type' => ['LocalBusiness', 'AutoRepair'],
-    'name' => $settings['business_name'] ?? 'Bengkel Cat & Body Repair Rudi',
+    'name' => 'Bengkel Rudi',
     'description' => $settings['meta_description'] ?? 'Layanan cat dan body repair mobil dan motor di Wonokerto, Bandar, Kabupaten Batang.',
     'telephone' => '+' . ($settings['whatsapp_number'] ?? '628123456789'),
-    'url' => url('/'),
+    'url' => 'https://bengkel-rudi.vercel.app/',
+    'image' => 'https://bengkel-rudi.vercel.app/images/og-bengkel-rudi.png',
     'address' => [
         '@type' => 'PostalAddress',
-        'streetAddress' => $settings['address'] ?? 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254',
+        'streetAddress' => 'RT.05/RW.01, Krajan, Wonokerto',
         'addressLocality' => 'Bandar',
         'addressRegion' => 'Jawa Tengah',
+        'postalCode' => '51254',
         'addressCountry' => 'ID',
     ],
-    'openingHours' => $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB',
-    'sameAs' => array_values(array_filter([$settings['instagram_url'] ?? null, $settings['google_business_url'] ?? null])),
+    'areaServed' => [
+        ['@type' => 'AdministrativeArea', 'name' => 'Kecamatan Bandar'],
+        ['@type' => 'AdministrativeArea', 'name' => 'Kabupaten Batang'],
+    ],
+    'openingHoursSpecification' => [[
+        '@type' => 'OpeningHoursSpecification',
+        'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+        'opens' => '08:00',
+        'closes' => '17:00',
+    ]],
+    'sameAs' => array_values(array_filter([$settings['instagram_url'] ?? null, $settings['google_business_profile_url'] ?? 'https://share.google/8pHQ7sXmkUWGf9YHI'])),
 ])
 <script type="application/ld+json">{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 @endsection

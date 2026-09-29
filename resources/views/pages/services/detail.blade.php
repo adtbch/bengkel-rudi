@@ -2,6 +2,19 @@
 @section('title', $service->name . ' — ' . ($settings['business_name'] ?? 'Bengkel Rudi'))
 @section('description', trim(strip_tags($service->description)))
 
+@section('breadcrumb_structured_data')
+@php($breadcrumbs = [
+    '@context' => 'https://schema.org',
+    '@type' => 'BreadcrumbList',
+    'itemListElement' => [
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Beranda', 'item' => 'https://bengkel-rudi.vercel.app/'],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Layanan', 'item' => 'https://bengkel-rudi.vercel.app/layanan'],
+        ['@type' => 'ListItem', 'position' => 3, 'name' => $service->name, 'item' => 'https://bengkel-rudi.vercel.app/layanan/'.$service->slug],
+    ],
+])
+<script type="application/ld+json">{!! json_encode($breadcrumbs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+@endsection
+
 @section('content')
 <div style="margin-bottom:1.75rem">
     <a href="/layanan" style="font-size:0.85rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:0.35rem;margin-bottom:0.75rem;font-weight:600">
