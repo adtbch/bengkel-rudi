@@ -49,7 +49,16 @@ class PortfolioController extends Controller
             'order' => 'nullable|array',
             'order.*' => 'required|integer|min:1',
             'images' => 'nullable|array',
-            'images.*' => 'required|file|mimes:jpg,jpeg,png,webp|max:10240',
+            'images.*' => [
+                'required', 'file', 'max:51200',
+                function (string $attribute, mixed $file, \Closure $fail): void {
+                    $allowed = ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm', 'video/quicktime'];
+                    if (!in_array($file->getMimeType(), $allowed, true)
+                        || (str_starts_with($file->getMimeType(), 'image/') && $file->getSize() > 10 * 1024 * 1024)) {
+                        $fail('File harus JPG, PNG, WebP (maks. 10 MB), MP4, WebM, atau MOV (maks. 50 MB).');
+                    }
+                },
+            ],
             'stage' => ['required_with:images', 'nullable', Rule::in(['BEFORE', 'PROCESS', 'AFTER'])],
             'sort_order' => 'nullable|integer|min:1',
         ], ['order.*.min' => 'Urutan foto minimal 1.']);
@@ -79,11 +88,13 @@ class PortfolioController extends Controller
             }
             $sortOrder = max((int) ($data['sort_order'] ?? 1), ((int) $portfolio->images()->max('sort_order')) + 1);
             foreach ($request->file('images', []) as $file) {
-                $uploaded = $cloudinary->upload($file, trim(config('cloudinary.folder', 'BengkelRudi'), '/').'/portfolio');
-                $uploadedAssets[] = $uploaded['public_id'];
+                $resourceType = str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'image';
+                $uploaded = $cloudinary->upload($file, trim(config('cloudinary.folder', 'BengkelRudi'), '/').'/portfolio', $resourceType);
+                $uploadedAssets[] = ['public_id' => $uploaded['public_id'], 'resource_type' => $resourceType];
                 $portfolio->images()->create([
                     'image_url' => $uploaded['secure_url'],
                     'cloudinary_public_id' => $uploaded['public_id'],
+                    'media_type' => $resourceType,
                     'stage' => $data['stage'],
                     'sort_order' => $sortOrder++,
                 ]);
@@ -91,8 +102,8 @@ class PortfolioController extends Controller
             DB::commit();
         } catch (\Throwable) {
             DB::rollBack();
-            foreach (array_reverse($uploadedAssets) as $publicId) {
-                try { $cloudinary->delete($publicId); } catch (\Throwable) {}
+            foreach (array_reverse($uploadedAssets) as $asset) {
+                try { $cloudinary->delete($asset['public_id'], $asset['resource_type']); } catch (\Throwable) {}
             }
             return back()->withInput()->withErrors(['integration' => 'Penyimpanan gagal. Tidak ada perubahan yang disimpan.']);
         }

@@ -19,7 +19,11 @@
             <article class="card" style="padding:0;overflow:hidden">
                 <div style="position:relative;background:#0f172a;aspect-ratio:16/10;overflow:hidden">
                     @if($cover = $portfolio->images->first())
-                        <img src="{{ $cover->image_url }}" alt="{{ $portfolio->title }}" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+                        @if($cover->media_type === 'video')
+                            <video src="{{ $cover->image_url }}" controls preload="metadata" playsinline aria-label="Video {{ $portfolio->title }}" style="width:100%;height:100%;object-fit:cover"></video>
+                        @else
+                            <img src="{{ $cover->image_url }}" alt="{{ $portfolio->title }}" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+                        @endif
                     @else
                         <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:0.8rem">
                             Belum ada foto

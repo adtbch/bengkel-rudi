@@ -14,6 +14,11 @@ class ServiceController extends Controller
         return view('admin.services', ['services' => Service::orderBy('sort_order')->get()]);
     }
 
+    public function show(Service $service)
+    {
+        return view('admin.service-edit', compact('service'));
+    }
+
     public function store(Request $request)
     {
         $data = $this->validated($request);

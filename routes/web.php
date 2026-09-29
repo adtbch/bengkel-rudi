@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\PortfolioImageController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PortfolioController;
 use App\Http\Controllers\Frontend\ServiceController;
@@ -45,6 +46,7 @@ Route::prefix('admin')->middleware('admin.jwt')->group(function () {
 
     Route::get('/layanan', [AdminServiceController::class, 'index']);
     Route::post('/layanan', [AdminServiceController::class, 'store']);
+    Route::get('/layanan/{service}', [AdminServiceController::class, 'show']);
     Route::put('/layanan/{service}', [AdminServiceController::class, 'update']);
     Route::patch('/layanan/{service}/toggle', [AdminServiceController::class, 'toggle']);
     Route::delete('/layanan/{service}', [AdminServiceController::class, 'destroy']);
@@ -61,7 +63,10 @@ Route::prefix('admin')->middleware('admin.jwt')->group(function () {
     Route::delete('/portfolio/{portfolio}/images/{image}', [PortfolioImageController::class, 'destroy']);
 
     Route::middleware('superadmin')->group(function () {
-        Route::view('/users', 'admin.coming-soon', ['feature' => 'Users']);
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
+        Route::get('/users/{user}', [UserController::class, 'show']);
+        Route::put('/users/{user}', [UserController::class, 'update']);
         Route::get('/settings', [SettingController::class, 'edit']);
         Route::put('/settings', [SettingController::class, 'update']);
     });

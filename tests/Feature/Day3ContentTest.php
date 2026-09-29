@@ -123,19 +123,23 @@ class Day3ContentTest extends TestCase
         $this->assertStringContainsString('admin-card-grid', $portfolio);
     }
 
-    public function test_admin_services_exposes_editable_accessible_mobile_friendly_management(): void
+    public function test_admin_services_uses_scalable_master_detail_management(): void
     {
-        $view = file_get_contents(resource_path('views/admin/services.blade.php'));
-        $css = file_get_contents(public_path('css/admin.css'));
+        $service = $this->service();
 
-        $this->assertStringContainsString('admin-page-head', $view);
-        $this->assertStringContainsString('admin-panel', $view);
-        $this->assertStringContainsString('admin-card-grid', $view);
-        $this->assertStringContainsString('@method(\'PUT\')', $view);
-        $this->assertStringContainsString('admin-status--draft', $view);
-        $this->assertStringContainsString('aria-describedby="service-name-error"', $view);
-        $this->assertStringContainsString('role="alert"', $view);
-        $this->assertStringContainsString('admin-service-price', $css);
+        $this->admin()->get('/admin/layanan')
+            ->assertOk()
+            ->assertSee('admin-service-list', false)
+            ->assertSee("href=\"/admin/layanan/{$service->id}\"", false)
+            ->assertSee('Kelola')
+            ->assertDontSee('name="_method" value="PUT"', false);
+
+        $this->admin()->get("/admin/layanan/{$service->id}")
+            ->assertOk()
+            ->assertSee('Kembali ke daftar')
+            ->assertSee('Simpan semua perubahan')
+            ->assertSee('Hapus layanan')
+            ->assertSee('name="_method" value="PUT"', false);
     }
 
     public function test_portfolio_uses_clear_admin_hierarchy(): void

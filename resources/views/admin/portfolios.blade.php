@@ -61,7 +61,11 @@
                 <a class="admin-portfolio-row__link" href="/admin/portfolio/{{ $portfolio->id }}" aria-label="Kelola {{ $portfolio->title }}">
                     <span class="admin-portfolio-row__cover">
                         @if($cover)
-                            <img src="{{ $cover->image_url }}" alt="Foto utama {{ $portfolio->title }}" loading="lazy" decoding="async">
+                            @if($cover->media_type === 'video')
+                                <video src="{{ $cover->image_url }}" controls preload="metadata" playsinline aria-label="Video utama {{ $portfolio->title }}"></video>
+                            @else
+                                <img src="{{ $cover->image_url }}" alt="Foto utama {{ $portfolio->title }}" loading="lazy" decoding="async">
+                            @endif
                         @else
                             <span>Belum ada foto</span>
                         @endif

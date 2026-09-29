@@ -50,12 +50,12 @@
     <section class="admin-workspace-section" aria-labelledby="tambah-foto">
         <div class="admin-workspace-section__head">
             <span>02</span>
-            <div><h2 id="tambah-foto">Tambah foto</h2><p>Opsional. Lewati jika tidak menambah foto.</p></div>
+            <div><h2 id="tambah-foto">Tambah media</h2><p>Opsional. Lewati jika tidak menambah foto atau video.</p></div>
         </div>
         <div class="admin-form-grid">
-            <label class="admin-field admin-field--wide">Pilih foto
-                <input type="file" name="images[]" accept="image/jpeg,image/png,image/webp" multiple data-image-input>
-                <span class="admin-field-help">JPG, PNG, atau WebP. Maksimal 10 MB per foto.</span>
+            <label class="admin-field admin-field--wide">Pilih foto atau video
+                <input type="file" name="images[]" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple data-image-input>
+                <span class="admin-field-help">JPG, PNG, WebP maks. 10 MB; MP4, WebM, MOV maks. 50 MB.</span>
             </label>
             <div class="admin-image-preview admin-field--wide" data-image-preview aria-live="polite"></div>
             <label class="admin-field">Tahap foto
@@ -80,7 +80,11 @@
             <div class="admin-photo-grid">
                 @foreach($portfolio->images as $img)
                     <article class="admin-photo-card">
-                        <img src="{{ $img->image_url }}" alt="Foto {{ strtolower($img->stage) }} {{ $portfolio->title }}" loading="lazy" decoding="async">
+                        @if($img->media_type === 'video')
+                            <video src="{{ $img->image_url }}" controls preload="metadata" playsinline aria-label="Video {{ strtolower($img->stage) }} {{ $portfolio->title }}"></video>
+                        @else
+                            <img src="{{ $img->image_url }}" alt="Foto {{ strtolower($img->stage) }} {{ $portfolio->title }}" loading="lazy" decoding="async">
+                        @endif
                         <div class="admin-photo-card__body">
                             <span class="pill-badge @if($img->stage === 'BEFORE') badge-stage-before @elseif($img->stage === 'PROCESS') badge-stage-process @else badge-stage-after @endif">{{ ['BEFORE' => 'Sebelum', 'PROCESS' => 'Proses', 'AFTER' => 'Hasil'][$img->stage] }}</span>
                             <label class="admin-field admin-image-order__field">Urutan

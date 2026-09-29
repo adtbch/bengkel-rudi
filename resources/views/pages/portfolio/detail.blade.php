@@ -41,8 +41,12 @@
                 <div class="grid" style="grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));gap:1rem">
                     @foreach($stageImages as $image)
                         <figure style="margin:0;background:#ffffff;border:1px solid var(--border-color);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--shadow-sm)">
-                            <div style="aspect-ratio:4/3;overflow:hidden;background:#0f172a">
-                                <img src="{{ $image->image_url }}" alt="{{ $portfolio->title }} — {{ $label }}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
+                            <div class="portfolio-media">
+                                @if($image->media_type === 'video')
+                                    <video src="{{ $image->image_url }}" controls preload="metadata" playsinline aria-label="Video {{ $portfolio->title }} — {{ $label }}"></video>
+                                @else
+                                    <img src="{{ $image->image_url }}" alt="{{ $portfolio->title }} — {{ $label }}" loading="lazy" decoding="async">
+                                @endif
                             </div>
                             <figcaption style="padding:0.65rem 0.75rem;font-size:0.75rem;color:var(--text-muted);display:flex;justify-content:space-between;align-items:center;background:#fafafa">
                                 <span>{{ $label }}</span>

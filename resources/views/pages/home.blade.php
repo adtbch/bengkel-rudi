@@ -98,7 +98,11 @@
             <article class="portfolio-preview-card">
                 <a href="/portfolio/{{ $portfolio->slug }}">
                     @if($thumb)
-                        <img src="{{ $thumb->image_url }}" alt="{{ $portfolio->title }}" loading="lazy" decoding="async">
+                        @if($thumb->media_type === 'video')
+                            <video src="{{ $thumb->image_url }}" controls preload="metadata" playsinline aria-label="Video {{ $portfolio->title }}"></video>
+                        @else
+                            <img src="{{ $thumb->image_url }}" alt="{{ $portfolio->title }}" loading="lazy" decoding="async">
+                        @endif
                     @else
                         <div class="home-photo-placeholder"><span>Foto belum tersedia</span></div>
                     @endif

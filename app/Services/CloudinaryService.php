@@ -16,7 +16,7 @@ class CloudinaryService
         }
     }
 
-    public function upload(UploadedFile $file, string $folder = 'BengkelRudi'): array
+    public function upload(UploadedFile $file, string $folder = 'BengkelRudi', string $resourceType = 'image'): array
     {
         if (!$this->client) {
             throw new \RuntimeException('Cloudinary is not configured.');
@@ -24,23 +24,24 @@ class CloudinaryService
 
         $response = $this->client->uploadApi()->upload($file->getRealPath(), [
             'folder' => $folder,
-            'resource_type' => 'image',
+            'resource_type' => $resourceType,
         ]);
 
         return [
             'secure_url' => $response['secure_url'],
             'public_id' => $response['public_id'],
+            'resource_type' => $response['resource_type'] ?? $resourceType,
         ];
     }
 
-    public function delete(string $publicId): bool
+    public function delete(string $publicId, string $resourceType = 'image'): bool
     {
         if (!$this->client) {
             return false;
         }
 
         $response = $this->client->uploadApi()->destroy($publicId, [
-            'resource_type' => 'image',
+            'resource_type' => $resourceType,
         ]);
 
         return ($response['result'] ?? '') === 'ok';
