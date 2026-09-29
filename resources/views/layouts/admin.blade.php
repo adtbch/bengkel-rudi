@@ -12,14 +12,32 @@
         <img class="admin-brand__logo" src="https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png" alt="Logo Bengkel Rudi" width="44" height="44">
         <span>Bengkel Rudi</span>
     </a>
-    <a href="/admin" @if(request()->is('admin')) aria-current="page" @endif>Dashboard</a>
-    <a href="/admin/portfolio" @if(request()->is('admin/portfolio*')) aria-current="page" @endif>Portfolio</a>
-    <a href="/admin/layanan" @if(request()->is('admin/layanan*')) aria-current="page" @endif>Layanan</a>
-    @if(auth('admin')->user()?->role === 'SUPER_ADMIN')
-        <a href="/admin/users" @if(request()->is('admin/users*')) aria-current="page" @endif>Users</a>
-        <a href="/admin/settings" @if(request()->is('admin/settings*')) aria-current="page" @endif>Settings</a>
-    @endif
-    <form method="post" action="/admin/logout">@csrf<button type="submit">Keluar</button></form>
+
+    <div class="admin-nav__links">
+        <a href="/admin" @if(request()->is('admin')) aria-current="page" @endif>Dashboard</a>
+        <a href="/admin/portfolio" @if(request()->is('admin/portfolio*')) aria-current="page" @endif>Portfolio</a>
+        <a href="/admin/layanan" @if(request()->is('admin/layanan*')) aria-current="page" @endif>Layanan</a>
+        @if(auth('admin')->user()?->role === 'SUPER_ADMIN')
+            <a href="/admin/users" @if(request()->is('admin/users*')) aria-current="page" @endif>Users</a>
+            <a href="/admin/settings" @if(request()->is('admin/settings*')) aria-current="page" @endif>Settings</a>
+        @endif
+    </div>
+
+    <form class="admin-nav__logout" method="post" action="/admin/logout">@csrf<button type="submit">Keluar</button></form>
+
+    <details class="admin-mobile-menu">
+        <summary aria-label="Buka menu admin"><span></span><span></span><span></span></summary>
+        <div class="admin-mobile-menu__list">
+            <a href="/admin" @if(request()->is('admin')) aria-current="page" @endif>Dashboard</a>
+            <a href="/admin/portfolio" @if(request()->is('admin/portfolio*')) aria-current="page" @endif>Portfolio</a>
+            <a href="/admin/layanan" @if(request()->is('admin/layanan*')) aria-current="page" @endif>Layanan</a>
+            @if(auth('admin')->user()?->role === 'SUPER_ADMIN')
+                <a href="/admin/users" @if(request()->is('admin/users*')) aria-current="page" @endif>Users</a>
+                <a href="/admin/settings" @if(request()->is('admin/settings*')) aria-current="page" @endif>Settings</a>
+            @endif
+            <form method="post" action="/admin/logout">@csrf<button type="submit">Keluar</button></form>
+        </div>
+    </details>
 </nav>
 <main class="admin-shell">@yield('content')</main>
 </body>

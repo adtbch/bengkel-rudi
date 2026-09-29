@@ -38,9 +38,18 @@
 </section>
 
 <section class="quick-info" aria-label="Informasi bengkel">
-    <div><strong>Buat janji</strong><span>Hindari antrean dengan konfirmasi jadwal.</span></div>
-    <div><strong>Jam buka</strong><span>{{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</span></div>
-    <div><strong>Konsultasi awal</strong><span>Kirim foto kerusakan melalui WhatsApp.</span></div>
+    <div class="quick-info__item">
+        <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v3m10-3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="m9 14 2 2 4-4"/></svg>
+        <div><strong>Sebelum datang</strong><span>Konfirmasi jadwal via WhatsApp.</span></div>
+    </div>
+    <div class="quick-info__item">
+        <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+        <div><strong>Jam kerja</strong><span>{{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</span></div>
+    </div>
+    <div class="quick-info__item">
+        <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M8 5l1-2h6l1 2"/></svg>
+        <div><strong>Kirim foto kerusakan</strong><span>Untuk cek awal via WhatsApp.</span></div>
+    </div>
 </section>
 
 <section class="home-section" aria-labelledby="layanan-title">
@@ -72,16 +81,17 @@
 </section>
 
 <section class="about-preview" aria-labelledby="tentang-title">
-    <div>
-        <h2 id="tentang-title">Bengkel lokal untuk mobil dan motor.</h2>
-        <p>{{ $settings['about_content'] ?? 'Bengkel Rudi melayani perbaikan bodi, pengecatan, dan perawatan kendaraan dengan komunikasi terbuka sejak pemeriksaan awal sampai serah terima.' }}</p>
-        <a class="home-text-link" href="/tentang">Tentang Bengkel Rudi <span aria-hidden="true">→</span></a>
+    <div class="about-preview__intro">
+        <p class="about-preview__kicker">Cara kami menangani kendaraan</p>
+        <h2 id="tentang-title">Cek kondisi dulu, baru tentukan pekerjaan.</h2>
+        <p>Supaya pekerjaan dan biayanya jelas dari awal, kami cek bagian yang perlu ditangani sebelum mulai.</p>
+        <a class="home-text-link" href="/tentang">Lihat profil bengkel <span aria-hidden="true">→</span></a>
     </div>
-    <ul>
-        <li><strong>Pemeriksaan awal</strong><span>Kondisi kendaraan dicek sebelum menentukan pekerjaan.</span></li>
-        <li><strong>Estimasi transparan</strong><span>Biaya dan lingkup pengerjaan dibahas lebih dulu.</span></li>
-        <li><strong>Quality control</strong><span>Panel, warna, dan finishing diperiksa sebelum serah terima.</span></li>
-    </ul>
+    <ol class="about-preview__steps">
+        <li><strong>Periksa bagian yang bermasalah</strong><span>Kerusakan bodi dan kebutuhan cat dilihat lebih dulu.</span></li>
+        <li><strong>Sepakati pekerjaan dan estimasi</strong><span>Lingkup kerja dibahas sebelum kendaraan masuk pengerjaan.</span></li>
+        <li><strong>Sebelum serah terima</strong><span>Panel, warna, dan hasil akhir kami cek kembali.</span></li>
+    </ol>
 </section>
 
 <section class="home-section portfolio-preview" aria-labelledby="portfolio-title">
@@ -117,14 +127,10 @@
 
 <section class="review-cta" aria-labelledby="ulasan-title">
     <div>
-        <h2 id="ulasan-title">Lihat ulasan pelanggan</h2>
-        <p>Pengalaman pelanggan membantu Anda menilai pelayanan Bengkel Rudi sebelum datang.</p>
+        <h2 id="ulasan-title">Puas dengan layanan kami?</h2>
+        <p>Bagikan pengalaman Anda di Google. Ulasan Anda membantu Bengkel Rudi terus meningkatkan pelayanan.</p>
     </div>
-    @if(!empty($settings['google_business_url']))
-        <a class="btn btn-white" href="{{ $settings['google_business_url'] }}" target="_blank" rel="noopener">Buka Google Reviews</a>
-    @else
-        <a class="btn btn-white" href="/kontak">Hubungi bengkel</a>
-    @endif
+    <a class="btn btn-white" href="{{ $settings['google_business_url'] }}" target="_blank" rel="noopener">Beri Ulasan di Google</a>
 </section>
 
 @if(!empty($settings['google_maps_embed_url']))

@@ -650,14 +650,36 @@
         }
         .quick-info {
             display: grid;
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
+            margin: -1.35rem 0 0;
+            position: relative;
+            z-index: 1;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
             background: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
         }
-        .quick-info div { padding: 1.1rem 0; }
+        .quick-info__item {
+            display: grid;
+            grid-template-columns: 2.25rem minmax(0, 1fr);
+            gap: .7rem;
+            align-items: center;
+            padding: 1rem;
+        }
+        .quick-info__item + .quick-info__item { border-top: 1px solid var(--border-color); }
+        .quick-info__icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: var(--brand-primary);
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
         .quick-info strong, .quick-info span { display: block; }
-        .quick-info strong { color: var(--text-heading); font-size: .9rem; }
-        .quick-info span { margin-top: .2rem; color: var(--text-muted); font-size: .78rem; }
+        .quick-info strong { color: var(--text-heading); font-size: .88rem; line-height: 1.25; }
+        .quick-info span { margin-top: .18rem; color: var(--text-muted); font-size: .78rem; line-height: 1.45; }
         .service-cards { display: grid; gap: 1rem; }
         .service-card {
             min-height: 210px;
@@ -713,8 +735,8 @@
         .review-cta .btn { justify-self: start; white-space: nowrap; }
         @media (min-width: 640px) {
             .quick-info { grid-template-columns: repeat(3, 1fr); }
-            .quick-info div { padding: 1.1rem; border-right: 1px solid var(--border-color); }
-            .quick-info div:last-child { border-right: 0; }
+            .quick-info__item { padding: 1.15rem 1.25rem; border-top: 0; border-right: 1px solid var(--border-color); }
+            .quick-info__item:last-child { border-right: 0; }
             .service-cards { grid-template-columns: repeat(2, 1fr); }
             .portfolio-strip { grid-template-columns: repeat(2, 1fr); }
         }

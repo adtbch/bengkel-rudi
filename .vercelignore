@@ -1,0 +1,8 @@
+/vendor
+/node_modules
+/.git
+/.github
+/.vercel
+/graphify-out
+/storage/logs
+/tests

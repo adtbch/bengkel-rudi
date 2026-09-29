@@ -51,6 +51,19 @@ class ControllerStructureTest extends TestCase
         $this->assertTrue(class_exists(PortfolioController::class));
     }
 
+    public function test_admin_layout_uses_compact_desktop_nav_and_mobile_list_menu(): void
+    {
+        $layout = file_get_contents(resource_path('views/layouts/admin.blade.php'));
+        $css = file_get_contents(public_path('css/admin.css'));
+
+        $this->assertStringContainsString('class="admin-nav__links"', $layout);
+        $this->assertStringContainsString('class="admin-mobile-menu"', $layout);
+        $this->assertStringContainsString('<summary', $layout);
+        $this->assertStringContainsString('@media (max-width: 767px)', $css);
+        $this->assertStringContainsString('.admin-nav__links { display: none; }', $css);
+        $this->assertStringContainsString('.admin-mobile-menu { display: block; }', $css);
+    }
+
     public function test_public_layout_has_no_top_notice_bar_or_bottom_mobile_dock(): void
     {
         $layout = file_get_contents(resource_path('views/layouts/public.blade.php'));
@@ -62,5 +75,20 @@ class ControllerStructureTest extends TestCase
         $this->assertStringContainsString('class="mobile-menu"', $header);
         $this->assertStringContainsString('<summary', $header);
         $this->assertStringContainsString('site-header--hero', $header);
+    }
+
+    public function test_vercel_deployment_uses_laravel_handler_and_persistent_runtime_stores(): void
+    {
+        $vercel = file_get_contents(base_path('vercel.json'));
+        $handler = file_get_contents(base_path('api/index.php'));
+        $environment = file_get_contents(base_path('.env.example'));
+
+        $this->assertStringContainsString('vercel-php@0.9.0', $vercel);
+        $this->assertStringContainsString('"dest": "/api/index.php"', $vercel);
+        $this->assertStringContainsString("require __DIR__.'/../public/index.php';", $handler);
+        $this->assertStringContainsString('DB_CONNECTION=pgsql', $environment);
+        $this->assertStringContainsString('CACHE_DRIVER=database', $environment);
+        $this->assertStringContainsString('SESSION_DRIVER=database', $environment);
+        $this->assertStringContainsString('LOG_CHANNEL=stderr', $environment);
     }
 }

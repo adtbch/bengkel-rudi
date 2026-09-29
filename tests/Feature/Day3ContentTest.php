@@ -168,7 +168,9 @@ class Day3ContentTest extends TestCase
         $this->assertStringContainsString('https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png', $layout);
         $this->assertStringContainsString('alt="Logo Bengkel Rudi"', $layout);
         $this->assertStringContainsString('class="admin-brand"', $layout);
-        $this->assertMatchesRegularExpression('/\.admin-nav\s*\{[^}]*flex-wrap:\s*wrap/s', $css);
+        $this->assertDoesNotMatchRegularExpression('/\.admin-nav\s*\{[^}]*flex-wrap:\s*wrap/s', $css);
+        $this->assertStringContainsString('.admin-nav__links', $css);
+        $this->assertStringContainsString('.admin-mobile-menu__list', $css);
         $this->assertStringContainsString('.admin-brand__logo', $css);
         $this->assertStringContainsString('class="admin-field-error" role="alert"', $view);
         $this->assertStringContainsString(':focus-visible', $css);
@@ -251,6 +253,14 @@ class Day3ContentTest extends TestCase
             ->assertSee('class="workshop-hero__brand"', false)
             ->assertSee('Solusi Cat dan Body Repair Terpercaya di')
             ->assertSee('Hubungi Kami via WhatsApp')
+            ->assertSee('Puas dengan layanan kami?')
+            ->assertSee('Bagikan pengalaman Anda di Google')
+            ->assertSee('Beri Ulasan di Google')
+            ->assertSee('Sebelum datang', false)
+            ->assertSee('Kirim foto kerusakan', false)
+            ->assertSee('Cek kondisi dulu, baru tentukan pekerjaan.', false)
+            ->assertSee('Sebelum serah terima', false)
+            ->assertSee('https://g.page/r/CRdF6YYTJuobEBM/review', false)
             ->assertDontSee('Lihat Galeri', false)
             ->assertDontSee('workshop-hero__copy', false);
     }
