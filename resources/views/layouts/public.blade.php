@@ -9,8 +9,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://{{ request()->getHost() }}/images/logo-bengkel-rudi.png" type="image/png">
-    <link rel="stylesheet" href="{{ app()->environment('production') ? secure_asset('css/site.css') : asset('css/site.css') }}?v={{ filemtime(public_path('css/site.css')) }}">
+    <link rel="icon" href="/images/logo-bengkel-rudi.png" type="image/png">
+    <link rel="stylesheet" href="/css/site.css?v={{ filemtime(public_path('css/site.css')) }}">
 </head>
 <body>
     @include('layouts.partials.header')
