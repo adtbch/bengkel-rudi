@@ -168,7 +168,7 @@ class Day3ContentTest extends TestCase
         $css = file_get_contents(public_path('css/admin.css'));
         $view = file_get_contents(resource_path('views/admin/portfolios.blade.php'));
 
-        $this->assertStringContainsString("asset('css/admin.css')", $layout);
+        $this->assertStringContainsString('/css/admin.css?v=', $layout);
         $this->assertStringContainsString('https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png', $layout);
         $this->assertStringContainsString('alt="Logo Bengkel Rudi"', $layout);
         $this->assertStringContainsString('class="admin-brand"', $layout);
