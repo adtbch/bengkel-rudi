@@ -35,6 +35,8 @@ class SettingController extends Controller
             SiteSetting::updateOrCreate(['key' => $key], ['value' => (string) $value]);
         }
 
+        SiteSettings::forget();
+
         return redirect('/admin/settings')->with('status', 'Pengaturan berhasil disimpan.');
     }
 
