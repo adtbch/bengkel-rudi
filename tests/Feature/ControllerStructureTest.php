@@ -89,6 +89,8 @@ class ControllerStructureTest extends TestCase
 
         $this->assertStringContainsString('vercel-php@0.9.0', $vercel);
         $this->assertStringContainsString('"outputDirectory": "public"', $vercel);
+        $this->assertStringContainsString('"src": "/css/(.*)", "dest": "/css/$1"', $vercel);
+        $this->assertStringContainsString('"src": "/js/(.*)", "dest": "/js/$1"', $vercel);
         $this->assertStringContainsString('"dest": "/api/index.php"', $vercel);
         $this->assertStringContainsString("require __DIR__.'/../public/index.php';", $handler);
         $this->assertStringContainsString('DB_CONNECTION=pgsql', $environment);
