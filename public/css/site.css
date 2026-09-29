@@ -700,19 +700,41 @@
         .service-card__footer a { font-size: .8rem; font-weight: 800; }
         .about-preview {
             display: grid;
-            gap: 2rem;
+            gap: 2.5rem;
             margin: 4.5rem -1rem 0;
             padding: 4rem max(1rem, calc((100vw - 1180px) / 2));
             color: #cbd5e1;
             background: var(--brand-dark);
         }
+        .about-preview__kicker {
+            margin: 0;
+            color: var(--brand-primary);
+            font-size: .75rem;
+            font-weight: 800;
+        }
         .about-preview h2, .review-cta h2 { color: #f8fafc; font-size: clamp(1.75rem, 4vw, 2.6rem); letter-spacing: -.04em; line-height: 1.12; }
-        .about-preview p { max-width: 62ch; margin-top: .8rem; color: #94a3b8; }
-        .about-preview ul { list-style: none; }
-        .about-preview li { padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,.12); }
-        .about-preview li strong, .about-preview li span { display: block; }
-        .about-preview li strong { color: #f8fafc; }
-        .about-preview li span { margin-top: .25rem; color: #94a3b8; font-size: .84rem; }
+        .about-preview__intro h2 { margin-top: .55rem; max-width: 14ch; }
+        .about-preview__intro > p:not(.about-preview__kicker) { max-width: 52ch; margin-top: .85rem; color: #94a3b8; }
+        .about-preview .home-text-link { display: inline-flex; margin-top: 1.2rem; color: #f8fafc; }
+        .about-preview__steps { display: grid; gap: .2rem; margin: 0; padding: 0; list-style: none; counter-reset: workshop-step; }
+        .about-preview__steps li {
+            display: grid;
+            grid-template-columns: 2.4rem minmax(0, 1fr);
+            column-gap: .8rem;
+            padding: 1rem 0;
+            counter-increment: workshop-step;
+        }
+        .about-preview__steps li::before {
+            content: "0" counter(workshop-step);
+            grid-row: span 2;
+            color: var(--brand-primary);
+            font-size: .78rem;
+            font-weight: 800;
+            line-height: 1.5;
+        }
+        .about-preview__steps li + li { border-top: 1px solid rgba(255,255,255,.12); }
+        .about-preview__steps strong { color: #f8fafc; font-size: .95rem; line-height: 1.35; }
+        .about-preview__steps span { margin-top: .22rem; color: #94a3b8; font-size: .84rem; line-height: 1.5; }
         .portfolio-preview { padding-top: 1rem; }
         .portfolio-strip { display: grid; gap: 1rem; }
         .portfolio-preview-card { overflow: hidden; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-card); }
