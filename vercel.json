@@ -19,7 +19,7 @@
   "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "false",
-    "CACHE_DRIVER": "database",
+    "CACHE_DRIVER": "array",
     "CACHE_PREFIX": "bengkel_rudi_cache_",
     "SESSION_DRIVER": "database",
     "SESSION_SECURE_COOKIE": "true",
