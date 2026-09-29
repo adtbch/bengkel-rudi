@@ -251,6 +251,7 @@ class Day3ContentTest extends TestCase
             ->assertOk()
             ->assertSee('id="beranda"', false)
             ->assertSee('class="workshop-hero__brand"', false)
+            ->assertDontSee('workshop-hero__media', false)
             ->assertSee('Solusi Cat dan Body Repair Terpercaya di')
             ->assertSee('Hubungi Kami via WhatsApp')
             ->assertSee('Puas dengan layanan kami?')
@@ -260,6 +261,9 @@ class Day3ContentTest extends TestCase
             ->assertSee('Kirim foto kerusakan', false)
             ->assertSee('Cek kondisi dulu, baru tentukan pekerjaan.', false)
             ->assertSee('Sebelum serah terima', false)
+            ->assertSee('class="service-list"', false)
+            ->assertSee('class="review-cta review-cta--light"', false)
+            ->assertDontSee('about-preview__steps li::before', false)
             ->assertSee('https://g.page/r/CRdF6YYTJuobEBM/review', false)
             ->assertDontSee('Lihat Galeri', false)
             ->assertDontSee('workshop-hero__copy', false);

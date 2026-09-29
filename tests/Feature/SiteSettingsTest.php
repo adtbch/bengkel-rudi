@@ -13,7 +13,8 @@ class SiteSettingsTest extends TestCase
   $this->assertStringNotContainsString('calc(50% - 50vw)', $css);
   $this->assertStringContainsString('clip-path: inset(0 -100vmax);', $css);
   $this->assertStringContainsString('box-shadow: 0 0 0 100vmax var(--brand-dark);', $css);
-  $this->assertStringContainsString('.workshop-hero__brand { max-width: 100%; }', $css);
+  $this->assertStringContainsString('.workshop-hero__brand {', $css);
+  $this->assertStringContainsString('width: 160px;', $css);
   $this->assertStringContainsString('alt="Logo Bengkel Rudi"', $header);
   $this->assertStringContainsString('class="mobile-menu"', $header);
  }

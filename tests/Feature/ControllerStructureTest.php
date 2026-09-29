@@ -21,8 +21,12 @@ class ControllerStructureTest extends TestCase
             $this->assertStringNotContainsString('>BR</span>', $source);
         }
 
+        $home = file_get_contents(resource_path('views/pages/home.blade.php'));
+        $this->assertStringNotContainsString('workshop-hero__media', $home);
+
         $css = file_get_contents(public_path('css/site.css'));
-        $this->assertStringContainsString('width: min(48vw, 200px);', $css);
+        $this->assertStringContainsString('width: 160px;', $css);
+        $this->assertStringContainsString('height: 160px;', $css);
         $this->assertStringContainsString('white-space: nowrap;', $css);
         $this->assertStringContainsString('@media (max-width: 1099px)', $css);
         $this->assertStringContainsString('white-space: normal;', $css);
