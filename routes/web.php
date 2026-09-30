@@ -25,7 +25,7 @@ Route::get('/robots.txt', function () {
 });
 
 Route::get('/sitemap.xml', function () {
-    $baseUrl = 'https://bengkel-rudi.vercel.app';
+    $baseUrl = rtrim(config('app.url'), '/');
     $urls = collect([
         ['path' => '/', 'updated_at' => now()],
         ['path' => '/tentang', 'updated_at' => now()],

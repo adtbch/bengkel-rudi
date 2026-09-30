@@ -7,9 +7,9 @@
     '@context' => 'https://schema.org',
     '@type' => 'BreadcrumbList',
     'itemListElement' => [
-        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Beranda', 'item' => 'https://bengkel-rudi.vercel.app/'],
-        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Portfolio', 'item' => 'https://bengkel-rudi.vercel.app/portfolio'],
-        ['@type' => 'ListItem', 'position' => 3, 'name' => $portfolio->title, 'item' => 'https://bengkel-rudi.vercel.app/portfolio/'.$portfolio->slug],
+        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Beranda', 'item' => rtrim(config('app.url'), '/') . '/'],
+        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Portfolio', 'item' => rtrim(config('app.url'), '/') . '/portfolio'],
+        ['@type' => 'ListItem', 'position' => 3, 'name' => $portfolio->title, 'item' => rtrim(config('app.url'), '/') . '/portfolio/'.$portfolio->slug],
     ],
 ])
 <script type="application/ld+json">{!! json_encode($breadcrumbs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>

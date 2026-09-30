@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    @php($canonicalBase = 'https://bengkel-rudi.vercel.app')
+    @php($canonicalBase = rtrim(config('app.url'), '/'))
     @php($canonicalUrl = $canonicalBase . (request()->path() === '/' ? '/' : '/' . request()->path()))
     @php($pageTitle = html_entity_decode(trim($__env->yieldContent('title', $settings['meta_title'] ?? 'Bengkel Rudi — Cat & Body Repair Batang')), ENT_QUOTES, 'UTF-8'))
     @php($pageDescription = trim($__env->yieldContent('description', $settings['meta_description'] ?? 'Layanan cat dan body repair mobil dan motor di Wonokerto, Bandar, Kabupaten Batang.')))

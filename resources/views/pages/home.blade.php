@@ -9,8 +9,8 @@
     'name' => 'Bengkel Rudi',
     'description' => $settings['meta_description'] ?? 'Layanan cat dan body repair mobil dan motor di Wonokerto, Bandar, Kabupaten Batang.',
     'telephone' => '+' . ($settings['whatsapp_number'] ?? '628123456789'),
-    'url' => 'https://bengkel-rudi.vercel.app/',
-    'image' => 'https://bengkel-rudi.vercel.app/images/og-bengkel-rudi.png',
+    'url' => rtrim(config('app.url'), '/') . '/',
+    'image' => rtrim(config('app.url'), '/') . '/images/og-bengkel-rudi.png',
     'address' => [
         '@type' => 'PostalAddress',
         'streetAddress' => 'RT.05/RW.01, Krajan, Wonokerto',
