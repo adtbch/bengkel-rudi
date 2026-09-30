@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Hash;
 
 return new class extends Migration
 {
-    private const EMAIL = 'adit.bactiar091@gmail.com';
+    private const EMAIL = 'adit.bachtiar091@gmail.com';
 
     public function up(): void
     {
