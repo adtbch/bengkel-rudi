@@ -19,6 +19,7 @@
   "env": {
     "APP_ENV": "production",
     "APP_DEBUG": "false",
+    "VERCEL": "1",
     "CACHE_DRIVER": "array",
     "CACHE_PREFIX": "bengkel_rudi_cache_",
     "SESSION_DRIVER": "database",

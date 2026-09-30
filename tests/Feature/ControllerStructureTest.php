@@ -94,8 +94,11 @@ class ControllerStructureTest extends TestCase
         $this->assertStringContainsString('"dest": "/api/index.php"', $vercel);
         $this->assertStringContainsString("require __DIR__.'/../public/index.php';", $handler);
         $this->assertStringContainsString('DB_CONNECTION=pgsql', $environment);
+        $this->assertStringContainsString('"VERCEL": "1"', $vercel);
         $this->assertStringContainsString('"CACHE_DRIVER": "array"', $vercel);
         $this->assertStringNotContainsString('"CACHE_DRIVER": "database"', $vercel);
+        $this->assertStringContainsString("env('VERCEL') ? 'array' : env('CACHE_DRIVER', 'file')", file_get_contents(config_path('cache.php')));
+        $this->assertStringContainsString("env('VERCEL') ? 'cookie' : env('SESSION_DRIVER', 'file')", file_get_contents(config_path('session.php')));
         $this->assertStringContainsString('CACHE_DRIVER=database', $environment);
         $this->assertStringContainsString('SESSION_DRIVER=database', $environment);
         $this->assertStringContainsString('LOG_CHANNEL=stderr', $environment);
