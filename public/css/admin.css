@@ -115,6 +115,11 @@ button, .admin-nav a { min-height: 44px; }
 .admin-create-panel__summary:hover { color: var(--admin-accent-dark); }
 .admin-create-panel__form { padding: 0 1.25rem 1.25rem; border-top: 1px solid var(--admin-border); padding-top: 1.25rem; }
 .admin-alert--success { border-color: #bbf7d0; color: var(--admin-success); background: var(--admin-success-soft); }
+.admin-toast { position: fixed; right: 1rem; bottom: 1rem; z-index: 30; width: min(24rem, calc(100vw - 2rem)); border: 1px solid; border-radius: 10px; padding: .9rem 1rem; box-shadow: 0 12px 28px rgba(15, 23, 42, .16); font-weight: 700; animation: admin-toast-out 5s forwards; }
+.admin-toast--success { border-color: #bbf7d0; color: var(--admin-success); background: var(--admin-success-soft); }
+.admin-toast--error { border-color: #fecaca; color: var(--admin-accent-dark); background: var(--admin-accent-soft); }
+@keyframes admin-toast-out { 0%, 82% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(.5rem); visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { .admin-toast { animation: none; } }
 .admin-portfolio-list { grid-template-columns: 1fr !important; gap: .65rem; }
 .admin-portfolio-row { overflow: hidden; background: var(--admin-surface); border: 1px solid var(--admin-border); border-radius: var(--radius-card); box-shadow: 0 3px 12px rgba(15, 23, 42, .035); }
 .admin-portfolio-row__link { display: grid; grid-template-columns: 7rem minmax(0, 1fr) auto; gap: 1rem; align-items: center; min-height: 7rem; padding: .75rem 1rem .75rem .75rem; color: var(--admin-charcoal); text-decoration: none; transition: border-color .16s ease, box-shadow .16s ease, transform .16s ease; }

@@ -14,7 +14,7 @@ class InitialAdminMigrationTest extends TestCase
         $source = file_get_contents($files[0]);
 
         $this->assertStringContainsString("'name' => 'admin'", $source);
-        $this->assertStringContainsString("private const EMAIL = 'adit.bactiar091@gmail.com'", $source);
+        $this->assertStringContainsString("private const EMAIL = 'adit.bachtiar091@gmail.com'", $source);
         $this->assertStringContainsString("'role' => 'SUPER_ADMIN'", $source);
         $this->assertStringContainsString("'is_active' => true", $source);
         $this->assertStringContainsString("env('ADMIN_INITIAL_PASSWORD')", $source);

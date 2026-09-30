@@ -11,13 +11,6 @@
     <span class="admin-page-head__mark" aria-hidden="true">L</span>
 </header>
 
-@if($errors->any())
-    <div class="admin-alert" role="alert">{{ $errors->first() }}</div>
-@endif
-@if(session('status'))
-    <div class="admin-alert admin-alert--success" role="status">{{ session('status') }}</div>
-@endif
-
 <details class="admin-panel admin-create-panel" @if($errors->any()) open @endif>
     <summary class="admin-create-panel__summary">Tambah layanan baru</summary>
     <form method="post" action="/admin/layanan" class="admin-form-grid admin-create-panel__form">

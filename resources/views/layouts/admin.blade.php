@@ -4,7 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>@yield('title') - Admin</title>
+    <link rel="icon" href="/images/logo-bengkel-rudi.png" type="image/png">
     <link rel="stylesheet" href="/css/admin.css?v={{ filemtime(public_path('css/admin.css')) }}">
+    <script src="/js/admin-form-feedback.js?v={{ filemtime(public_path('js/admin-form-feedback.js')) }}" defer></script>
 </head>
 <body>
 <nav class="admin-nav" aria-label="Navigasi admin">
@@ -40,5 +42,11 @@
     </details>
 </nav>
 <main class="admin-shell">@yield('content')</main>
+@if(session('status'))
+    <div class="admin-toast admin-toast--success" role="status">{{ session('status') }}</div>
+@endif
+@if($errors->any())
+    <div class="admin-toast admin-toast--error" role="alert">{{ $errors->first() }}</div>
+@endif
 </body>
 </html>

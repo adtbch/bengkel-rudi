@@ -21,13 +21,13 @@ class Day3ContentTest extends TestCase
         return Service::create(array_merge(['name'=>'Cat Panel','slug'=>'cat-panel','description'=>'Perbaikan cat panel kendaraan.','min_price'=>100000,'max_price'=>300000,'features'=>['Rapi'],'is_active'=>true,'sort_order'=>1], $data));
     }
 
-    public function test_service_admin_requires_auth_and_crud_generates_collision_safe_slug(): void
+    public function test_service_admin_requires_auth_and_rejects_duplicate_name(): void
     {
         $this->get('/admin/layanan')->assertRedirect('/admin/login');
         $this->admin()->post('/admin/layanan', ['name'=>'Cat Panel','description'=>'Deskripsi cukup','min_price'=>100,'max_price'=>200,'is_active'=>1,'sort_order'=>2])->assertRedirect('/admin/layanan');
-        $this->admin()->post('/admin/layanan', ['name'=>'Cat Panel','description'=>'Deskripsi cukup','min_price'=>100,'max_price'=>200,'sort_order'=>3])->assertRedirect('/admin/layanan');
+        $this->admin()->post('/admin/layanan', ['name'=>'Cat Panel','description'=>'Deskripsi cukup','min_price'=>100,'max_price'=>200,'sort_order'=>3])->assertSessionHasErrors('name');
         $this->assertDatabaseHas('services',['slug'=>'cat-panel']);
-        $this->assertDatabaseHas('services',['slug'=>'cat-panel-2']);
+        $this->assertDatabaseCount('services', 1);
         $service=Service::where('slug','cat-panel')->firstOrFail();
         $this->admin()->put("/admin/layanan/{$service->id}", ['name'=>'Body Repair','description'=>'Body kendaraan diperbaiki','min_price'=>200,'max_price'=>500,'is_active'=>1,'sort_order'=>4])->assertRedirect('/admin/layanan');
         $this->assertSame('body-repair', $service->fresh()->slug);
@@ -45,6 +45,36 @@ class Day3ContentTest extends TestCase
         Portfolio::create(['service_id'=>$service->id,'title'=>'Avanza','slug'=>'avanza','vehicle_type'=>'CAR','is_published'=>true]);
         $this->admin()->delete("/admin/layanan/{$service->id}")->assertSessionHasErrors('service');
         $this->assertModelExists($service);
+    }
+
+    public function test_service_name_and_display_order_must_be_unique(): void
+    {
+        $service = $this->service(['name' => 'Cat Unik', 'sort_order' => 7]);
+
+        $this->admin()->post('/admin/layanan', [
+            'name' => $service->name,
+            'description' => 'Deskripsi layanan yang cukup panjang.',
+            'sort_order' => 8,
+        ])->assertSessionHasErrors('name');
+
+        $this->admin()->post('/admin/layanan', [
+            'name' => 'Nama Lain',
+            'description' => 'Deskripsi layanan yang cukup panjang.',
+            'sort_order' => $service->sort_order,
+        ])->assertSessionHasErrors('sort_order');
+
+        $this->assertSame(1, Service::count());
+    }
+
+    public function test_admin_mutation_forms_prevent_repeat_submission_and_show_popups(): void
+    {
+        $layout = file_get_contents(resource_path('views/layouts/admin.blade.php'));
+        $script = file_get_contents(public_path('js/admin-form-feedback.js'));
+
+        $this->assertStringContainsString('admin-toast', $layout);
+        $this->assertStringContainsString('admin-form-feedback.js', $layout);
+        $this->assertStringContainsString("form.dataset.submitting", $script);
+        $this->assertStringContainsString("button.disabled = true", $script);
     }
 
     public function test_public_services_show_active_only_detail_and_empty_state(): void
