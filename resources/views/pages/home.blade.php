@@ -1,163 +1,223 @@
 @extends('layouts.public')
+
 @section('title', $settings['meta_title'] ?? 'Bengkel Rudi - Bengkel Cat dan Body Repair Batang')
 @section('description', $settings['meta_description'] ?? 'Bengkel cat dan body repair mobil motor di Wonokerto, Bandar, Kabupaten Batang. Konsultasi langsung melalui WhatsApp.')
 
+@push('styles')
+    <link rel="stylesheet" href="/css/public/home.css?v={{ filemtime(public_path('css/public/home.css')) }}">
+@endpush
+
 @section('structured_data')
-@php($structuredData = [
-    '@context' => 'https://schema.org',
-    '@type' => ['LocalBusiness', 'AutoRepair'],
-    'name' => 'Bengkel Rudi',
-    'description' => $settings['meta_description'] ?? 'Layanan cat dan body repair mobil dan motor di Wonokerto, Bandar, Kabupaten Batang.',
-    'telephone' => '+' . ($settings['whatsapp_number'] ?? '628123456789'),
-    'url' => rtrim(config('app.url'), '/') . '/',
-    'image' => rtrim(config('app.url'), '/') . '/images/og-bengkel-rudi.png',
-    'address' => [
-        '@type' => 'PostalAddress',
-        'streetAddress' => 'RT.05/RW.01, Krajan, Wonokerto',
-        'addressLocality' => 'Bandar',
-        'addressRegion' => 'Jawa Tengah',
-        'postalCode' => '51254',
-        'addressCountry' => 'ID',
-    ],
-    'areaServed' => [
-        ['@type' => 'AdministrativeArea', 'name' => 'Kecamatan Bandar'],
-        ['@type' => 'AdministrativeArea', 'name' => 'Kabupaten Batang'],
-    ],
-    'openingHoursSpecification' => [[
-        '@type' => 'OpeningHoursSpecification',
-        'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-        'opens' => '08:00',
-        'closes' => '17:00',
-    ]],
-    'sameAs' => array_values(array_filter([$settings['instagram_url'] ?? null, $settings['google_business_profile_url'] ?? 'https://share.google/8pHQ7sXmkUWGf9YHI'])),
-])
-<script type="application/ld+json">{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @php($structuredData = [
+        '@context' => 'https://schema.org',
+        '@type' => ['LocalBusiness', 'AutoRepair'],
+        'name' => 'Bengkel Rudi',
+        'description' => $settings['meta_description'] ?? 'Layanan cat dan body repair mobil dan motor di Wonokerto, Bandar, Kabupaten Batang.',
+        'telephone' => '+' . ($settings['whatsapp_number'] ?? '628123456789'),
+        'url' => rtrim(config('app.url'), '/') . '/',
+        'image' => rtrim(config('app.url'), '/') . '/images/og-bengkel-rudi.png',
+        'address' => [
+            '@type' => 'PostalAddress',
+            'streetAddress' => 'RT.05/RW.01, Krajan, Wonokerto',
+            'addressLocality' => 'Bandar',
+            'addressRegion' => 'Jawa Tengah',
+            'postalCode' => '51254',
+            'addressCountry' => 'ID',
+        ],
+        'areaServed' => [
+            ['@type' => 'AdministrativeArea', 'name' => 'Kecamatan Bandar'],
+            ['@type' => 'AdministrativeArea', 'name' => 'Kabupaten Batang'],
+        ],
+        'openingHoursSpecification' => [[
+            '@type' => 'OpeningHoursSpecification',
+            'dayOfWeek' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+            'opens' => '08:00',
+            'closes' => '17:00',
+        ]],
+        'sameAs' => array_values(array_filter([
+            $settings['instagram_url'] ?? null,
+            $settings['google_business_profile_url'] ?? 'https://share.google/8pHQ7sXmkUWGf9YHI',
+        ])),
+    ])
+
+    <script type="application/ld+json">{!! json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 @endsection
 
 @section('content')
+    @php($whatsapp = $settings['whatsapp_number'] ?? '628123456789')
+    @php($mapsEmbedUrl = $settings['google_maps_embed_url'] ?? null)
 
-<section class="workshop-hero" id="beranda" aria-labelledby="hero-title">
-    <div class="workshop-hero__content">
-        <img class="workshop-hero__brand" src="https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png" alt="Bengkel Rudi Cat dan Body Repair" width="160" height="160">
-        <h1 id="hero-title">Solusi Cat dan Body Repair Terpercaya di Batang</h1>
-        <p class="workshop-hero__subtitle">Perbaikan bodi, pengecatan, dan restorasi mobil maupun motor dengan pengerjaan rapi.</p>
-        <a class="btn btn-primary workshop-hero__cta" href="https://wa.me/{{ $settings['whatsapp_number'] ?? '628123456789' }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin tanya tentang layanan cat dan body repair.') }}" target="_blank" rel="noopener">Hubungi Kami via WhatsApp</a>
-    </div>
-</section>
+    <section class="workshop-hero" id="beranda" aria-labelledby="hero-title">
+        <div class="workshop-hero__content">
+            <img
+                class="workshop-hero__brand"
+                src="https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png"
+                alt="Bengkel Rudi Cat dan Body Repair"
+                width="160"
+                height="160"
+            >
+            <h1 id="hero-title">Solusi Cat dan Body Repair Terpercaya di Batang</h1>
+            <p class="workshop-hero__subtitle">Perbaikan bodi, pengecatan, dan restorasi mobil maupun motor dengan pengerjaan rapi.</p>
+            <a
+                class="btn btn-primary workshop-hero__cta"
+                href="https://wa.me/{{ $whatsapp }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin tanya tentang layanan cat dan body repair.') }}"
+                target="_blank"
+                rel="noopener"
+            >Hubungi Kami via WhatsApp</a>
+        </div>
+    </section>
 
-<section class="quick-info" aria-label="Informasi bengkel">
-    <div class="quick-info__item">
-        <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v3m10-3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/><path d="m9 14 2 2 4-4"/></svg>
-        <div><strong>Sebelum datang</strong><span>Konfirmasi jadwal via WhatsApp.</span></div>
-    </div>
-    <div class="quick-info__item">
-        <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
-        <div><strong>Jam kerja</strong><span>{{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</span></div>
-    </div>
-    <div class="quick-info__item">
-        <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M8 5l1-2h6l1 2"/></svg>
-        <div><strong>Kirim foto kerusakan</strong><span>Untuk cek awal via WhatsApp.</span></div>
-    </div>
-</section>
+    <section class="quick-info" aria-label="Informasi bengkel">
+        <div class="quick-info__item">
+            <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M7 3v3m10-3v3M4 9h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
+                <path d="m9 14 2 2 4-4"/>
+            </svg>
+            <div><strong>Sebelum datang</strong><span>Konfirmasi jadwal via WhatsApp.</span></div>
+        </div>
 
-<section class="home-section" aria-labelledby="layanan-title">
-    <div class="home-section__heading">
-        <h2 id="layanan-title">Layanan kami</h2>
-        <p>Penanganan disesuaikan dengan kondisi bodi, luas kerusakan, dan hasil yang Anda inginkan.</p>
-    </div>
-    <div class="service-list">
-        @forelse($services as $service)
-            <article class="service-list__item">
-                <div>
-                    <h3><a href="/layanan/{{ $service->slug }}">{{ $service->name }}</a></h3>
-                    <p>{{ Str::limit($service->description, 125) }}</p>
-                </div>
-                <div class="service-list__meta">
-                    <span>{{ $service->min_price ? 'Mulai Rp '.number_format($service->min_price, 0, ',', '.') : 'Harga sesuai kondisi' }}</span>
-                    <a href="/layanan/{{ $service->slug }}">Detail <span aria-hidden="true">→</span></a>
-                </div>
-            </article>
-        @empty
-            <div class="home-empty">Layanan belum tersedia. Hubungi kami untuk konsultasi langsung.</div>
-        @endforelse
-    </div>
-    <a class="home-text-link" href="/layanan">Lihat semua layanan <span aria-hidden="true">→</span></a>
-</section>
+        <div class="quick-info__item">
+            <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="8"/>
+                <path d="M12 8v4l3 2"/>
+            </svg>
+            <div><strong>Jam kerja</strong><span>{{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</span></div>
+        </div>
 
-<section class="about-preview" aria-labelledby="tentang-title">
-    <div class="about-preview__intro">
-        <p class="about-preview__kicker">Cara kami menangani kendaraan</p>
-        <h2 id="tentang-title">Cek kondisi dulu, baru tentukan pekerjaan.</h2>
-        <p>Supaya pekerjaan dan biayanya jelas dari awal, kami cek bagian yang perlu ditangani sebelum mulai.</p>
-        <a class="home-text-link" href="/tentang">Lihat profil bengkel <span aria-hidden="true">→</span></a>
-    </div>
-    <ol class="about-preview__steps">
-        <li><strong>Periksa bagian yang bermasalah</strong><span>Kerusakan bodi dan kebutuhan cat dilihat lebih dulu.</span></li>
-        <li><strong>Sepakati pekerjaan dan estimasi</strong><span>Lingkup kerja dibahas sebelum kendaraan masuk pengerjaan.</span></li>
-        <li><strong>Sebelum serah terima</strong><span>Panel, warna, dan hasil akhir kami cek kembali.</span></li>
-    </ol>
-</section>
+        <div class="quick-info__item">
+            <svg class="quick-info__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="4" y="5" width="16" height="14" rx="2"/>
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M8 5l1-2h6l1 2"/>
+            </svg>
+            <div><strong>Kirim foto kerusakan</strong><span>Untuk cek awal via WhatsApp.</span></div>
+        </div>
+    </section>
 
-<section class="home-section portfolio-preview" aria-labelledby="portfolio-title">
-    <div class="home-section__heading">
-        <h2 id="portfolio-title">Hasil pengerjaan terbaru</h2>
-        <p>Lihat dokumentasi before, process, dan after dari kendaraan yang kami tangani.</p>
-    </div>
-    <div class="portfolio-strip">
-        @forelse($portfolios as $portfolio)
-            @php($thumb = $portfolio->images->first())
-            <article class="portfolio-preview-card">
-                <a href="/portfolio/{{ $portfolio->slug }}">
-                    @if($thumb)
-                        @if($thumb->media_type === 'video')
-                            <video src="{{ $thumb->image_url }}" controls preload="metadata" playsinline aria-label="Video {{ $portfolio->title }}"></video>
-                        @else
-                            <img src="{{ $thumb->image_url }}" alt="{{ $portfolio->title }}" loading="lazy" decoding="async">
-                        @endif
-                    @else
-                        <div class="home-photo-placeholder"><span>Foto belum tersedia</span></div>
-                    @endif
+    <section class="home-section" aria-labelledby="layanan-title">
+        <div class="home-section__heading">
+            <h2 id="layanan-title">Layanan kami</h2>
+            <p>Penanganan disesuaikan dengan kondisi bodi, luas kerusakan, dan hasil yang Anda inginkan.</p>
+        </div>
+
+        <div class="service-list">
+            @forelse($services as $service)
+                <article class="service-list__item">
                     <div>
-                        <span>{{ $portfolio->service->name }}</span>
-                        <h3>{{ $portfolio->title }}</h3>
-                        <p>{{ $portfolio->vehicle_label }}</p>
+                        <h3><a href="/layanan/{{ $service->slug }}">{{ $service->name }}</a></h3>
+                        <p>{{ Str::limit($service->description, 125) }}</p>
                     </div>
-                </a>
-            </article>
-        @empty
-            <div class="home-empty">Portfolio belum dipublikasikan.</div>
-        @endforelse
-    </div>
-    @if($portfolioCount > 6)
-        <a class="home-text-link" href="/portfolio">Lihat Semua Portfolio <span aria-hidden="true">→</span></a>
+                    <div class="service-list__meta">
+                        <span>{{ $service->min_price ? 'Mulai Rp '.number_format($service->min_price, 0, ',', '.') : 'Harga sesuai kondisi' }}</span>
+                        <a href="/layanan/{{ $service->slug }}">Detail <span aria-hidden="true">→</span></a>
+                    </div>
+                </article>
+            @empty
+                <div class="home-empty">Layanan belum tersedia. Hubungi kami untuk konsultasi langsung.</div>
+            @endforelse
+        </div>
+
+        <a class="home-text-link" href="/layanan">Lihat semua layanan <span aria-hidden="true">→</span></a>
+    </section>
+
+    <section class="about-preview" aria-labelledby="tentang-title">
+        <div class="about-preview__intro">
+            <p class="about-preview__kicker">Cara kami menangani kendaraan</p>
+            <h2 id="tentang-title">Cek kondisi dulu, baru tentukan pekerjaan.</h2>
+            <p>Supaya pekerjaan dan biayanya jelas dari awal, kami cek bagian yang perlu ditangani sebelum mulai.</p>
+            <a class="home-text-link" href="/tentang">Lihat profil bengkel <span aria-hidden="true">→</span></a>
+        </div>
+
+        <ol class="about-preview__steps">
+            <li><strong>Periksa bagian yang bermasalah</strong><span>Kerusakan bodi dan kebutuhan cat dilihat lebih dulu.</span></li>
+            <li><strong>Sepakati pekerjaan dan estimasi</strong><span>Lingkup kerja dibahas sebelum kendaraan masuk pengerjaan.</span></li>
+            <li><strong>Sebelum serah terima</strong><span>Panel, warna, dan hasil akhir kami cek kembali.</span></li>
+        </ol>
+    </section>
+
+    <section class="home-section portfolio-preview" aria-labelledby="portfolio-title">
+        <div class="home-section__heading">
+            <h2 id="portfolio-title">Hasil pengerjaan terbaru</h2>
+            <p>Lihat dokumentasi before, process, dan after dari kendaraan yang kami tangani.</p>
+        </div>
+
+        <div class="portfolio-strip">
+            @forelse($portfolios as $portfolio)
+                @php($thumb = $portfolio->images->first())
+
+                <article class="portfolio-preview-card">
+                    <a href="/portfolio/{{ $portfolio->slug }}">
+                        @if($thumb)
+                            @if($thumb->media_type === 'video')
+                                <video
+                                    src="{{ $thumb->image_url }}"
+                                    controls
+                                    preload="metadata"
+                                    playsinline
+                                    aria-label="Video {{ $portfolio->title }}"
+                                ></video>
+                            @else
+                                <img src="{{ $thumb->image_url }}" alt="{{ $portfolio->title }}" loading="lazy" decoding="async">
+                            @endif
+                        @else
+                            <div class="home-photo-placeholder"><span>Foto belum tersedia</span></div>
+                        @endif
+
+                        <div>
+                            <span>{{ $portfolio->service->name }}</span>
+                            <h3>{{ $portfolio->title }}</h3>
+                            <p>{{ $portfolio->vehicle_label }}</p>
+                        </div>
+                    </a>
+                </article>
+            @empty
+                <div class="home-empty">Portfolio belum dipublikasikan.</div>
+            @endforelse
+        </div>
+
+        @if($portfolioCount > 6)
+            <a class="home-text-link" href="/portfolio">Lihat Semua Portfolio <span aria-hidden="true">→</span></a>
+        @endif
+    </section>
+
+    <section class="review-cta review-cta--light" aria-labelledby="ulasan-title">
+        <div>
+            <h2 id="ulasan-title">Puas dengan layanan kami?</h2>
+            <p>Bagikan pengalaman Anda di Google. Ulasan Anda membantu Bengkel Rudi terus meningkatkan pelayanan.</p>
+        </div>
+        <a class="btn btn-white" href="{{ $settings['google_business_url'] }}" target="_blank" rel="noopener">Beri Ulasan di Google</a>
+    </section>
+
+    @if(!empty($mapsEmbedUrl))
+        <section class="home-location" aria-labelledby="lokasi-title">
+            <div class="home-location__copy">
+                <h2 id="lokasi-title">Lokasi workshop</h2>
+                <p>{{ $settings['address'] ?? 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254' }}</p>
+                <span>{{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</span>
+                <a class="home-text-link" href="/kontak">Lihat kontak dan petunjuk arah <span aria-hidden="true">→</span></a>
+            </div>
+            <iframe
+                src="{{ $mapsEmbedUrl }}"
+                title="Lokasi Bengkel Rudi"
+                width="100%"
+                height="360"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+            ></iframe>
+        </section>
     @endif
-</section>
 
-<section class="review-cta review-cta--light" aria-labelledby="ulasan-title">
-    <div>
-        <h2 id="ulasan-title">Puas dengan layanan kami?</h2>
-        <p>Bagikan pengalaman Anda di Google. Ulasan Anda membantu Bengkel Rudi terus meningkatkan pelayanan.</p>
-    </div>
-    <a class="btn btn-white" href="{{ $settings['google_business_url'] }}" target="_blank" rel="noopener">Beri Ulasan di Google</a>
-</section>
-
-@if(!empty($settings['google_maps_embed_url']))
-<section class="home-location" aria-labelledby="lokasi-title">
-    <div class="home-location__copy">
-        <h2 id="lokasi-title">Lokasi workshop</h2>
-        <p>{{ $settings['address'] ?? 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254' }}</p>
-        <span>{{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</span>
-        <a class="home-text-link" href="/kontak">Lihat kontak dan petunjuk arah <span aria-hidden="true">→</span></a>
-    </div>
-    <iframe src="{{ $settings['google_maps_embed_url'] }}" title="Lokasi Bengkel Rudi" width="100%" height="360" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-</section>
-@endif
-
-<section class="home-cta" aria-labelledby="cta-title">
-    <div>
-        <h2 id="cta-title">Perlu estimasi perbaikan?</h2>
-        <p>Kirim foto bagian kendaraan yang rusak. Kami bantu menentukan penanganan awal.</p>
-    </div>
-    <a class="btn btn-wa" href="https://wa.me/{{ $settings['whatsapp_number'] ?? '628123456789' }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin meminta estimasi awal. Berikut foto kondisi kendaraan saya.') }}" target="_blank" rel="noopener">Kirim foto via WhatsApp</a>
-</section>
+    <section class="home-cta" aria-labelledby="cta-title">
+        <div>
+            <h2 id="cta-title">Perlu estimasi perbaikan?</h2>
+            <p>Kirim foto bagian kendaraan yang rusak. Kami bantu menentukan penanganan awal.</p>
+        </div>
+        <a
+            class="btn btn-wa"
+            href="https://wa.me/{{ $whatsapp }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin meminta estimasi awal. Berikut foto kondisi kendaraan saya.') }}"
+            target="_blank"
+            rel="noopener"
+        >Kirim foto via WhatsApp</a>
+    </section>
 @endsection

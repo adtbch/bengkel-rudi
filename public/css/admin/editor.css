@@ -1,0 +1,138 @@
+/*
+ * Kerangka editor admin (portfolio, service, dan user).
+ */
+
+.admin-workspace-section {
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+.admin-workspace-section__head {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.admin-workspace-section__head > span {
+    display: grid;
+    width: 2.35rem;
+    height: 2.35rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--admin-accent-soft);
+    color: var(--admin-accent-dark);
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.admin-workspace-section__head h2 {
+    margin: 0;
+    color: var(--admin-charcoal);
+    font-size: 1.1rem;
+    letter-spacing: -0.025em;
+}
+
+.admin-workspace-section__head p {
+    margin: 0.2rem 0 0;
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+}
+
+.admin-portfolio-workspace {
+    display: grid;
+    gap: 1rem;
+}
+
+/* Grid foto */
+.admin-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 0.85rem;
+}
+
+.admin-photo-card {
+    overflow: hidden;
+    background: #f8fafc;
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+}
+
+.admin-photo-card > :is(img, video) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background: #0f172a;
+}
+
+.admin-photo-card__body {
+    display: grid;
+    gap: 0.75rem;
+    padding: 0.85rem;
+}
+
+/* Bar simpan */
+.admin-save-bar {
+    position: sticky;
+    bottom: 0.75rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1rem;
+    background: rgba(255, 255, 255, .96);
+    border: 1px solid #fecaca;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(15, 23, 42, .14);
+}
+
+.admin-save-bar p {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+}
+
+.admin-save-bar .admin-button {
+    flex: 0 0 auto;
+}
+
+/* Zona hapus */
+.admin-danger-zone {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #fecaca;
+}
+
+.admin-danger-zone h2 {
+    margin: 0;
+    color: var(--admin-charcoal);
+    font-size: 1rem;
+}
+
+.admin-danger-zone p {
+    margin: 0.25rem 0 0;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+}
+
+@media (max-width: 550px) {
+    .admin-save-bar,
+    .admin-danger-zone {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-save-bar .admin-button,
+    .admin-danger-zone .admin-button {
+        width: 100%;
+    }
+}

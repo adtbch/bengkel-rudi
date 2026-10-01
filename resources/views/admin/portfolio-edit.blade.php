@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 @section('title', 'Kelola '.$portfolio->title)
 
+@push('styles')
+    <link rel="stylesheet" href="/css/admin/portfolios.css?v={{ filemtime(public_path('css/admin/portfolios.css')) }}">
+@endpush
+
 @section('content')
 <a class="admin-back-link" href="/admin/portfolio">‹ Kembali ke daftar</a>
 <header class="admin-page-head admin-page-head--edit">

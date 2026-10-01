@@ -1,0 +1,51 @@
+/*
+ * Basis panel admin: design token, reset, dan kontrol formulir.
+ * Wajib dimuat sebelum file CSS admin lainnya.
+ */
+
+:root {
+    --admin-page: #f8fafc;
+    --admin-surface: #ffffff;
+    --admin-charcoal: #0f172a;
+    --admin-text: #334155;
+    --admin-muted: #64748b;
+    --admin-border: #e2e8f0;
+    --admin-accent: #dc2626;
+    --admin-accent-dark: #b91c1c;
+    --admin-accent-soft: #fef2f2;
+    --admin-success: #15803d;
+    --admin-success-soft: #f0fdf4;
+    --radius-button: 9999px;
+    --radius-card: 14px;
+    --shadow-card: 0 8px 24px rgba(15, 23, 42, .06);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-width: 320px;
+    margin: 0;
+    background: var(--admin-page);
+    color: var(--admin-text);
+    font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+    line-height: 1.55;
+}
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+button,
+.admin-nav a {
+    min-height: 44px;
+}
+
+:focus-visible {
+    outline: 3px solid #f59e0b;
+    outline-offset: 3px;
+}

@@ -1,0 +1,109 @@
+/*
+ * Halaman layanan admin (services, service-edit).
+ */
+
+.admin-service-list {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.admin-service-row {
+    overflow: hidden;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: 0 3px 12px rgba(15, 23, 42, .035);
+}
+
+.admin-service-row__link {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    min-height: 5.75rem;
+    padding: 0.8rem 1rem;
+    color: var(--admin-charcoal);
+    text-decoration: none;
+    transition: box-shadow .16s ease, transform .16s ease;
+}
+
+.admin-service-row__link:hover {
+    box-shadow: 0 8px 22px rgba(15, 23, 42, .08);
+    color: var(--admin-charcoal);
+    transform: translateY(-1px);
+}
+
+.admin-service-row__link:active {
+    transform: translateY(0);
+}
+
+.admin-service-row__order {
+    display: grid;
+    width: 2.6rem;
+    height: 2.6rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--admin-accent-soft);
+    color: var(--admin-accent-dark);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.admin-service-row__body,
+.admin-service-row__heading {
+    min-width: 0;
+}
+
+.admin-service-row__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.admin-service-row__heading strong {
+    overflow-wrap: anywhere;
+}
+
+.admin-service-row__heading .admin-status {
+    margin: 0;
+}
+
+.admin-service-row__meta {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+}
+
+.admin-service-row__action {
+    color: var(--admin-accent-dark);
+    font-size: 0.84rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.admin-service-price {
+    margin: 1rem 0 0;
+    overflow-wrap: anywhere;
+    color: var(--admin-muted);
+    font-size: 0.86rem;
+    font-weight: 700;
+}
+
+@media (max-width: 550px) {
+    .admin-service-row__link {
+        grid-template-columns: 2.6rem minmax(0, 1fr);
+        gap: 0.7rem;
+        padding: 0.7rem;
+    }
+
+    .admin-service-row__action {
+        grid-column: 2;
+    }
+
+    .admin-service-row__heading {
+        flex-direction: column;
+        align-items: start;
+        gap: 0.35rem;
+    }
+}

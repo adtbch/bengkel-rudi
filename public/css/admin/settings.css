@@ -1,0 +1,42 @@
+/*
+ * Halaman pengaturan situs (admin/settings).
+ */
+
+.admin-setting-alert {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.admin-setting-alert--success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.admin-setting-alert--error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.admin-setting-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 600px;
+}
+
+.admin-setting-form input,
+.admin-setting-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.admin-setting-submit {
+    padding: 0.75rem;
+    background: #171717;
+    border: 0;
+    border-radius: 9999px;
+    color: #fff;
+    cursor: pointer;
+}

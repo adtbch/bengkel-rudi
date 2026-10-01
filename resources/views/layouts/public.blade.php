@@ -30,7 +30,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="/images/logo-bengkel-rudi.png" type="image/png">
-    <link rel="stylesheet" href="/css/site.css?v={{ filemtime(public_path('css/site.css')) }}">
+    <link rel="stylesheet" href="/css/public/base.css?v={{ filemtime(public_path('css/public/base.css')) }}">
+    <link rel="stylesheet" href="/css/public/components.css?v={{ filemtime(public_path('css/public/components.css')) }}">
+    <link rel="stylesheet" href="/css/public/header.css?v={{ filemtime(public_path('css/public/header.css')) }}">
+    <link rel="stylesheet" href="/css/public/footer.css?v={{ filemtime(public_path('css/public/footer.css')) }}">
+    @stack('styles')
 </head>
 <body>
     @include('layouts.partials.header')

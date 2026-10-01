@@ -1,47 +1,70 @@
 @extends('layouts.public')
+
 @section('title', 'Tentang Kami — ' . ($settings['business_name'] ?? 'Bengkel Rudi'))
 @section('description', 'Mengenal Bengkel Rudi, spesialis perbaikan bodi, pengecatan panel dan seluruh bodi kendaraan.')
 
+@push('styles')
+    <link rel="stylesheet" href="/css/public/page.css?v={{ filemtime(public_path('css/public/page.css')) }}">
+    <link rel="stylesheet" href="/css/public/about.css?v={{ filemtime(public_path('css/public/about.css')) }}">
+@endpush
+
 @section('content')
-<div style="margin-bottom:2rem">
-    <div class="pill-badge" style="background:#fee2e2;color:#b91c1c;margin-bottom:0.5rem">Tentang Bengkel Rudi</div>
-    <h1 style="font-size:clamp(1.75rem, 4vw, 2.35rem);font-weight:800;color:var(--text-heading);letter-spacing:-0.02em;margin-bottom:0.35rem">
-        Bengkel Cat &amp; Body Repair di Kabupaten Batang
-    </h1>
-    <p style="color:var(--text-muted);font-size:0.95rem">Membangun kepercayaan pelanggan melalui ketelitian pengerjaan, material cat berkualitas, dan garansi rapi.</p>
-</div>
+    @php($whatsapp = $settings['whatsapp_number'] ?? '628123456789')
 
-<div class="grid" style="grid-template-columns:1fr;gap:1.5rem">
-    <article class="card" style="padding:1.75rem">
-        <h2 style="font-size:1.25rem;font-weight:700;color:var(--text-heading);margin-bottom:0.85rem">Dedikasi Kualitas &amp; Kepuasan Pelanggan</h2>
-        <p style="color:var(--text-body);font-size:1rem;line-height:1.75;margin-bottom:1.75rem">
-            {{ $settings['about_content'] ?? 'Bengkel Rudi bergerak di bidang body repair dan pengecatan kendaraan. Kami mengutamakan ketepatan bentuk bodi, perbaikan penyok, pendempulan rapi, serta pengecatan mobil maupun motor.' }}
+    @php($pillars = [
+        [
+            'title' => 'Pengecatan Rapi dan Terkontrol',
+            'text' => 'Area kerja dijaga bersih untuk membantu hasil pengecatan rapi dan merata.',
+        ],
+        [
+            'title' => 'Tukang Las & Ketok Presisi',
+            'text' => 'Menangani bodi sobek, rangka bengkok, hingga panel keropos dengan presisi simetris pabrikan.',
+        ],
+        [
+            'title' => 'Estimasi Pasti & Garansi',
+            'text' => 'Penawaran harga transparan di muka tanpa pembengkakan biaya, lengkap jaminan kepuasan pengerjaan.',
+        ],
+    ])
+
+    <div class="page-header">
+        <div class="pill-badge page-header__badge page-header__badge--red">Tentang Bengkel Rudi</div>
+
+        <h1 class="page-title page-title--page page-title--soft">
+            Bengkel Cat &amp; Body Repair di Kabupaten Batang
+        </h1>
+
+        <p class="page-lead page-lead--plain">
+            Membangun kepercayaan pelanggan melalui ketelitian pengerjaan, material cat berkualitas, dan garansi rapi.
         </p>
+    </div>
 
-        <!-- 3 Pilar Keunggulan (seperti Bengkel Anga & Bengkel Cat) -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:1rem;margin-bottom:1.75rem">
-            <div style="background:#f8fafc;padding:1.2rem;border-radius:var(--radius-sm);border:1px solid var(--border-color)">
-                <div style="color:var(--brand-primary);font-weight:800;font-size:1.05rem;margin-bottom:0.35rem">✓ Pengecatan Rapi dan Terkontrol</div>
-                <p style="color:var(--text-muted);font-size:0.85rem;margin:0;line-height:1.5">Area kerja dijaga bersih untuk membantu hasil pengecatan rapi dan merata.</p>
-            </div>
-            <div style="background:#f8fafc;padding:1.2rem;border-radius:var(--radius-sm);border:1px solid var(--border-color)">
-                <div style="color:var(--brand-primary);font-weight:800;font-size:1.05rem;margin-bottom:0.35rem">✓ Tukang Las &amp; Ketok Presisi</div>
-                <p style="color:var(--text-muted);font-size:0.85rem;margin:0;line-height:1.5">Menangani bodi sobek, rangka bengkok, hingga panel keropos dengan presisi simetris pabrikan.</p>
-            </div>
-            <div style="background:#f8fafc;padding:1.2rem;border-radius:var(--radius-sm);border:1px solid var(--border-color)">
-                <div style="color:var(--brand-primary);font-weight:800;font-size:1.05rem;margin-bottom:0.35rem">✓ Estimasi Pasti &amp; Garansi</div>
-                <p style="color:var(--text-muted);font-size:0.85rem;margin:0;line-height:1.5">Penawaran harga transparan di muka tanpa pembengkakan biaya, lengkap jaminan kepuasan pengerjaan.</p>
-            </div>
-        </div>
+    <div class="grid page-single">
+        <article class="card page-card">
+            <h2 class="about__heading">Dedikasi Kualitas &amp; Kepuasan Pelanggan</h2>
 
-        <div style="border-top:1px solid var(--border-color);padding-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.75rem">
-            <a class="btn btn-wa" href="https://wa.me/{{ $settings['whatsapp_number'] ?? '628123456789' }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin tanya seputar pengerjaan bengkel.') }}" target="_blank" rel="noopener">
-                Konsultasi WhatsApp Sekarang
-            </a>
-            <a class="btn btn-white" href="/portfolio">
-                Lihat Bukti Hasil Pengerjaan
-            </a>
-        </div>
-    </article>
-</div>
+            <p class="about__content">
+                {{ $settings['about_content'] ?? 'Bengkel Rudi bergerak di bidang body repair dan pengecatan kendaraan. Kami mengutamakan ketepatan bentuk bodi, perbaikan penyok, pendempulan rapi, serta pengecatan mobil maupun motor.' }}
+            </p>
+
+            <div class="pillars">
+                @foreach($pillars as $pillar)
+                    <div class="pillar">
+                        <div class="pillar__title">✓ {{ $pillar['title'] }}</div>
+                        <p class="pillar__text">{{ $pillar['text'] }}</p>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="page-actions page-actions--bordered">
+                <a
+                    class="btn btn-wa"
+                    href="https://wa.me/{{ $whatsapp }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin tanya seputar pengerjaan bengkel.') }}"
+                    target="_blank"
+                    rel="noopener"
+                >Konsultasi WhatsApp Sekarang</a>
+
+                <a class="btn btn-white" href="/portfolio">Lihat Bukti Hasil Pengerjaan</a>
+            </div>
+        </article>
+    </div>
 @endsection

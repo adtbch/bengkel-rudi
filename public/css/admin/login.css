@@ -1,0 +1,176 @@
+/*
+ * Halaman login admin (admin/login.blade.php).
+ * Dimuat langsung karena halaman ini berdiri sendiri tanpa layout.
+ */
+
+:root {
+    --bg-body: #0b0f17;
+    --bg-card: #111827;
+    --bg-input: #1f2937;
+    --border: #374151;
+    --border-focus: #ef4444;
+    --brand: #dc2626;
+    --brand-hover: #b91c1c;
+    --brand-glow: rgba(220, 38, 38, 0.35);
+    --text-main: #f9fafb;
+    --text-muted: #9ca3af;
+    --radius-btn: 9999px;
+    --radius-box: 16px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+    overflow-x: hidden;
+    background-color: var(--bg-body);
+    background-image:
+        radial-gradient(at 0% 0%, rgba(220, 38, 38, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(30, 58, 138, 0.12) 0px, transparent 50%);
+    color: var(--text-main);
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.login-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 420px;
+}
+
+.login-card {
+    padding: 2.5rem 2rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-box);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+}
+
+.brand-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.brand-logo {
+    display: block;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+    filter: drop-shadow(0 4px 12px rgba(220, 38, 38, 0.3));
+    object-fit: contain;
+}
+
+.brand-title {
+    color: #ffffff;
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.brand-subtitle {
+    margin-top: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #e5e7eb;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.92rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    background: #111827;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--brand-glow);
+}
+
+.form-control::placeholder {
+    color: #6b7280;
+}
+
+.btn-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.75rem;
+    padding: 0.85rem 1.5rem;
+    background: var(--brand);
+    border: none;
+    border-radius: var(--radius-btn);
+    box-shadow: 0 4px 14px var(--brand-glow);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background: var(--brand-hover);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.45);
+    transform: translateY(-1px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.alert-error {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 0.85rem;
+}
+
+.back-link {
+    display: block;
+    margin-top: 1.5rem;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    text-decoration: none;
+    text-align: center;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: #ffffff;
+}

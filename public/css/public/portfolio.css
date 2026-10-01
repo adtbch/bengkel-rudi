@@ -1,0 +1,216 @@
+/*
+ * Halaman portfolio publik (daftar galeri + detail pengerjaan).
+ * Struktur header/judul/data kosong memakai kelas dasar dari page.css.
+ */
+
+/* Wadah foto/video pada halaman detail */
+.portfolio-media {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    background: var(--brand-dark);
+}
+
+.portfolio-media > :is(img, video) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Kartu di daftar portfolio */
+.portfolio-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.portfolio-card__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--brand-dark);
+}
+
+.portfolio-card__media > :is(img, video) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.portfolio-card__media-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.portfolio-card__badges {
+    position: absolute;
+    top: 0.65rem;
+    left: 0.65rem;
+    display: flex;
+    gap: 0.35rem;
+}
+
+.portfolio-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 1.25rem;
+}
+
+.portfolio-card__service {
+    margin-bottom: 0.35rem;
+    color: var(--brand-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.portfolio-card__title {
+    margin-bottom: 0.4rem;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.portfolio-card__title a {
+    color: var(--text-heading);
+}
+
+.portfolio-card__meta {
+    margin-bottom: 1.1rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.portfolio-card__actions {
+    margin-top: auto;
+}
+
+.portfolio-card__cta {
+    width: 100%;
+    min-height: 40px;
+    padding: 0.55rem;
+    font-size: 0.85rem;
+}
+
+/* Header halaman detail */
+.portfolio-detail-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.portfolio-detail-service {
+    color: var(--brand-primary);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.portfolio-detail-title {
+    margin-bottom: 0.35rem;
+    color: var(--text-heading);
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.portfolio-detail-subtitle {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+.portfolio-detail-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+/* Blok tahap pengerjaan */
+.portfolio-stage__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.portfolio-stage__headings {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.portfolio-stage__title {
+    color: var(--text-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.portfolio-stage__empty {
+    padding: 0.75rem 0;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+}
+
+.portfolio-stage__grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+/* Foto / video per tahap */
+.portfolio-shot {
+    overflow: hidden;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+}
+
+.portfolio-shot__caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.65rem 0.75rem;
+    background: #fafafa;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+}
+
+/* Ajakan konsultasi di bawah detail */
+.portfolio-cta {
+    padding: 1.75rem;
+    text-align: center;
+    background: var(--bg-card);
+    border: 2px solid #fee2e2;
+}
+
+.portfolio-cta__title {
+    margin-bottom: 0.5rem;
+    color: var(--text-heading);
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.portfolio-cta__text {
+    max-width: 540px;
+    margin: 0 auto 1.25rem;
+    color: var(--text-body);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.portfolio-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+}

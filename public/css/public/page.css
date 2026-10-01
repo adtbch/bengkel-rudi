@@ -1,0 +1,97 @@
+/*
+ * Struktur dasar halaman publik: header halaman, judul, subjudul,
+ * link kembali, dan tampilan data kosong.
+ * Dipakai bersama oleh halaman portfolio, services, about, dan contact.
+ */
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header--compact {
+    margin-bottom: 1.75rem;
+}
+
+.page-header__badge {
+    margin-bottom: 0.5rem;
+}
+
+.page-header__badge--red {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.page-title {
+    color: var(--text-heading);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.page-title--index {
+    font-size: 1.95rem;
+}
+
+.page-title--page {
+    margin-bottom: 0.35rem;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+}
+
+.page-title--soft {
+    letter-spacing: -0.02em;
+}
+
+.page-lead {
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.page-lead--plain {
+    margin-top: 0;
+}
+
+.page-backlink {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Tampilan saat belum ada data */
+.page-empty {
+    padding: 2.5rem 1rem;
+    text-align: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.page-empty__text {
+    color: var(--text-muted);
+}
+
+/* Grid satu kolom untuk halaman detail */
+.page-single {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+/* Kartu dengan padding lebih lega */
+.page-card {
+    padding: 1.75rem;
+}
+
+/* Baris tombol aksi */
+.page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.page-actions--bordered {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}

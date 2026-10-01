@@ -1,0 +1,102 @@
+/*
+ * Halaman pengguna admin (users, user-edit).
+ */
+
+.admin-user-list {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.admin-user-row {
+    overflow: hidden;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: 0 3px 12px rgba(15, 23, 42, .035);
+}
+
+.admin-user-row__link {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    min-height: 5.75rem;
+    padding: 0.8rem 1rem;
+    color: var(--admin-charcoal);
+    text-decoration: none;
+    transition: box-shadow .16s ease, transform .16s ease;
+}
+
+.admin-user-row__link:hover {
+    box-shadow: 0 8px 22px rgba(15, 23, 42, .08);
+    color: var(--admin-charcoal);
+    transform: translateY(-1px);
+}
+
+.admin-user-row__link:active {
+    transform: translateY(0);
+}
+
+.admin-user-row__initial {
+    display: grid;
+    width: 2.6rem;
+    height: 2.6rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--admin-accent-soft);
+    color: var(--admin-accent-dark);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.admin-user-row__body,
+.admin-user-row__heading {
+    min-width: 0;
+}
+
+.admin-user-row__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.admin-user-row__heading strong {
+    overflow-wrap: anywhere;
+}
+
+.admin-user-row__heading .admin-status {
+    margin: 0;
+}
+
+.admin-user-row__meta {
+    display: block;
+    margin-top: 0.35rem;
+    overflow-wrap: anywhere;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+}
+
+.admin-user-row__action {
+    color: var(--admin-accent-dark);
+    font-size: 0.84rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+@media (max-width: 550px) {
+    .admin-user-row__link {
+        grid-template-columns: 2.6rem minmax(0, 1fr);
+        gap: 0.7rem;
+        padding: 0.7rem;
+    }
+
+    .admin-user-row__action {
+        grid-column: 2;
+    }
+
+    .admin-user-row__heading {
+        flex-direction: column;
+        align-items: start;
+        gap: 0.35rem;
+    }
+}

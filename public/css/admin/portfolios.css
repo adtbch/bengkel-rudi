@@ -1,0 +1,268 @@
+/*
+ * Halaman portfolio admin (portfolios, portfolio-edit).
+ */
+
+.admin-portfolio-list {
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem;
+}
+
+/* Baris daftar portfolio */
+.admin-portfolio-row {
+    overflow: hidden;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: 0 3px 12px rgba(15, 23, 42, .035);
+}
+
+.admin-portfolio-row__link {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr) auto;
+    gap: 1rem;
+    align-items: center;
+    min-height: 7rem;
+    padding: 0.75rem 1rem 0.75rem 0.75rem;
+    color: var(--admin-charcoal);
+    text-decoration: none;
+    transition: box-shadow .16s ease, transform .16s ease;
+}
+
+.admin-portfolio-row__link:hover {
+    box-shadow: 0 8px 22px rgba(15, 23, 42, .08);
+    color: var(--admin-charcoal);
+    transform: translateY(-1px);
+}
+
+.admin-portfolio-row__link:active {
+    transform: translateY(0);
+}
+
+.admin-portfolio-row__cover {
+    display: grid;
+    width: 7rem;
+    height: 5.5rem;
+    place-items: center;
+    overflow: hidden;
+    background: #f1f5f9;
+    border-radius: 10px;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.admin-portfolio-row__cover :is(img, video) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-portfolio-row__body,
+.admin-portfolio-row__heading {
+    min-width: 0;
+}
+
+.admin-portfolio-row__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.admin-portfolio-row__heading strong {
+    overflow-wrap: anywhere;
+    font-size: 1rem;
+}
+
+.admin-portfolio-row__heading .admin-status {
+    margin: 0;
+}
+
+.admin-portfolio-row__meta {
+    display: block;
+    margin-top: 0.38rem;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+}
+
+.admin-portfolio-row__action {
+    color: var(--admin-accent-dark);
+    font-size: 0.84rem;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* Kartu ringkasan (dipakai saat panel utama disembunyikan) */
+.admin-portfolio-card {
+    padding: 0;
+    overflow: hidden;
+}
+
+.admin-portfolio-card__summary {
+    display: grid;
+    grid-template-columns: 8rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem;
+}
+
+.admin-portfolio-card__cover {
+    display: grid;
+    min-height: 6rem;
+    place-items: center;
+    overflow: hidden;
+    background: #f1f5f9;
+    border-radius: 10px;
+    color: var(--admin-muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+}
+
+.admin-portfolio-card__cover img {
+    width: 100%;
+    height: 6rem;
+    object-fit: cover;
+}
+
+.admin-portfolio-card__info {
+    min-width: 0;
+}
+
+.admin-portfolio-card__title-row {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.admin-portfolio-card__title-row h3 {
+    margin: 0;
+    overflow-wrap: anywhere;
+    color: var(--admin-charcoal);
+    font-size: 1rem;
+}
+
+.admin-portfolio-card__info p {
+    margin: 0.45rem 0 0;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+}
+
+.admin-portfolio-card .admin-status {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.admin-portfolio-editor {
+    margin: 0 1rem;
+}
+
+.admin-portfolio-editor > .admin-section-summary {
+    color: var(--admin-accent-dark);
+}
+
+/* Pratinjau gambar */
+.admin-image-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+.admin-image-preview:empty {
+    display: none;
+}
+
+.admin-image-preview__item,
+.admin-image-item {
+    display: grid;
+    gap: 0.65rem;
+    min-width: 0;
+    padding: 0.75rem;
+    background: #f8fafc;
+    border: 1px solid var(--admin-border);
+    border-radius: 10px;
+}
+
+.admin-image-preview__item img,
+.admin-image-item img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 7px;
+    object-fit: cover;
+}
+
+.admin-image-preview__item div {
+    display: grid;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.admin-image-preview__item strong {
+    overflow-wrap: anywhere;
+}
+
+.admin-image-preview__item span {
+    color: var(--admin-muted);
+    font-size: 0.875rem;
+}
+
+.admin-image-heading {
+    margin-top: 1.5rem;
+    color: var(--admin-charcoal);
+    font-size: 0.9rem;
+}
+
+.admin-image-order {
+    margin-top: 0.5rem;
+}
+
+.admin-image-order__field {
+    font-size: 0.8rem;
+}
+
+.admin-image-delete {
+    min-height: 44px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.admin-card-actions {
+    margin-top: 1rem;
+}
+
+@media (max-width: 430px) {
+    .admin-portfolio-card__summary {
+        grid-template-columns: 5.5rem minmax(0, 1fr);
+        gap: 0.75rem;
+    }
+
+    .admin-portfolio-card__cover,
+    .admin-portfolio-card__cover img {
+        min-height: 4.5rem;
+        height: 4.5rem;
+    }
+}
+
+@media (max-width: 550px) {
+    .admin-portfolio-row__link {
+        grid-template-columns: 5rem minmax(0, 1fr);
+        gap: 0.75rem;
+        padding: 0.65rem;
+    }
+
+    .admin-portfolio-row__cover {
+        width: 5rem;
+        height: 4.5rem;
+    }
+
+    .admin-portfolio-row__action {
+        grid-column: 2;
+    }
+
+    .admin-portfolio-row__heading {
+        flex-direction: column;
+        align-items: start;
+        gap: 0.35rem;
+    }
+}

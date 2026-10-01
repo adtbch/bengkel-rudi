@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 @section('title', 'Kelola '.$user->name)
 
+@push('styles')
+    <link rel="stylesheet" href="/css/admin/users.css?v={{ filemtime(public_path('css/admin/users.css')) }}">
+@endpush
+
 @section('content')
 <a class="admin-back-link" href="/admin/users">‹ Kembali ke daftar</a>
 <header class="admin-page-head admin-page-head--edit">

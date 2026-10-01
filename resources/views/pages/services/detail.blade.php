@@ -1,78 +1,84 @@
 @extends('layouts.public')
+
 @section('title', $service->name . ' — ' . ($settings['business_name'] ?? 'Bengkel Rudi'))
 @section('description', trim(strip_tags($service->description)))
 
+@push('styles')
+    <link rel="stylesheet" href="/css/public/page.css?v={{ filemtime(public_path('css/public/page.css')) }}">
+    <link rel="stylesheet" href="/css/public/services.css?v={{ filemtime(public_path('css/public/services.css')) }}">
+@endpush
+
 @section('breadcrumb_structured_data')
-@php($breadcrumbs = [
-    '@context' => 'https://schema.org',
-    '@type' => 'BreadcrumbList',
-    'itemListElement' => [
-        ['@type' => 'ListItem', 'position' => 1, 'name' => 'Beranda', 'item' => rtrim(config('app.url'), '/') . '/'],
-        ['@type' => 'ListItem', 'position' => 2, 'name' => 'Layanan', 'item' => rtrim(config('app.url'), '/') . '/layanan'],
-        ['@type' => 'ListItem', 'position' => 3, 'name' => $service->name, 'item' => rtrim(config('app.url'), '/') . '/layanan/'.$service->slug],
-    ],
-])
-<script type="application/ld+json">{!! json_encode($breadcrumbs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
+    @php($breadcrumbs = [
+        '@context' => 'https://schema.org',
+        '@type' => 'BreadcrumbList',
+        'itemListElement' => [
+            ['@type' => 'ListItem', 'position' => 1, 'name' => 'Beranda', 'item' => rtrim(config('app.url'), '/') . '/'],
+            ['@type' => 'ListItem', 'position' => 2, 'name' => 'Layanan', 'item' => rtrim(config('app.url'), '/') . '/layanan'],
+            ['@type' => 'ListItem', 'position' => 3, 'name' => $service->name, 'item' => rtrim(config('app.url'), '/') . '/layanan/' . $service->slug],
+        ],
+    ])
+
+    <script type="application/ld+json">{!! json_encode($breadcrumbs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}</script>
 @endsection
 
 @section('content')
-<div style="margin-bottom:1.75rem">
-    <a href="/layanan" style="font-size:0.85rem;color:var(--text-muted);display:inline-flex;align-items:center;gap:0.35rem;margin-bottom:0.75rem;font-weight:600">
-        &larr; Kembali ke Daftar Layanan
-    </a>
-    <h1 style="font-size:clamp(1.75rem, 4vw, 2.35rem);font-weight:800;color:var(--text-heading);letter-spacing:-0.02em">
-        {{ $service->name }}
-    </h1>
-</div>
+    @php($whatsapp = $settings['whatsapp_number'] ?? '628123456789')
 
-<div class="grid" style="grid-template-columns:1fr;gap:1.5rem">
-    <article class="card" style="padding:1.75rem">
-        <div style="font-size:0.8rem;color:var(--brand-primary);font-weight:800;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:0.5rem">
-            Deskripsi Layanan &amp; Ketentuan
-        </div>
-        <p style="color:var(--text-body);font-size:1.02rem;line-height:1.7;margin-bottom:1.5rem">
-            {{ $service->description }}
-        </p>
+    <div class="page-header page-header--compact">
+        <a href="/layanan" class="page-backlink">&larr; Kembali ke Daftar Layanan</a>
+        <h1 class="page-title page-title--page">{{ $service->name }}</h1>
+    </div>
 
-        @if($service->min_price || $service->max_price)
-            <div style="background:#f8fafc;border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:1.35rem;margin-bottom:1.5rem">
-                <span style="font-size:0.8rem;color:var(--text-muted);display:block;margin-bottom:0.25rem;text-transform:uppercase;font-weight:700">Estimasi Biaya Pengerjaan:</span>
-                <p style="font-size:1.45rem;font-weight:800;color:var(--brand-primary);margin:0">
-                    @if($service->min_price)
-                        Rp{{ number_format($service->min_price, 0, ',', '.') }}
-                    @endif
-                    @if($service->max_price)
-                        – Rp{{ number_format($service->max_price, 0, ',', '.') }}
-                    @endif
-                </p>
-                <small style="color:var(--text-muted);display:block;margin-top:0.4rem;font-size:0.78rem">
-                    *Estimasi final disesuaikan dengan luas bidang panel, tingkat keparahan bodi, dan jenis warna cat kendaraan.
-                </small>
+    <div class="grid page-single">
+        <article class="card page-card">
+            <div class="service-detail__eyebrow">Deskripsi Layanan &amp; Ketentuan</div>
+            <p class="service-detail__description">{{ $service->description }}</p>
+
+            @if($service->min_price || $service->max_price)
+                <div class="service-detail__price">
+                    <span class="service-detail__price-label">Estimasi Biaya Pengerjaan:</span>
+
+                    <p class="service-detail__price-value">
+                        @if($service->min_price)
+                            Rp{{ number_format($service->min_price, 0, ',', '.') }}
+                        @endif
+                        @if($service->max_price)
+                            – Rp{{ number_format($service->max_price, 0, ',', '.') }}
+                        @endif
+                    </p>
+
+                    <small class="service-detail__price-note">
+                        *Estimasi final disesuaikan dengan luas bidang panel, tingkat keparahan bodi, dan jenis warna cat kendaraan.
+                    </small>
+                </div>
+            @endif
+
+            @if(!empty($service->features) && count($service->features) > 0)
+                <div class="service-detail__features">
+                    <h2 class="service-detail__features-title">Keunggulan &amp; Cakupan Pekerjaan:</h2>
+
+                    <ul class="service-detail__feature-list">
+                        @foreach($service->features as $feature)
+                            <li class="service-detail__feature-item">
+                                <span class="service-detail__feature-check">&#10003;</span>
+                                <span>{{ $feature }}</span>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <div class="service-detail__cta">
+                <a
+                    class="btn btn-wa"
+                    href="https://wa.me/{{ $whatsapp }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin konsultasi estimasi layanan ' . $service->name) }}"
+                    target="_blank"
+                    rel="noopener"
+                >Konsultasi Layanan via WhatsApp</a>
+
+                <a class="btn btn-white" href="/portfolio">Lihat Contoh Hasil di Galeri</a>
             </div>
-        @endif
-
-        @if(!empty($service->features) && count($service->features) > 0)
-            <div style="margin-bottom:1.75rem">
-                <h2 style="font-size:1.1rem;font-weight:700;color:var(--text-heading);margin-bottom:0.85rem">Keunggulan &amp; Cakupan Pekerjaan:</h2>
-                <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:0.6rem">
-                    @foreach($service->features as $feature)
-                        <li style="display:flex;align-items:center;gap:0.6rem;color:var(--text-body);font-size:0.95rem">
-                            <span style="color:var(--wa-color);font-weight:bold;font-size:1.1rem">&#10003;</span>
-                            <span>{{ $feature }}</span>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <div style="border-top:1px solid var(--border-color);padding-top:1.5rem;display:flex;flex-wrap:wrap;gap:0.75rem">
-            <a class="btn btn-wa" href="https://wa.me/{{ $settings['whatsapp_number'] ?? '628123456789' }}?text={{ urlencode('Halo Bengkel Rudi, saya ingin konsultasi estimasi layanan ' . $service->name) }}" target="_blank" rel="noopener" style="flex:1">
-                Konsultasi Layanan via WhatsApp
-            </a>
-            <a class="btn btn-white" href="/portfolio">
-                Lihat Contoh Hasil di Galeri
-            </a>
-        </div>
-    </article>
-</div>
+        </article>
+    </div>
 @endsection

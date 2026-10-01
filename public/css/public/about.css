@@ -1,0 +1,47 @@
+/*
+ * Halaman tentang bengkel (pages/about.blade.php).
+ * Memakai kelas dasar dari page.css.
+ */
+
+/* Isi profil */
+.about__heading {
+    margin-bottom: 0.85rem;
+    color: var(--text-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.about__content {
+    margin-bottom: 1.75rem;
+    color: var(--text-body);
+    font-size: 1rem;
+    line-height: 1.75;
+}
+
+/* Tiga pilar keunggulan */
+.pillars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+}
+
+.pillar {
+    padding: 1.2rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+}
+
+.pillar__title {
+    margin-bottom: 0.35rem;
+    color: var(--brand-primary);
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.pillar__text {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    line-height: 1.5;
+}

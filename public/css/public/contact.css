@@ -1,0 +1,71 @@
+/*
+ * Halaman kontak (pages/contact.blade.php).
+ * Memakai kelas dasar dari page.css.
+ */
+
+/* Kartu alamat dan jam operasional */
+.contact__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.75rem;
+}
+
+.contact-card {
+    padding: 1.25rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+}
+
+.contact-card__label {
+    display: block;
+    margin-bottom: 0.35rem;
+    color: var(--brand-primary);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.contact-card__value {
+    color: var(--text-heading);
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.contact-card__note {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--text-muted);
+}
+
+.contact__actions {
+    margin-bottom: 1.75rem;
+}
+
+/* Peta petunjuk arah */
+.contact__map-section {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.contact__map-title {
+    margin-bottom: 0.75rem;
+    color: var(--text-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.contact__map-frame {
+    max-width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-sm);
+}
+
+.contact__map-frame iframe {
+    display: block;
+    border: 0;
+}

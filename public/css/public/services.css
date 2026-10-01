@@ -1,0 +1,163 @@
+/*
+ * Halaman layanan publik (daftar layanan + detail layanan).
+ * Memakai kelas dasar dari page.css.
+ */
+
+/* Kartu pada daftar layanan */
+.service-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.service-card__title {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.service-card__title a {
+    color: var(--text-heading);
+}
+
+.service-card__excerpt {
+    margin-bottom: 1.25rem;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.service-card__footer {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.service-card__price-label {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.service-card__price {
+    margin-bottom: 0.75rem;
+    color: var(--brand-primary);
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.service-card__price span {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.service-card__actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.service-card__detail {
+    flex: 1;
+    min-height: 40px;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+}
+
+.service-card__wa {
+    min-height: 40px;
+    padding: 0.5rem 0.85rem;
+}
+
+/* Halaman detail layanan */
+.service-detail__eyebrow {
+    margin-bottom: 0.5rem;
+    color: var(--brand-primary);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.service-detail__description {
+    margin-bottom: 1.5rem;
+    color: var(--text-body);
+    font-size: 1.02rem;
+    line-height: 1.7;
+}
+
+.service-detail__price {
+    margin-bottom: 1.5rem;
+    padding: 1.35rem;
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+}
+
+.service-detail__price-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.service-detail__price-value {
+    color: var(--brand-primary);
+    font-size: 1.45rem;
+    font-weight: 800;
+}
+
+.service-detail__price-note {
+    display: block;
+    margin-top: 0.4rem;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+}
+
+.service-detail__features {
+    margin-bottom: 1.75rem;
+}
+
+.service-detail__features-title {
+    margin-bottom: 0.85rem;
+    color: var(--text-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.service-detail__feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 0;
+    list-style: none;
+}
+
+.service-detail__feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--text-body);
+    font-size: 0.95rem;
+}
+
+.service-detail__feature-check {
+    color: var(--wa-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.service-detail__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.service-detail__cta .btn-wa {
+    flex: 1;
+}

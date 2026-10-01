@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 @section('title', 'Portfolio')
 
+@push('styles')
+    <link rel="stylesheet" href="/css/admin/portfolios.css?v={{ filemtime(public_path('css/admin/portfolios.css')) }}">
+@endpush
+
 @section('content')
 <header class="admin-page-head">
     <div>

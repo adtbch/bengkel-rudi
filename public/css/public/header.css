@@ -1,0 +1,169 @@
+/*
+ * Header situs (layouts/partials/header.blade.php).
+ */
+
+header.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: #ffffff;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+}
+
+.header-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0.85rem 1rem;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    color: var(--brand-dark);
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+}
+
+.brand-logo__text {
+    display: block;
+    font-size: 1.15rem;
+    font-weight: 100;
+}
+
+/* Navigasi desktop */
+nav.nav-links-desktop {
+    display: none;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+nav.nav-links-desktop a {
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-body);
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+nav.nav-links-desktop a:hover,
+nav.nav-links-desktop a.active {
+    color: var(--brand-primary);
+}
+
+nav.nav-links-desktop a.btn {
+    border-radius: var(--radius-button);
+}
+
+/* Menu mobile */
+.mobile-menu {
+    position: relative;
+}
+
+.mobile-menu summary {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    gap: 5px;
+    place-content: center;
+    list-style: none;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+}
+
+.mobile-menu summary::-webkit-details-marker {
+    display: none;
+}
+
+.mobile-menu summary span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--brand-dark);
+}
+
+.mobile-menu[open] summary {
+    border-color: var(--brand-primary);
+}
+
+.mobile-menu nav {
+    position: absolute;
+    top: calc(100% + 0.7rem);
+    right: 0;
+    display: grid;
+    width: min(82vw, 320px);
+    padding: 0.65rem;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+}
+
+.mobile-menu nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.7rem 0.8rem;
+    color: var(--text-body);
+    font-weight: 700;
+}
+
+.mobile-menu nav a:hover {
+    background: #f8fafc;
+    color: var(--brand-primary);
+}
+
+.mobile-menu nav .mobile-menu__wa {
+    justify-content: center;
+    margin-top: 0.4rem;
+    border-radius: var(--radius-button);
+    background: var(--wa-color);
+    color: #ffffff;
+}
+
+.mobile-menu nav .mobile-menu__wa:hover {
+    background: var(--wa-hover);
+    color: #ffffff;
+}
+
+/* Varian hero pada halaman depan */
+header.site-header--hero {
+    background: var(--brand-dark);
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+    box-shadow: none;
+}
+
+header.site-header--hero .brand-logo,
+header.site-header--hero .nav-links-desktop a {
+    color: #f8fafc;
+}
+
+header.site-header--hero .nav-links-desktop a:hover {
+    color: #fdba74;
+}
+
+header.site-header--hero .mobile-menu summary {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+header.site-header--hero .mobile-menu summary span {
+    background: #f8fafc;
+}
+
+@media (min-width: 1024px) {
+    nav.nav-links-desktop {
+        display: flex;
+    }
+
+    .mobile-menu {
+        display: none;
+    }
+}

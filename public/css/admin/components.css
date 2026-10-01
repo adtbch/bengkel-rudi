@@ -1,0 +1,459 @@
+/*
+ * Komponen admin: panel, kartu, form, tombol, status, dan toast.
+ */
+
+/* Panel & kartu */
+.admin-panel,
+.admin-card {
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+.admin-panel {
+    margin-bottom: 1.5rem;
+    padding: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.admin-panel > h2 {
+    margin: 0 0 1.15rem;
+    color: var(--admin-charcoal);
+    font-size: 1.2rem;
+    letter-spacing: -0.035em;
+}
+
+.admin-card-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-card {
+    padding: 1.15rem;
+}
+
+/* Section yang bisa dilipat */
+.admin-section {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--admin-border);
+}
+
+.admin-section-summary {
+    min-height: 44px;
+    padding: 0.85rem 0;
+    color: var(--admin-charcoal);
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.admin-section-summary:hover {
+    color: var(--admin-accent-dark);
+}
+
+.admin-section[open] > .admin-section-summary {
+    margin-bottom: 0.5rem;
+}
+
+/* Form */
+.admin-form-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-field {
+    display: grid;
+    gap: 0.42rem;
+    color: var(--admin-charcoal);
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.admin-field input,
+.admin-field select,
+.admin-field textarea {
+    width: 100%;
+    min-height: 44px;
+    padding: 0.68rem 0.8rem;
+    background: var(--admin-surface);
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    color: var(--admin-charcoal);
+}
+
+.admin-field textarea {
+    min-height: 7rem;
+    resize: vertical;
+}
+
+.admin-field input:focus,
+.admin-field select:focus,
+.admin-field textarea:focus {
+    border-color: var(--admin-accent);
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, .1);
+    outline: 0;
+}
+
+.admin-field [aria-invalid='true'] {
+    border-color: var(--admin-accent);
+}
+
+.admin-field-error {
+    color: var(--admin-accent-dark);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.admin-field-help {
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+    font-weight: 400;
+}
+
+.admin-check {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    min-height: 44px;
+    color: var(--admin-charcoal);
+    font-size: 0.9rem;
+    font-weight: 650;
+}
+
+.admin-check input {
+    width: 1.15rem;
+    height: 1.15rem;
+    accent-color: var(--admin-accent);
+}
+
+/* Tombol */
+.admin-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0.65rem 1rem;
+    background: var(--admin-accent);
+    border: 1px solid var(--admin-accent);
+    border-radius: var(--radius-button);
+    color: #fff;
+    font-size: 0.84rem;
+    font-weight: 750;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background .16s ease, border-color .16s ease, box-shadow .16s ease;
+}
+
+.admin-button:hover {
+    background: var(--admin-accent-dark);
+    border-color: var(--admin-accent-dark);
+    box-shadow: 0 5px 12px rgba(185, 28, 28, .18);
+    color: #fff;
+}
+
+.admin-button--secondary {
+    background: var(--admin-surface);
+    border-color: var(--admin-border);
+    color: var(--admin-charcoal);
+}
+
+.admin-button--secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    box-shadow: none;
+    color: var(--admin-charcoal);
+}
+
+.admin-button--danger {
+    background: var(--admin-accent-dark);
+    border-color: var(--admin-accent-dark);
+}
+
+.admin-button--danger-quiet {
+    background: var(--admin-surface);
+    border-color: #fecaca;
+    color: var(--admin-accent-dark);
+}
+
+.admin-button--danger-quiet:hover {
+    background: var(--admin-accent-dark);
+    border-color: var(--admin-accent-dark);
+    color: #fff;
+}
+
+.admin-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 0.95rem;
+}
+
+.admin-actions form {
+    margin: 0;
+}
+
+/* Status & pesan */
+.admin-status {
+    display: inline-block;
+    margin-bottom: 1rem;
+    padding: 0.28rem 0.65rem;
+    border-radius: var(--radius-button);
+    background: var(--admin-success-soft);
+    color: var(--admin-success);
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+.admin-status--draft {
+    background: #f1f5f9;
+    color: var(--admin-muted);
+}
+
+.admin-alert {
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    background: var(--admin-accent-soft);
+    border: 1px solid #fecaca;
+    border-radius: 10px;
+    color: var(--admin-accent-dark);
+    font-size: 0.9rem;
+}
+
+.admin-alert--success {
+    background: var(--admin-success-soft);
+    border-color: #bbf7d0;
+    color: var(--admin-success);
+}
+
+.admin-empty {
+    padding: 2rem;
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radius-card);
+    color: var(--admin-muted);
+    text-align: center;
+}
+
+.admin-empty h3 {
+    margin: 0;
+    color: var(--admin-charcoal);
+}
+
+.admin-empty p {
+    margin: 0.35rem 0 0;
+    font-size: 0.88rem;
+}
+
+/* Panel tambah data */
+.admin-create-panel {
+    padding: 0;
+    overflow: hidden;
+}
+
+.admin-create-panel__summary {
+    display: flex;
+    align-items: center;
+    min-height: 58px;
+    padding: 0 1.25rem;
+    color: var(--admin-charcoal);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.admin-create-panel__summary:hover {
+    color: var(--admin-accent-dark);
+}
+
+.admin-create-panel__form {
+    padding: 1.25rem 1.25rem 1.25rem;
+    border-top: 1px solid var(--admin-border);
+}
+
+/* Metric dashboard */
+.admin-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.admin-metric {
+    min-height: 10.5rem;
+    padding: 1.35rem;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+}
+
+.admin-metric__label {
+    margin: 0;
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+    font-weight: 650;
+}
+
+.admin-metric__number {
+    margin: 0.5rem 0 0;
+    color: var(--admin-charcoal);
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.075em;
+    line-height: 1;
+}
+
+.admin-metric__hint {
+    margin: 0.8rem 0 0;
+    color: var(--admin-muted);
+    font-size: 0.84rem;
+}
+
+/* Aktivitas terbaru */
+.admin-recent-work {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.admin-recent-work__item {
+    display: grid;
+    grid-template-columns: 2.6rem minmax(0, 1fr) auto;
+    gap: 0.85rem;
+    align-items: center;
+    padding: 0.95rem 1rem;
+    background: var(--admin-surface);
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(15, 23, 42, .035);
+    color: var(--admin-charcoal);
+    text-decoration: none;
+    transition: border-color .16s ease, box-shadow .16s ease;
+}
+
+.admin-recent-work__item:hover {
+    border-color: #fca5a5;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, .07);
+    color: var(--admin-charcoal);
+}
+
+.admin-recent-work__id {
+    display: grid;
+    width: 2.6rem;
+    height: 2.6rem;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--admin-accent-soft);
+    color: var(--admin-accent);
+    font-size: 0.78rem;
+    font-weight: 800;
+}
+
+.admin-recent-work__title,
+.admin-recent-work__meta {
+    overflow-wrap: anywhere;
+}
+
+.admin-recent-work__title {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 750;
+}
+
+.admin-recent-work__meta {
+    display: block;
+    margin-top: 0.15rem;
+    color: var(--admin-muted);
+    font-size: 0.82rem;
+}
+
+.admin-recent-work__arrow {
+    color: var(--admin-accent);
+    font-size: 1.1rem;
+}
+
+/* Badge tahap */
+.pill-badge {
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-button);
+    font-size: 0.7rem;
+    font-weight: 800;
+}
+
+.badge-stage-before {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.badge-stage-process {
+    background: #fffbeb;
+    color: #b45309;
+}
+
+.badge-stage-after {
+    background: #f0fdf4;
+    color: #15803d;
+}
+
+/* Toast */
+.admin-toast {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 30;
+    width: min(24rem, calc(100vw - 2rem));
+    padding: 0.9rem 1rem;
+    border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, .16);
+    font-weight: 700;
+    animation: admin-toast-out 5s forwards;
+}
+
+.admin-toast--success {
+    background: var(--admin-success-soft);
+    border-color: #bbf7d0;
+    color: var(--admin-success);
+}
+
+.admin-toast--error {
+    background: var(--admin-accent-soft);
+    border-color: #fecaca;
+    color: var(--admin-accent-dark);
+}
+
+@keyframes admin-toast-out {
+
+    0%,
+    82% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(0.5rem);
+        visibility: hidden;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .admin-toast {
+        animation: none;
+    }
+}
+
+@media (min-width: 720px) {
+    .admin-form-grid,
+    .admin-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-field--wide {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 550px) {
+    .admin-metric-grid {
+        grid-template-columns: 1fr;
+    }
+}

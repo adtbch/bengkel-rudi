@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 @section('title', 'Users')
 
+@push('styles')
+    <link rel="stylesheet" href="/css/admin/users.css?v={{ filemtime(public_path('css/admin/users.css')) }}">
+@endpush
+
 @section('content')
 <header class="admin-page-head">
     <div>
