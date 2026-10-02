@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="google-site-verification" content="IAqufHi5uz3_fhq-n-WVj7hU_p5fmlxYyEK1D9w3w4g">
     @php($canonicalBase = rtrim(config('app.url'), '/'))
     @php($canonicalUrl = $canonicalBase . (request()->path() === '/' ? '/' : '/' . request()->path()))
     @php($pageTitle = html_entity_decode(trim($__env->yieldContent('title', $settings['meta_title'] ?? 'Bengkel Rudi — Cat & Body Repair Batang')), ENT_QUOTES, 'UTF-8'))
