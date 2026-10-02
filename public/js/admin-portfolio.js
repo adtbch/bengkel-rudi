@@ -78,25 +78,46 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
 
     const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
     const form = document.querySelector('[data-portfolio-form]');
+    const summary = form?.querySelector('[data-upload-summary]');
+    const submitButton = form?.querySelector('[data-save-button]');
+    const saveHint = form?.querySelector('[data-save-hint]');
+    const defaultLabel = submitButton?.textContent ?? '';
+
+    // Single source of truth for the submit lock: any file still in flight
+    // keeps the whole form un-submittable.
+    let inFlight = 0;
+    const uploadInFlight = () => inFlight > 0;
 
     document.querySelectorAll('[data-media-input]').forEach((input) => {
         const list = form?.querySelector('[data-upload-list]');
-        const summary = form?.querySelector('[data-upload-summary]');
         const signUrl = input.dataset.signUrl;
         const discardBase = input.dataset.discardUrlBase;
         if (!form || !list || !summary || !signUrl || !discardBase) return;
 
-        const submitButton = form.querySelector('button[type="submit"].admin-button');
         const cards = new Map();
         let counter = 0;
-        let pending = 0;
 
         const setPending = (delta) => {
-            pending = Math.max(0, pending + delta);
-            if (submitButton) submitButton.disabled = pending > 0;
-            summary.textContent = pending > 0
-                ? `${pending} berkas sedang diunggah ke penyimpanan...`
-                : (cards.size > 0 ? `${cards.size} berkas siap disimpan.` : '');
+            inFlight = Math.max(0, inFlight + delta);
+            const uploading = uploadInFlight();
+            // Only cards with hidden inputs will actually be persisted.
+            const ready = [...cards.values()].filter((entry) => entry.mediaUploadId !== null).length;
+
+            // Keep the save button locked for the whole time any file is in
+            // flight, otherwise the form posts details and drops the media.
+            if (submitButton) {
+                submitButton.disabled = uploading;
+                submitButton.textContent = uploading ? 'Menunggu unggahan...' : defaultLabel;
+                submitButton.setAttribute('aria-disabled', uploading ? 'true' : 'false');
+            }
+            if (saveHint) {
+                saveHint.textContent = uploading
+                    ? 'Tunggu sampai semua berkas selesai diunggah.'
+                    : 'Simpan detail, publikasi, foto baru, dan seluruh urutan sekaligus.';
+            }
+            summary.textContent = uploading
+                ? `${inFlight} berkas sedang diunggah ke penyimpanan...`
+                : (ready > 0 ? `${ready} berkas siap disimpan.` : '');
         };
 
         const buildCard = (file, resourceType) => {
@@ -291,13 +312,14 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
             input.value = '';
             files.reduce((chain, file) => chain.then(() => process(file)), Promise.resolve());
         });
+    });
 
-        // A disabled button alone is not enough: pressing Enter in a text field
-        // still submits the form, which would save details without the files.
-        form.addEventListener('submit', (event) => {
-            if (pending <= 0) return;
-            event.preventDefault();
-            summary.textContent = 'Tunggu sampai semua berkas selesai diunggah sebelum menyimpan.';
-        });
+    // Registered once, outside the per-input loop: a disabled button alone is
+    // not enough, because pressing Enter in a text field still submits the form
+    // and would save the details while silently dropping the media.
+    form?.addEventListener('submit', (event) => {
+        if (!uploadInFlight()) return;
+        event.preventDefault();
+        if (summary) summary.textContent = 'Tunggu sampai semua berkas selesai diunggah sebelum menyimpan.';
     });
 })();

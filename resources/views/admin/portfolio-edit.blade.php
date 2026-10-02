@@ -111,8 +111,8 @@
     </section>
 
     <div class="admin-save-bar">
-        <p>Simpan detail, publikasi, foto baru, dan seluruh urutan sekaligus.</p>
-        <button class="admin-button" type="submit">Simpan semua perubahan</button>
+        <p data-save-hint>Simpan detail, publikasi, foto baru, dan seluruh urutan sekaligus.</p>
+        <button class="admin-button" type="submit" data-save-button>Simpan semua perubahan</button>
     </div>
 </form>
 
