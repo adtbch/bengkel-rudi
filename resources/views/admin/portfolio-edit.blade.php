@@ -131,5 +131,5 @@
         <button class="admin-button admin-button--danger-quiet" type="submit">Hapus portfolio</button>
     </form>
 </section>
-<script src="{{ asset('js/admin-portfolio.js') }}" defer></script>
+<script src="/js/admin-portfolio.js?v={{ filemtime(public_path('js/admin-portfolio.js')) }}" defer></script>
 @endsection
