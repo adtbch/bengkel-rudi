@@ -23,7 +23,7 @@
     <div class="admin-alert admin-alert--success" role="status">{{ session('status') }}</div>
 @endif
 
-<form method="post" action="/admin/portfolio/{{ $portfolio->id }}/save" enctype="multipart/form-data" class="admin-portfolio-workspace">
+<form method="post" action="/admin/portfolio/{{ $portfolio->id }}/save" class="admin-portfolio-workspace" data-portfolio-form>
     @csrf
     <section class="admin-workspace-section" aria-labelledby="detail-portfolio">
         <div class="admin-workspace-section__head">
@@ -58,10 +58,16 @@
         </div>
         <div class="admin-form-grid">
             <label class="admin-field admin-field--wide">Pilih foto atau video
-                <input type="file" name="images[]" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple data-image-input>
-                <span class="admin-field-help">JPG, PNG, WebP maks. 10 MB; MP4, WebM, MOV maks. 50 MB.</span>
+                <input type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" multiple
+                       data-image-input
+                       data-media-input
+                       data-sign-url="/admin/portfolio/{{ $portfolio->id }}/uploads/sign"
+                       data-discard-url-base="/admin/portfolio/{{ $portfolio->id }}/uploads">
+                <span class="admin-field-help">JPG, PNG, WebP maks. 10 MB; MP4, WebM, MOV maks. 50 MB. File dikirim langsung ke penyimpanan, tidak melalui server.</span>
             </label>
             <div class="admin-image-preview admin-field--wide" data-image-preview aria-live="polite"></div>
+            <div class="admin-field--wide" data-upload-list aria-live="polite"></div>
+            <p class="admin-field-help admin-field--wide" data-upload-summary role="status"></p>
             <label class="admin-field">Tahap foto
                 <select name="stage">
                     <option value="BEFORE" @selected(old('stage') === 'BEFORE')>Sebelum perbaikan</option>

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\MediaUpload;
 use App\Models\Portfolio;
 use App\Models\Service;
 use App\Services\CloudinaryService;
 use App\Support\UniqueSlug;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
@@ -48,20 +50,23 @@ class PortfolioController extends Controller
             'is_published' => 'nullable|boolean',
             'order' => 'nullable|array',
             'order.*' => 'required|integer|min:1',
-            'images' => 'nullable|array',
-            'images.*' => [
-                'required', 'file', 'max:51200',
-                function (string $attribute, mixed $file, \Closure $fail): void {
-                    $allowed = ['image/jpeg', 'image/png', 'image/webp', 'video/mp4', 'video/webm', 'video/quicktime'];
-                    if (!in_array($file->getMimeType(), $allowed, true)
-                        || (str_starts_with($file->getMimeType(), 'image/') && $file->getSize() > 10 * 1024 * 1024)) {
-                        $fail('File harus JPG, PNG, WebP (maks. 10 MB), MP4, WebM, atau MOV (maks. 50 MB).');
-                    }
-                },
-            ],
-            'stage' => ['required_with:images', 'nullable', Rule::in(['BEFORE', 'PROCESS', 'AFTER'])],
+            'uploads' => 'nullable|array',
+            'uploads.*' => 'required|array',
+            'uploads.*.media_upload_id' => 'required|integer',
+            'uploads.*.public_id' => 'required|string|max:255',
+            'uploads.*.secure_url' => 'required|string|max:2048',
+            'uploads.*.resource_type' => ['required', Rule::in(['image', 'video'])],
+            'uploads.*.token' => 'required|string',
+            'stage' => ['required_with:uploads', 'nullable', Rule::in(['BEFORE', 'PROCESS', 'AFTER'])],
             'sort_order' => 'nullable|integer|min:1',
-        ], ['order.*.min' => 'Urutan foto minimal 1.']);
+        ], [
+            'order.*.min' => 'Urutan foto minimal 1.',
+            'uploads.*.media_upload_id' => 'Unggahan tidak valid.',
+            'uploads.*.public_id' => 'Unggahan tidak valid.',
+            'uploads.*.secure_url' => 'Alamat media tidak valid.',
+            'uploads.*.resource_type' => 'Jenis media tidak valid.',
+            'uploads.*.token' => 'Token unggahan tidak valid.',
+        ]);
 
         $order = $data['order'] ?? [];
         if (count($order) !== count(array_unique(array_values($order)))) {
@@ -73,7 +78,9 @@ class PortfolioController extends Controller
             throw ValidationException::withMessages(['order' => 'Daftar foto tidak valid untuk portfolio ini.']);
         }
 
+        $claimedUploads = $this->resolveUploads($portfolio, $data['uploads'] ?? [], $cloudinary);
         $uploadedAssets = [];
+
         try {
             DB::beginTransaction();
             $portfolio->update([
@@ -87,28 +94,92 @@ class PortfolioController extends Controller
                 $portfolio->images()->whereKey((int) $id)->update(['sort_order' => $sortOrder]);
             }
             $sortOrder = max((int) ($data['sort_order'] ?? 1), ((int) $portfolio->images()->max('sort_order')) + 1);
-            foreach ($request->file('images', []) as $file) {
-                $resourceType = str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'image';
-                $uploaded = $cloudinary->upload($file, trim(config('cloudinary.folder', 'BengkelRudi'), '/').'/portfolio', $resourceType);
-                $uploadedAssets[] = ['public_id' => $uploaded['public_id'], 'resource_type' => $resourceType];
+            foreach ($claimedUploads as $upload) {
+                $uploadedAssets[$upload['public_id']] = $upload['resource_type'];
                 $portfolio->images()->create([
-                    'image_url' => $uploaded['secure_url'],
-                    'cloudinary_public_id' => $uploaded['public_id'],
-                    'media_type' => $resourceType,
+                    'image_url' => $upload['secure_url'],
+                    'cloudinary_public_id' => $upload['public_id'],
+                    'media_type' => $upload['resource_type'],
                     'stage' => $data['stage'],
                     'sort_order' => $sortOrder++,
                 ]);
             }
+            MediaUpload::whereIn('id', array_column($claimedUploads, 'media_upload_id'))->delete();
             DB::commit();
         } catch (\Throwable) {
             DB::rollBack();
-            foreach (array_reverse($uploadedAssets) as $asset) {
-                try { $cloudinary->delete($asset['public_id'], $asset['resource_type']); } catch (\Throwable) {}
+            foreach ($uploadedAssets as $publicId => $resourceType) {
+                try {
+                    $cloudinary->delete($publicId, $resourceType);
+                } catch (\Throwable) {
+                }
             }
+            if ($claimedUploads !== []) {
+                MediaUpload::whereIn('id', array_column($claimedUploads, 'media_upload_id'))->delete();
+            }
+
             return back()->withInput()->withErrors(['integration' => 'Penyimpanan gagal. Tidak ada perubahan yang disimpan.']);
         }
 
         return redirect("/admin/portfolio/{$portfolio->id}")->with('status', 'Semua perubahan berhasil disimpan.');
+    }
+
+    /**
+     * Validate the metadata of files already uploaded straight to Cloudinary.
+     * No file bytes reach this server, so ownership, freshness, and the delivery
+     * host are verified from the signed token and the pending media_uploads row.
+     *
+     * @param  array<int, array<string, mixed>>  $uploads
+     * @return array<int, array{media_upload_id: int, public_id: string, secure_url: string, resource_type: string}>
+     */
+    private function resolveUploads(Portfolio $portfolio, array $uploads, CloudinaryService $cloudinary): array
+    {
+        $userId = (int) auth('admin')->id();
+        $resolved = [];
+
+        foreach ($uploads as $index => $upload) {
+            try {
+                $claim = json_decode(Crypt::decryptString($upload['token']), true);
+            } catch (\Throwable) {
+                $claim = null;
+            }
+
+            $invalid = ! is_array($claim)
+                || (int) ($claim['portfolio_id'] ?? 0) !== $portfolio->id
+                || (int) ($claim['user_id'] ?? 0) !== $userId
+                || ($claim['resource_type'] ?? null) !== $upload['resource_type']
+                || ($claim['public_id'] ?? null) !== $upload['public_id']
+                || (int) ($claim['expires_at'] ?? 0) < time();
+
+            $mediaUpload = MediaUpload::find($upload['media_upload_id']);
+            $invalid = $invalid
+                || ! $mediaUpload
+                || $mediaUpload->portfolio_id !== $portfolio->id
+                || $mediaUpload->user_id !== $userId
+                || $mediaUpload->public_id !== $upload['public_id']
+                || $mediaUpload->resource_type !== $upload['resource_type'];
+
+            $secureUrl = (string) $upload['secure_url'];
+            $deliveryPrefix = $cloudinary->deliveryUrl($upload['resource_type']);
+            if (! str_starts_with($secureUrl, $deliveryPrefix) || ! str_contains($secureUrl, $upload['public_id'])) {
+                $invalid = true;
+            }
+
+            if ($invalid) {
+                throw ValidationException::withMessages([
+                    "uploads.{$index}" => 'Unggahan tidak lagi valid. Muat ulang halaman dan coba lagi.',
+                ]);
+            }
+
+            $resolved[] = [
+                'media_upload_id' => (int) $upload['media_upload_id'],
+                'public_id' => $upload['public_id'],
+                'secure_url' => $secureUrl,
+                'resource_type' => $upload['resource_type'],
+            ];
+        }
+
+        return $resolved;
     }
 
     public function update(Request $request, Portfolio $portfolio)
@@ -122,7 +193,7 @@ class PortfolioController extends Controller
 
     public function toggle(Portfolio $portfolio)
     {
-        $portfolio->update(['is_published' => !$portfolio->is_published]);
+        $portfolio->update(['is_published' => ! $portfolio->is_published]);
 
         return redirect('/admin/portfolio')->with(
             'status',

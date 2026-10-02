@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PortfolioController as AdminPortfolioController;
 use App\Http\Controllers\Admin\PortfolioImageController;
+use App\Http\Controllers\Admin\PortfolioUploadController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
@@ -64,7 +65,8 @@ Route::prefix('admin')->middleware('admin.jwt')->group(function () {
     Route::put('/portfolio/{portfolio}', [AdminPortfolioController::class, 'update']);
     Route::patch('/portfolio/{portfolio}/toggle', [AdminPortfolioController::class, 'toggle']);
     Route::delete('/portfolio/{portfolio}', [AdminPortfolioController::class, 'destroy']);
-    Route::post('/portfolio/{portfolio}/images', [PortfolioImageController::class, 'store']);
+    Route::post('/portfolio/{portfolio}/uploads/sign', [PortfolioUploadController::class, 'sign'])->middleware('throttle:60,1');
+    Route::delete('/portfolio/{portfolio}/uploads/{mediaUpload}', [PortfolioUploadController::class, 'destroy']);
     Route::post('/portfolio/{portfolio}/images/order', [PortfolioImageController::class, 'reorder']);
     Route::delete('/portfolio/{portfolio}/images/{image}', [PortfolioImageController::class, 'destroy']);
 
