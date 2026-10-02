@@ -16,4 +16,17 @@ class AdminAuthTest extends TestCase {
  public function test_superadmin_routes_and_logout_blacklist_token(): void { $u=$this->user('SUPER_ADMIN'); $token=auth('admin')->login($u); $this->withCookie('admin_token',$token)->get('/admin/users')->assertOk(); $this->withCookie('admin_token',$token)->post('/admin/logout')->assertRedirect('/admin/login'); $this->withCookie('admin_token',$token)->get('/admin')->assertRedirect('/admin/login'); }
  public function test_expired_token_rejected(): void { config(['jwt.ttl'=>-1]); $this->expectException(\PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException::class); auth('admin')->login($this->user()); }
  public function test_csrf_is_not_bypassed(): void { $route=collect(app('router')->getRoutes())->first(fn($r)=>$r->uri()==='admin/login' && in_array('POST',$r->methods())); $this->assertContains('web',$route->gatherMiddleware()); $this->assertSame([], (new \ReflectionClass(\App\Http\Middleware\VerifyCsrfToken::class))->getDefaultProperties()['except']); }
+ public function test_admin_pages_send_noindex_header(): void {
+  $u=$this->user();
+  $token=auth('admin')->login($u);
+  $this->withCookie('admin_token',$token)->get('/admin')->assertOk()->assertHeader('X-Robots-Tag','noindex, nofollow');
+  $this->withCookie('admin_token',$token)->get('/admin/portfolio')->assertOk()->assertHeader('X-Robots-Tag','noindex, nofollow');
+  $r=$this->withCookie('admin_token',$token)->get('/admin');
+  $this->assertStringNotContainsString('name="robots"', $r->getContent());
+ }
+ public function test_robots_txt_disallows_admin_and_advertises_sitemap(): void {
+  $body=$this->get('/robots.txt')->assertOk()->getContent();
+  $this->assertStringContainsString('Disallow: /admin', $body);
+  $this->assertStringContainsString('Sitemap: https://www.bengkelrudi.my.id/sitemap.xml', $body);
+ }
 }

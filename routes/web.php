@@ -22,7 +22,7 @@ Route::get('/portfolio', [PortfolioController::class, 'index']);
 Route::get('/portfolio/{slug}', [PortfolioController::class, 'show']);
 
 Route::get('/robots.txt', function () {
-    return response("User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ".url('/sitemap.xml')."\n", 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
+    return response("User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: ".rtrim(config('app.url'), '/')."/sitemap.xml\n", 200, ['Content-Type' => 'text/plain; charset=UTF-8']);
 });
 
 Route::get('/sitemap.xml', function () {

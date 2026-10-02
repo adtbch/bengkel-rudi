@@ -78,7 +78,7 @@ class ControllerStructureTest extends TestCase
         $this->assertStringNotContainsString("layouts.partials.mobile-dock", $layout);
         $this->assertStringContainsString('class="mobile-menu"', $header);
         $this->assertStringContainsString('<summary', $header);
-        $this->assertStringContainsString('site-header--hero', $header);
+        $this->assertStringContainsString('site-header--dark', $header);
     }
 
     public function test_vercel_deployment_uses_laravel_handler_and_persistent_runtime_stores(): void

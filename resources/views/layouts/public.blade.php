@@ -29,7 +29,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="icon" href="/images/logo-bengkel-rudi.png" type="image/png">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
     <link rel="stylesheet" href="/css/public/base.css?v={{ filemtime(public_path('css/public/base.css')) }}">
     <link rel="stylesheet" href="/css/public/components.css?v={{ filemtime(public_path('css/public/components.css')) }}">
     <link rel="stylesheet" href="/css/public/header.css?v={{ filemtime(public_path('css/public/header.css')) }}">

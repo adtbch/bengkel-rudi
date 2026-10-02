@@ -133,29 +133,38 @@ nav.nav-links-desktop a.btn {
     color: #ffffff;
 }
 
-/* Varian hero pada halaman depan */
-header.site-header--hero {
+/* Varian gelap, dipakai seragam di semua halaman publik */
+header.site-header--dark {
     background: var(--brand-dark);
     border-bottom-color: rgba(255, 255, 255, 0.12);
     box-shadow: none;
 }
 
-header.site-header--hero .brand-logo,
-header.site-header--hero .nav-links-desktop a {
+header.site-header--dark .brand-logo,
+header.site-header--dark .nav-links-desktop a {
     color: #f8fafc;
 }
 
-header.site-header--hero .nav-links-desktop a:hover {
+header.site-header--dark .nav-links-desktop a:hover {
     color: #fdba74;
 }
 
-header.site-header--hero .mobile-menu summary {
+header.site-header--dark .mobile-menu summary {
     background: transparent;
     border-color: rgba(255, 255, 255, 0.35);
 }
 
-header.site-header--hero .mobile-menu summary span {
+header.site-header--dark .mobile-menu summary span {
     background: #f8fafc;
+}
+
+/* Panel menu mobile tetap terang agar teksnya terbaca */
+header.site-header--dark .mobile-menu nav {
+    background: #ffffff;
+}
+
+header.site-header--dark .mobile-menu nav a {
+    color: var(--text-body);
 }
 
 @media (min-width: 1024px) {

@@ -1,4 +1,4 @@
-<header class="site-header{{ request()->is('/') ? ' site-header--hero' : '' }}">
+<header class="site-header site-header--dark">
     <div class="header-wrap">
         <a href="/" class="brand-logo">
             <img class="brand-logo__image" src="https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png" alt="Logo Bengkel Rudi" width="56" height="56">

@@ -41,7 +41,7 @@ class SiteSettingsTest extends TestCase
  {
   $service=\App\Models\Service::create(['name'=>'Cat Panel','slug'=>'cat-panel','description'=>'Cat panel rapi','features'=>[],'is_active'=>true]);
   $portfolio=\App\Models\Portfolio::create(['service_id'=>$service->id,'title'=>'Jazz','slug'=>'jazz','vehicle_type'=>'CAR','is_published'=>true]);
-  $canonical='https://bengkelrudi.my.id';
+  $canonical='https://www.bengkelrudi.my.id';
   $image=$canonical.'/images/og-bengkel-rudi.png';
 
   $this->get('/')->assertOk()->assertSee('<link rel="canonical" href="'.$canonical.'/">',false)->assertSee('property="og:image" content="'.$image.'"',false)->assertSee('name="twitter:card" content="summary_large_image"',false)->assertSee('OpeningHoursSpecification',false)->assertSee('Kabupaten Batang',false)->assertSee('https://share.google/8pHQ7sXmkUWGf9YHI',false);
