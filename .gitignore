@@ -90,6 +90,7 @@ Thumbs.db
 /.agent
 /.hermes
 /graphify-out
+/.kilo
 
 # Local planning documents
 /PRD.md
