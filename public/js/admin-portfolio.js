@@ -139,7 +139,7 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
             card.append(thumb, body);
             list.append(card);
 
-            const entry = { key, card, status, bar, inputs: [], mediaUploadId: null, objectUrl: null };
+            const entry = { key, card, status, bar, inputs: [], mediaUploadId: null, objectUrl: null, busy: true };
             cards.set(key, entry);
             return entry;
         };
@@ -155,12 +155,14 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
             if (!entry) return;
 
             const uploaded = Boolean(entry.mediaUploadId);
+            const wasBusy = entry.busy;
+            entry.busy = false;
             removeButton.disabled = true;
             if (entry.objectUrl) URL.revokeObjectURL(entry.objectUrl);
             entry.card.remove();
             entry.inputs.forEach((node) => node.remove());
             cards.delete(key);
-            setPending(-1);
+            if (wasBusy) setPending(-1);
 
             if (!uploaded || !entry.mediaUploadId) return;
 
@@ -276,6 +278,11 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
                 addHidden(entry, 'token', payload.token);
             } catch (error) {
                 fail(entry, error.message);
+            } finally {
+                // Always release the submit lock, otherwise the button stays
+                // disabled and saving silently posts details only.
+                entry.busy = false;
+                setPending(-1);
             }
         };
 
@@ -283,6 +290,14 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
             const files = Array.from(input.files);
             input.value = '';
             files.reduce((chain, file) => chain.then(() => process(file)), Promise.resolve());
+        });
+
+        // A disabled button alone is not enough: pressing Enter in a text field
+        // still submits the form, which would save details without the files.
+        form.addEventListener('submit', (event) => {
+            if (pending <= 0) return;
+            event.preventDefault();
+            summary.textContent = 'Tunggu sampai semua berkas selesai diunggah sebelum menyimpan.';
         });
     });
 })();
