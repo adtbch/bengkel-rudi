@@ -41,53 +41,58 @@
     </div>
 
     <article class="portfolio-detail-body">
-        @foreach(['AFTER' => 'Hasil akhir'] as $stage => $label)
-            @if($portfolio->images->where('stage', $stage)->isNotEmpty())
-                @php($stageImages = $portfolio->images->where('stage', $stage))
+        @php($stages = [
+            'BEFORE' => 'Sebelum pengerjaan',
+            'PROCESS' => 'Proses pengerjaan',
+            'AFTER' => 'Hasil akhir',
+        ])
 
-                <section aria-labelledby="stage-{{ $stage }}" class="card">
-                    <div class="portfolio-stage__head">
-                        <div class="portfolio-stage__headings">
-                            <span class="pill-badge badge-stage-{{ strtolower($stage) }}">{{ $stage }}</span>
-                            <h2 id="stage-{{ $stage }}" class="portfolio-stage__title">{{ $label }}</h2>
-                        </div>
-                    </div>
+        @foreach($stages as $stage => $label)
+            @php($stageImages = $portfolio->images->where('stage', $stage))
 
-                    @if($stageImages->isEmpty())
-                        <p class="portfolio-stage__empty">Belum ada foto pada tahap ini.</p>
-                    @else
-                        <div class="grid portfolio-stage__grid">
-                            @foreach($stageImages as $image)
-                                <figure class="portfolio-shot">
-                                    <div class="portfolio-media">
-                                        @if($image->media_type === 'video')
-                                            <video
-                                                src="{{ $image->image_url }}"
-                                                controls
-                                                preload="metadata"
-                                                playsinline
-                                                aria-label="Video {{ $portfolio->title }} — {{ $label }}"
-                                            ></video>
-                                        @else
-                                            <img
-                                                src="{{ $image->image_url }}"
-                                                alt="{{ $portfolio->title }} — {{ $label }}"
-                                                loading="lazy"
-                                                decoding="async"
-                                            >
-                                        @endif
-                                    </div>
-
-                                    <figcaption class="portfolio-shot__caption">
-                                        <span>{{ $label }}</span>
-                                        <span class="pill-badge badge-stage-{{ strtolower($stage) }}">{{ $stage }}</span>
-                                    </figcaption>
-                                </figure>
-                            @endforeach
-                        </div>
-                    @endif
-                </section>
+            {{-- A stage with no media is skipped entirely rather than showing an empty placeholder. --}}
+            @if($stageImages->isEmpty())
+                @continue
             @endif
+
+            <section aria-labelledby="stage-{{ $stage }}" class="card">
+                <div class="portfolio-stage__head">
+                    <div class="portfolio-stage__headings">
+                        <span class="pill-badge badge-stage-{{ strtolower($stage) }}">{{ $stage }}</span>
+                        <h2 id="stage-{{ $stage }}" class="portfolio-stage__title">{{ $label }}</h2>
+                    </div>
+                </div>
+
+                <div class="grid portfolio-stage__grid">
+                    @foreach($stageImages as $image)
+                        <figure class="portfolio-shot">
+                            <div class="portfolio-media">
+                                @if($image->media_type === 'video')
+                                    <video
+                                        src="{{ $image->image_url }}"
+                                        controls
+                                        preload="metadata"
+                                        playsinline
+                                        aria-label="Video {{ $portfolio->title }} — {{ $label }}"
+                                    ></video>
+                                @else
+                                    <img
+                                        src="{{ $image->image_url }}"
+                                        alt="{{ $portfolio->title }} — {{ $label }}"
+                                        loading="lazy"
+                                        decoding="async"
+                                    >
+                                @endif
+                            </div>
+
+                            <figcaption class="portfolio-shot__caption">
+                                <span>{{ $label }}</span>
+                                <span class="pill-badge badge-stage-{{ strtolower($stage) }}">{{ $stage }}</span>
+                            </figcaption>
+                        </figure>
+                    @endforeach
+                </div>
+            </section>
         @endforeach
 
         {{-- Ajakan konsultasi untuk kerusakan serupa --}}
