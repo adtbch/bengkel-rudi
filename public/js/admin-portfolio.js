@@ -20,9 +20,17 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
             const item = document.createElement('article');
             item.className = 'admin-image-preview__item';
 
-            const image = document.createElement('img');
-            image.src = url;
-            image.alt = `Preview ${file.name}`;
+            // A blob URL of a video renders as a broken image in <img>, so
+            // video files get their own player element.
+            const media = document.createElement(file.type.startsWith('video/') ? 'video' : 'img');
+            media.src = url;
+            if (media.tagName === 'VIDEO') {
+                media.controls = true;
+                media.muted = true;
+                media.playsInline = true;
+                media.preload = 'metadata';
+            }
+            media.alt = `Preview ${file.name}`;
 
             const details = document.createElement('div');
             const name = document.createElement('strong');
@@ -44,7 +52,7 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
                 render();
             });
 
-            item.append(image, details, remove);
+            item.append(media, details, remove);
             preview.append(item);
         });
     };

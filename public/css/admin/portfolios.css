@@ -185,9 +185,11 @@
 }
 
 .admin-image-preview__item img,
+.admin-image-preview__item video,
 .admin-image-item img {
     width: 100%;
     aspect-ratio: 4 / 3;
+    background: #0f172a;
     border-radius: 7px;
     object-fit: cover;
 }
