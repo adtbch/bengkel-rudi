@@ -63,6 +63,48 @@ class CloudinaryService
         return 'https://res.cloudinary.com/'.$this->credentials()['cloud_name'].'/'.$resourceType.'/upload/';
     }
 
+    public function portfolioFolder(): string
+    {
+        $root = trim((string) config('cloudinary.folder', 'BengkelRudi'), '/');
+        $sub = trim((string) config('cloudinary.portfolio_folder', 'portofolio'), '/');
+
+        return $root === '' ? $sub : ($sub === '' ? $root : $root.'/'.$sub);
+    }
+
+    public function videoTransformation(): array
+    {
+        return (array) config('cloudinary.video_transformation', [
+            'format' => 'mp4', 'video_codec' => 'h264', 'quality' => 'auto:eco',
+        ]);
+    }
+
+    public function transformationString(array $transformation): string
+    {
+        $prefixes = [
+            'format' => 'f_', 'video_codec' => 'vc_', 'quality' => 'q_',
+            'bit_rate' => 'br_', 'width' => 'w_', 'height' => 'h_',
+            'crop' => 'c_', 'audio_codec' => 'ac_',
+        ];
+
+        $parts = [];
+        foreach ($transformation as $key => $value) {
+            if (isset($prefixes[$key]) && $value !== null && $value !== '') {
+                $parts[] = $prefixes[$key].$value;
+            }
+        }
+
+        return implode(',', $parts);
+    }
+
+    public function assetUrl(string $resourceType, string $publicId, ?string $transformation = null): string
+    {
+        $base = $this->deliveryUrl($resourceType).$publicId;
+
+        return ($transformation === null || $transformation === '')
+            ? $base
+            : $this->deliveryUrl($resourceType).$transformation.'/'.$publicId;
+    }
+
     public function uploadUrl(string $resourceType = 'image'): string
     {
         return 'https://api.cloudinary.com/v1_1/'.$this->credentials()['cloud_name'].'/'.$resourceType.'/upload';

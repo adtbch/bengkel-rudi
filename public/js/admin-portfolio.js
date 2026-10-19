@@ -215,10 +215,10 @@ document.querySelectorAll('[data-image-input]').forEach((input) => {
             const body = new FormData();
             body.append('file', file);
             body.append('api_key', payload.api_key);
-            body.append('timestamp', payload.params.timestamp);
             body.append('signature', payload.signature);
-            body.append('public_id', payload.params.public_id);
-            body.append('overwrite', payload.params.overwrite);
+            Object.entries(payload.params || {}).forEach(([key, value]) => {
+                body.append(key, value);
+            });
 
             xhr.open('POST', payload.upload_url);
             xhr.upload.addEventListener('progress', (event) => {

@@ -97,7 +97,7 @@ class PortfolioController extends Controller
             foreach ($claimedUploads as $upload) {
                 $uploadedAssets[$upload['public_id']] = $upload['resource_type'];
                 $portfolio->images()->create([
-                    'image_url' => $upload['secure_url'],
+                    'image_url' => $upload['image_url'],
                     'cloudinary_public_id' => $upload['public_id'],
                     'media_type' => $upload['resource_type'],
                     'stage' => $data['stage'],
@@ -130,7 +130,7 @@ class PortfolioController extends Controller
      * host are verified from the signed token and the pending media_uploads row.
      *
      * @param  array<int, array<string, mixed>>  $uploads
-     * @return array<int, array{media_upload_id: int, public_id: string, secure_url: string, resource_type: string}>
+     * @return array<int, array{media_upload_id: int, public_id: string, image_url: string, resource_type: string}>
      */
     private function resolveUploads(Portfolio $portfolio, array $uploads, CloudinaryService $cloudinary): array
     {
@@ -174,7 +174,13 @@ class PortfolioController extends Controller
             $resolved[] = [
                 'media_upload_id' => (int) $upload['media_upload_id'],
                 'public_id' => $upload['public_id'],
-                'secure_url' => $secureUrl,
+                'image_url' => $cloudinary->assetUrl(
+                    $upload['resource_type'],
+                    $upload['public_id'],
+                    $upload['resource_type'] === 'video'
+                        ? $cloudinary->transformationString($cloudinary->videoTransformation())
+                        : null
+                ),
                 'resource_type' => $upload['resource_type'],
             ];
         }

@@ -6,6 +6,12 @@ return [
     'api_key' => env('CLOUDINARY_API_KEY'),
     'api_secret' => env('CLOUDINARY_API_SECRET'),
     'folder' => env('CLOUDINARY_FOLDER', 'BengkelRudi'),
+    'portfolio_folder' => env('CLOUDINARY_PORTFOLIO_FOLDER', 'portofolio'),
+    'video_transformation' => [
+        'format' => 'mp4',
+        'video_codec' => 'h264',
+        'quality' => 'auto:eco',
+    ],
     'token_ttl_minutes' => (int) env('CLOUDINARY_TOKEN_TTL_MINUTES', 360),
     'orphan_ttl_hours' => (int) env('CLOUDINARY_ORPHAN_TTL_HOURS', 24),
     'max_image_kb' => 10240,

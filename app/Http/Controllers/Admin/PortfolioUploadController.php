@@ -49,13 +49,17 @@ class PortfolioUploadController extends Controller
             ], 422);
         }
 
-        $publicId = $this->publicId($resourceType, $data['filename'] ?? null);
+        $publicId = $this->publicId($resourceType, $data['filename'] ?? null, $cloudinary->portfolioFolder());
         $timestamp = time();
         $params = [
             'public_id' => $publicId,
             'timestamp' => $timestamp,
             'overwrite' => 'false',
         ];
+
+        if ($resourceType === 'video') {
+            $params['eager'] = json_encode([$cloudinary->videoTransformation()], JSON_THROW_ON_ERROR);
+        }
 
         $signed = $cloudinary->signUpload($params);
         $credentials = $cloudinary->credentials();
@@ -111,9 +115,8 @@ class PortfolioUploadController extends Controller
         return response()->json(['status' => 'ok']);
     }
 
-    private function publicId(string $resourceType, ?string $filename): string
+    private function publicId(string $resourceType, ?string $filename, string $folder): string
     {
-        $folder = trim((string) config('cloudinary.folder', 'BengkelRudi'), '/').'/portfolio';
         $extension = strtolower(pathinfo((string) $filename, PATHINFO_EXTENSION));
         if (! in_array($extension, self::EXTENSIONS[$resourceType], true)) {
             $extension = $resourceType === 'video' ? 'mp4' : 'jpg';
