@@ -49,6 +49,14 @@ class PortfolioUploadController extends Controller
             ], 422);
         }
 
+        $extension = strtolower(pathinfo((string) ($data['filename'] ?? ''), PATHINFO_EXTENSION));
+        if ($extension !== '' && ! in_array($extension, self::EXTENSIONS[$resourceType], true)) {
+            return response()->json([
+                'message' => 'Jenis file tidak didukung.',
+                'errors' => ['filename' => ['Jenis file tidak didukung.']],
+            ], 422);
+        }
+
         $publicId = $this->publicId($resourceType, $data['filename'] ?? null, $cloudinary->portfolioFolder());
         $timestamp = time();
         $params = [

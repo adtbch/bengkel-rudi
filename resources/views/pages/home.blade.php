@@ -157,7 +157,7 @@
                                     aria-label="Video {{ $portfolio->title }}"
                                 ></video>
                             @else
-                                <img src="{{ $thumb->image_url }}" alt="{{ $portfolio->title }}" loading="lazy" decoding="async">
+                                <img src="{{ app(\App\Services\CloudinaryService::class)->imageSrc($thumb->cloudinary_public_id, 480) }}" srcset="{{ app(\App\Services\CloudinaryService::class)->imageSrcset($thumb->cloudinary_public_id) }}" sizes="(max-width: 768px) 50vw, 25vw" alt="{{ $portfolio->title }}" loading="lazy" decoding="async">
                             @endif
                         @else
                             <div class="home-photo-placeholder"><span>Foto belum tersedia</span></div>

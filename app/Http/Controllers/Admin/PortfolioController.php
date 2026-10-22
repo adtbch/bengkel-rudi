@@ -19,7 +19,7 @@ class PortfolioController extends Controller
     public function index()
     {
         return view('admin.portfolios', [
-            'portfolios' => Portfolio::with(['service', 'images'])->latest()->get(),
+            'portfolios' => Portfolio::with(['service', 'images'])->latest()->paginate(20),
             'services' => Service::orderBy('name')->get(),
         ]);
     }

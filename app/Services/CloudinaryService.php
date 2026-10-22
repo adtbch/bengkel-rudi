@@ -14,7 +14,7 @@ class CloudinaryService
 
     protected ?array $credentialsCache = null;
 
-    public function client(): Cloudinary
+    public function client(): ?Cloudinary
     {
         if (! $this->clientResolved) {
             $this->clientResolved = true;
@@ -144,4 +144,22 @@ class CloudinaryService
 
         return in_array($response['result'] ?? '', ['ok', 'not found'], true);
     }
+
+    public function imageSrc(string $publicId, int $width = 768): string
+    {
+        $transformation = 'f_auto,q_auto:good,c_limit,w_'.$width;
+
+        return $this->assetUrl('image', $publicId, $transformation);
+    }
+
+    public function imageSrcset(string $publicId, array $widths = [320, 640, 768, 1024, 1280]): string
+    {
+        $parts = [];
+        foreach ($widths as $width) {
+            $parts[] = $this->imageSrc($publicId, (int) $width).' '.(int) $width.'w';
+        }
+
+        return implode(', ', $parts);
+    }
 }
+

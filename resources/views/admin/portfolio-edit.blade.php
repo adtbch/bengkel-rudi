@@ -93,7 +93,7 @@
                         @if($img->media_type === 'video')
                             <video src="{{ $img->image_url }}" controls preload="metadata" playsinline aria-label="Video {{ strtolower($img->stage) }} {{ $portfolio->title }}"></video>
                         @else
-                            <img src="{{ $img->image_url }}" alt="Foto {{ strtolower($img->stage) }} {{ $portfolio->title }}" loading="lazy" decoding="async">
+                            <img src="{{ app(\App\Services\CloudinaryService::class)->imageSrc($img->cloudinary_public_id, 768) }}" srcset="{{ app(\App\Services\CloudinaryService::class)->imageSrcset($img->cloudinary_public_id) }}" sizes="(max-width: 768px) 100vw, 50vw" alt="Foto {{ strtolower($img->stage) }} {{ $portfolio->title }}" loading="lazy" decoding="async">
                         @endif
                         <div class="admin-photo-card__body">
                             <span class="pill-badge @if($img->stage === 'BEFORE') badge-stage-before @elseif($img->stage === 'PROCESS') badge-stage-process @else badge-stage-after @endif">{{ ['BEFORE' => 'Sebelum', 'PROCESS' => 'Proses', 'AFTER' => 'Hasil'][$img->stage] }}</span>

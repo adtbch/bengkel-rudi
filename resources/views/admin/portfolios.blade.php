@@ -56,7 +56,7 @@
             <p class="admin-page-head__eyebrow">Arsip visual</p>
             <h2 id="daftar-portfolio">Daftar portfolio</h2>
         </div>
-        <p>{{ $portfolios->count() }} item</p>
+        <p>{{ $portfolios->total() }} item</p>
     </div>
     <div class="admin-card-grid admin-portfolio-list">
         @forelse($portfolios as $portfolio)
@@ -68,7 +68,7 @@
                             @if($cover->media_type === 'video')
                                 <video src="{{ $cover->image_url }}" controls preload="metadata" playsinline aria-label="Video utama {{ $portfolio->title }}"></video>
                             @else
-                                <img src="{{ $cover->image_url }}" alt="Foto utama {{ $portfolio->title }}" loading="lazy" decoding="async">
+                                <img src="{{ app(\App\Services\CloudinaryService::class)->imageSrc($cover->cloudinary_public_id, 768) }}" srcset="{{ app(\App\Services\CloudinaryService::class)->imageSrcset($cover->cloudinary_public_id) }}" sizes="(max-width: 768px) 100vw, 33vw" alt="Foto utama {{ $portfolio->title }}" loading="lazy" decoding="async">
                             @endif
                         @else
                             <span>Belum ada foto</span>
