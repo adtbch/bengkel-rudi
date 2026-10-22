@@ -38,7 +38,7 @@
                                     aria-label="Video {{ $portfolio->title }}"
                                 ></video>
                             @else
-                                <img src="{{ $cover->image_url }}" alt="{{ $portfolio->title }}" loading="lazy">
+                                <img src="{{ app(\App\Services\CloudinaryService::class)->imageSrc($cover->cloudinary_public_id, 640) }}" srcset="{{ app(\App\Services\CloudinaryService::class)->imageSrcset($cover->cloudinary_public_id) }}" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" alt="{{ $portfolio->title }}" loading="lazy" decoding="async" width="640" height="480" style="aspect-ratio:4/3;object-fit:cover;">
                             @endif
                         @else
                             <div class="portfolio-card__media-empty">Belum ada foto</div>

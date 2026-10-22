@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use App\Support\UniqueSlug;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Validation\Rule;
 
 class ServiceController extends Controller
 {
     public function index()
     {
-        return view('admin.services', ['services' => Service::orderBy('sort_order')->get()]);
+        return view('admin.services', ['services' => Service::orderBy('sort_order')->paginate(25)]);
     }
 
     public function show(Service $service)
@@ -24,8 +25,9 @@ class ServiceController extends Controller
     {
         $data = $this->validated($request);
         $data['slug'] = UniqueSlug::make($data['name'], Service::class);
-        $data['features'] = [];
         Service::create($data);
+
+        Cache::forget('public.services.active');
 
         return redirect('/admin/layanan')->with('status', 'Layanan berhasil ditambahkan.');
     }
@@ -36,12 +38,16 @@ class ServiceController extends Controller
         $data['slug'] = UniqueSlug::make($data['name'], Service::class, $service->id);
         $service->update($data);
 
+        Cache::forget('public.services.active');
+
         return redirect('/admin/layanan')->with('status', 'Layanan berhasil diperbarui.');
     }
 
     public function toggle(Service $service)
     {
         $service->update(['is_active' => !$service->is_active]);
+
+        Cache::forget('public.services.active');
 
         return redirect('/admin/layanan')->with('status', 'Status layanan berhasil diubah.');
     }

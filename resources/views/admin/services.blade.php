@@ -45,7 +45,7 @@
 <section aria-labelledby="daftar-layanan">
     <div class="admin-section-head">
         <div><p class="admin-page-head__eyebrow">Layanan tersedia</p><h2 id="daftar-layanan">Daftar layanan</h2></div>
-        <p>{{ $services->count() }} item</p>
+        <p>{{ $services->total() }} item</p>
     </div>
     <div class="admin-service-list">
         @forelse($services as $service)
