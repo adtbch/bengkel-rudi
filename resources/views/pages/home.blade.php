@@ -51,10 +51,12 @@
         <div class="workshop-hero__content">
             <img
                 class="workshop-hero__brand"
-                src="https://res.cloudinary.com/dkv2rn5ax/image/upload/logo-bengkel-rudi.png_calja6.png"
+                src="{{ app(\App\Services\CloudinaryService::class)->assetUrl('image', 'logo-bengkel-rudi.png_calja6.png', 'f_auto,q_auto,w_160,c_limit') }}"
                 alt="Bengkel Rudi Cat dan Body Repair"
                 width="160"
                 height="160"
+                loading="eager"
+                fetchpriority="high"
             >
             <h1 id="hero-title">Solusi Cat dan Body Repair Terpercaya di Batang</h1>
             <p class="workshop-hero__subtitle">Perbaikan bodi, pengecatan, dan restorasi mobil maupun motor dengan pengerjaan rapi.</p>

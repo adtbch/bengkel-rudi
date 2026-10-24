@@ -15,6 +15,10 @@
 - 22 Blade views. Public: home, about, contact, services index/detail, portfolio index/detail + layouts/partials.
 - CWV not yet measured (LCP/CLS/INP, mobile-first) — needs Lighthouse run.
 
+## Deferred homepage work
+- Consolidate or build public CSS (`base.css`, `components.css`, `header.css`, `footer.css`, `home.css`) only after Lighthouse confirms request/render-blocking impact.
+- Inspect `resources/js/app.js` and defer every non-critical script only after confirming no public-page behavior depends on synchronous execution.
+
 ## Cloudinary
 - Used in admin upload + service. Public usage needs image sizing/lazyload coordination.
 
