@@ -40,9 +40,8 @@
 @endsection
 
 @section('content')
-    @php($whatsapp = $settings['whatsapp_number'] ?? '628123456789')
+    @php($whatsapp = $settings['whatsapp_number'] ?? '6282223361312')
     @php($mapsEmbedUrl = $settings['google_maps_embed_url'] ?? null)
-    @php($staticMapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C0,0' . (env('GOOGLE_STATIC_MAPS_KEY') ? '&key=' . urlencode(env('GOOGLE_STATIC_MAPS_KEY')) : ''))
 
     <section class="workshop-hero" id="beranda" aria-labelledby="hero-title">
         <div class="workshop-hero__content">
@@ -189,41 +188,17 @@
 
     @if(!empty($mapsEmbedUrl))
         <div class="home-location__map">
-            <img
-                src="{{ $staticMapUrl }}"
-                alt="Lokasi Bengkel Rudi – peta statik"
+            <iframe
+                src="{{ $mapsEmbedUrl }}"
+                title="Lokasi Bengkel Rudi"
                 width="100%"
                 height="360"
-                loading="eager"
-                style="display:block;max-width:100%;"
-                data-iframe-src="{{ $mapsEmbedUrl }}"
-                id="map-placeholder"
-            >
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+            ></iframe>
         </div>
-        <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const runSwap = () => {
-                const img = document.getElementById('map-placeholder');
-                if (!img) return;
-                const src = img.dataset.iframeSrc;
-                if (!src) return;
-                const iframe = document.createElement('iframe');
-                iframe.src = src;
-                iframe.width = '100%';
-                iframe.height = '360';
-                iframe.loading = 'lazy';
-                iframe.referrerPolicy = 'no-referrer-when-downgrade';
-                iframe.allowFullscreen = true;
-                iframe.style.border = '0';
-                img.parentNode.replaceWith(iframe);
-            };
-            if ('requestIdleCallback' in window) {
-                requestIdleCallback(runSwap, { timeout: 2000 });
-            } else {
-                setTimeout(runSwap, 1500);
-            }
-        });
-        </script>
+
     @endif
 
     <section class="home-cta" aria-labelledby="cta-title">
