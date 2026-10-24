@@ -33,6 +33,9 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    @if (request()->is('/'))
+        <link rel="stylesheet" href="/css/public/home.css?v={{ filemtime(public_path('css/public/home.css')) }}">
+    @endif
     <link rel="stylesheet" href="/css/public/base.css?v={{ filemtime(public_path('css/public/base.css')) }}">
     <link rel="stylesheet" href="/css/public/components.css?v={{ filemtime(public_path('css/public/components.css')) }}">
     <link rel="stylesheet" href="/css/public/header.css?v={{ filemtime(public_path('css/public/header.css')) }}">

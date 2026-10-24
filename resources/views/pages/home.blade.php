@@ -3,10 +3,6 @@
 @section('title', $settings['meta_title'] ?? 'Bengkel Rudi - Bengkel Cat dan Body Repair Batang')
 @section('description', $settings['meta_description'] ?? 'Bengkel cat dan body repair mobil motor di Wonokerto, Bandar, Kabupaten Batang. Konsultasi langsung melalui WhatsApp.')
 
-@push('styles')
-    <link rel="stylesheet" href="/css/public/home.css?v={{ filemtime(public_path('css/public/home.css')) }}">
-@endpush
-
 @section('structured_data')
     @php($structuredData = [
         '@context' => 'https://schema.org',
