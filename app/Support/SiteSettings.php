@@ -12,7 +12,7 @@ class SiteSettings
         $load = function (): array {
             return array_merge([
                 'business_name' => 'Bengkel Rudi',
-                'whatsapp_number' => '628123456789',
+                'whatsapp_number' => '6282223361312',
                 'address' => 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254',
                 'opening_hours' => 'Setiap hari: 08:00–17:00 WIB',
                 'google_business_profile_url' => 'https://share.google/8pHQ7sXmkUWGf9YHI',
