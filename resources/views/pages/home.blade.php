@@ -40,8 +40,13 @@
 @endsection
 
 @section('content')
-    @php($whatsapp = $settings['whatsapp_number'] ?? '628123456789')
-    @php($mapsEmbedUrl = $settings['google_maps_embed_url'] ?? null)
+    @php
+    // Static map fallback (Google Static Maps). Replace with real coordinates if needed.
+    $staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C0,0";
+    // Optional API key – use env('GOOGLE_STATIC_MAPS_KEY') if set.
+    $apiKey = env('GOOGLE_STATIC_MAPS_KEY');
+    if ($apiKey) $staticMapUrl .= "&key={$apiKey}";
+@endphp
 
     <section class="workshop-hero" id="beranda" aria-labelledby="hero-title">
         <div class="workshop-hero__content">
@@ -187,23 +192,42 @@
     </section>
 
     @if(!empty($mapsEmbedUrl))
-        <section class="home-location" aria-labelledby="lokasi-title">
-            <div class="home-location__copy">
-                <h2 id="lokasi-title">Lokasi workshop</h2>
-                <p>{{ $settings['address'] ?? 'RT.05/RW.01, Krajan, Wonokerto, Kec. Bandar, Kabupaten Batang, Jawa Tengah 51254' }}</p>
-                <span>{{ $settings['opening_hours'] ?? 'Senin - Sabtu: 08.00 - 17.00 WIB' }}</span>
-                <a class="home-text-link" href="/kontak">Lihat kontak dan petunjuk arah <span aria-hidden="true">→</span></a>
-            </div>
-            <iframe
-                src="{{ $mapsEmbedUrl }}"
-                title="Lokasi Bengkel Rudi"
+        <div class="home-location__map">
+            <img
+                src="{{ $staticMapUrl }}"
+                alt="Lokasi Bengkel Rudi – peta statik"
                 width="100%"
                 height="360"
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"
-                allowfullscreen
-            ></iframe>
-        </section>
+                loading="eager"
+                style="display:block;max-width:100%;"
+                data-iframe-src="{{ $mapsEmbedUrl }}"
+                id="map-placeholder"
+            >
+        </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const runSwap = () => {
+                const img = document.getElementById('map-placeholder');
+                if (!img) return;
+                const src = img.dataset.iframeSrc;
+                if (!src) return;
+                const iframe = document.createElement('iframe');
+                iframe.src = src;
+                iframe.width = '100%';
+                iframe.height = '360';
+                iframe.loading = 'lazy';
+                iframe.referrerPolicy = 'no-referrer-when-downgrade';
+                iframe.allowFullscreen = true;
+                iframe.style.border = '0';
+                img.parentNode.replaceWith(iframe);
+            };
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(runSwap, { timeout: 2000 });
+            } else {
+                setTimeout(runSwap, 1500);
+            }
+        });
+        </script>
     @endif
 
     <section class="home-cta" aria-labelledby="cta-title">
