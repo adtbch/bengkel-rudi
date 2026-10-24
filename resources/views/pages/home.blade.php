@@ -40,21 +40,9 @@
 @endsection
 
 @section('content')
-    @php
-+    // Preserve original embed URL for iframe swap
-+    $mapsEmbedUrl = $settings['google_maps_embed_url'] ?? null;
-     // Static map fallback (Google Static Maps). Replace with real coordinates if needed.
-     $staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C0,0";
-     // Optional API key – use env('GOOGLE_STATIC_MAPS_KEY') if set.
-     $apiKey = env('GOOGLE_STATIC_MAPS_KEY');
-@@
--    @php
--    // Static map fallback (Google Static Maps). Replace with real coordinates if needed.
--    $staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C0,0";
--    // Optional API key – use env('GOOGLE_STATIC_MAPS_KEY') if set.
--    $apiKey = env('GOOGLE_STATIC_MAPS_KEY');
--    if ($apiKey) $staticMapUrl .= "&key={$apiKey}";
--@endphp
+    @php($whatsapp = $settings['whatsapp_number'] ?? '628123456789')
+    @php($mapsEmbedUrl = $settings['google_maps_embed_url'] ?? null)
+    @php($staticMapUrl = 'https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C0,0' . (env('GOOGLE_STATIC_MAPS_KEY') ? '&key=' . urlencode(env('GOOGLE_STATIC_MAPS_KEY')) : ''))
 
     <section class="workshop-hero" id="beranda" aria-labelledby="hero-title">
         <div class="workshop-hero__content">
