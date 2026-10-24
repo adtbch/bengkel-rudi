@@ -41,12 +41,20 @@
 
 @section('content')
     @php
-    // Static map fallback (Google Static Maps). Replace with real coordinates if needed.
-    $staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C0,0";
-    // Optional API key – use env('GOOGLE_STATIC_MAPS_KEY') if set.
-    $apiKey = env('GOOGLE_STATIC_MAPS_KEY');
-    if ($apiKey) $staticMapUrl .= "&key={$apiKey}";
-@endphp
++    // Preserve original embed URL for iframe swap
++    $mapsEmbedUrl = $settings['google_maps_embed_url'] ?? null;
+     // Static map fallback (Google Static Maps). Replace with real coordinates if needed.
+     $staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C0,0";
+     // Optional API key – use env('GOOGLE_STATIC_MAPS_KEY') if set.
+     $apiKey = env('GOOGLE_STATIC_MAPS_KEY');
+@@
+-    @php
+-    // Static map fallback (Google Static Maps). Replace with real coordinates if needed.
+-    $staticMapUrl = "https://maps.googleapis.com/maps/api/staticmap?center=0,0&zoom=15&size=600x300&scale=2&maptype=roadmap&markers=color:red%7C0,0";
+-    // Optional API key – use env('GOOGLE_STATIC_MAPS_KEY') if set.
+-    $apiKey = env('GOOGLE_STATIC_MAPS_KEY');
+-    if ($apiKey) $staticMapUrl .= "&key={$apiKey}";
+-@endphp
 
     <section class="workshop-hero" id="beranda" aria-labelledby="hero-title">
         <div class="workshop-hero__content">
