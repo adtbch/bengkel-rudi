@@ -33,14 +33,14 @@
     <noscript><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-    @if (request()->is('/'))
-                <link rel="preload" as="image" href="{{ app(\App\Services\CloudinaryService::class)->assetUrl('image', 'logo-bengkel-rudi.png_calja6.png', 'f_auto,q_auto,w_160,c_limit') }}" fetchpriority="high">
-                <link rel="stylesheet" href="/css/public/home.css?v={{ filemtime(public_path('css/public/home.css')) }}">
-            @endif
     <link rel="stylesheet" href="/css/public/base.css?v={{ filemtime(public_path('css/public/base.css')) }}">
     <link rel="stylesheet" href="/css/public/components.css?v={{ filemtime(public_path('css/public/components.css')) }}">
     <link rel="stylesheet" href="/css/public/header.css?v={{ filemtime(public_path('css/public/header.css')) }}">
     <link rel="stylesheet" href="/css/public/footer.css?v={{ filemtime(public_path('css/public/footer.css')) }}">
+    @if (request()->is('/'))
+        <link rel="preload" as="image" href="{{ app(\App\Services\CloudinaryService::class)->assetUrl('image', 'logo-bengkel-rudi.png_calja6.png', 'f_auto,q_auto,w_160,c_limit') }}" fetchpriority="high">
+        <link rel="stylesheet" href="/css/public/home.css?v={{ filemtime(public_path('css/public/home.css')) }}">
+    @endif
     @stack('styles')
 </head>
 <body>
