@@ -9,7 +9,7 @@
         '@type' => ['LocalBusiness', 'AutoRepair'],
         'name' => 'Bengkel Rudi',
         'description' => $settings['meta_description'] ?? 'Layanan cat dan body repair mobil dan motor di Wonokerto, Bandar, Kabupaten Batang.',
-        'telephone' => '+' . ($settings['whatsapp_number'] ?? '628123456789'),
+        'telephone' => '+' . ($settings['whatsapp_number'] ?? '6282223361312'),
         'url' => rtrim(config('app.url'), '/') . '/',
         'image' => rtrim(config('app.url'), '/') . '/images/og-bengkel-rudi.png',
         'address' => [
@@ -187,18 +187,54 @@
     </section>
 
     @if(!empty($mapsEmbedUrl))
-        <div class="home-location__map">
+        <div class="home-location__map" data-map-container style="position:relative; width:100%; height:360px; overflow:hidden;">
+            <div class="home-location__map-placeholder" data-map-placeholder aria-hidden="true" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#f3f4f6 0%,#e5e7eb 100%); color:#6b7280; font-size:0.875rem; text-align:center; padding:1rem;">
+                <span>Memuat peta lokasi...</span>
+            </div>
             <iframe
-                src="{{ $mapsEmbedUrl }}"
+                data-map-iframe
+                data-src="{{ $mapsEmbedUrl }}"
                 title="Lokasi Bengkel Rudi"
                 width="100%"
-                height="360"
+                height="100%"
+                style="position:absolute; inset:0; border:0; width:100%; height:100%;"
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
                 allowfullscreen
             ></iframe>
         </div>
-
+        <script>
+            (function(){
+                var container = document.querySelector('.home-location__map[data-map-container]');
+                if(!container) return;
+                var iframe = container.querySelector('[data-map-iframe]');
+                var placeholder = container.querySelector('[data-map-placeholder]');
+                if(!iframe || !iframe.dataset.src) return;
+                var src = iframe.dataset.src;
+                var loaded = false;
+                function loadMap(){
+                    if(loaded) return;
+                    loaded = true;
+                    iframe.src = src;
+                    if(placeholder){
+                        placeholder.style.display = 'none';
+                    }
+                }
+                if('IntersectionObserver' in window){
+                    var obs = new IntersectionObserver(function(entries){
+                        entries.forEach(function(entry){
+                            if(entry.isIntersecting){
+                                loadMap();
+                                obs.unobserve(container);
+                            }
+                        });
+                    }, { rootMargin: '200px 0px' });
+                    obs.observe(container);
+                }else{
+                    loadMap();
+                }
+            })();
+        </script>
     @endif
 
     <section class="home-cta" aria-labelledby="cta-title">
